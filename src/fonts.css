@@ -1,0 +1,67 @@
+/*
+ * Bundled typefaces.
+ *
+ * SF Pro Display — supplied by the project owner. Apple's own licence does not
+ * permit embedding or non-Apple-platform use; this is a deliberate decision on
+ * their part for a learning project. It is isolated to this file and
+ * `src/assets/fonts/SFProDisplay-*`, so dropping it is a two-line change and
+ * Geist takes over automatically.
+ *
+ * Geist — SIL OFL 1.1, variable weight, and the fallback that makes the above
+ * removable.
+ *
+ * JetBrainsMono Nerd Font Mono — SIL OFL 1.1 (the Nerd Font patch keeps the
+ * upstream licence). Subset from 1 MB per weight to ~53 KB: the full build is
+ * mostly devicon and seti glyphs that nothing in this app can render. The
+ * Powerline range (U+E0A0–E0D4) is kept because terminal-looking content
+ * plausibly uses it.
+ */
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("./assets/fonts/SFProDisplay-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("./assets/fonts/SFProDisplay-Medium.woff2") format("woff2");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "SF Pro Display";
+  src: url("./assets/fonts/SFProDisplay-Bold.woff2") format("woff2");
+  /* The zip has no upright Semibold, so 600 and 700 share Bold. */
+  font-weight: 600 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist";
+  src: url("./assets/fonts/Geist-Variable.woff2") format("woff2-variations");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrainsMono Nerd Font Mono";
+  src: url("./assets/fonts/JetBrainsMonoNerdFontMono-Regular.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrainsMono Nerd Font Mono";
+  src: url("./assets/fonts/JetBrainsMonoNerdFontMono-Bold.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}

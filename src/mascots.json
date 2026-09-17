@@ -1,0 +1,170 @@
+[
+  {
+    "id": "adventurer",
+    "title": "Adventurer",
+    "creator": "Lisa Wischofsky",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://www.figma.com/community/file/1184595184137881796"
+  },
+  {
+    "id": "adventurerNeutral",
+    "title": "Adventurer Neutral",
+    "creator": "Lisa Wischofsky",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://www.figma.com/community/file/1184595184137881796"
+  },
+  {
+    "id": "avataaars",
+    "title": "Avataaars",
+    "creator": "Pablo Stanley",
+    "license": "Free for personal and commercial use",
+    "licenseUrl": "https://avataaars.com/",
+    "source": "https://avataaars.com/"
+  },
+  {
+    "id": "avataaarsNeutral",
+    "title": "Avataaars",
+    "creator": "Pablo Stanley",
+    "license": "Free for personal and commercial use.",
+    "licenseUrl": "https://avataaars.com/",
+    "source": "https://avataaars.com/"
+  },
+  {
+    "id": "bigEars",
+    "title": "Face Generator",
+    "creator": "The Visual Team",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://www.figma.com/community/file/986078800058673824"
+  },
+  {
+    "id": "bigEarsNeutral",
+    "title": "Face Generator",
+    "creator": "The Visual Team",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://www.figma.com/community/file/986078800058673824"
+  },
+  {
+    "id": "bigSmile",
+    "title": "Custom Avatar",
+    "creator": "Ashley Seo",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://www.figma.com/community/file/881358461963645496"
+  },
+  {
+    "id": "croodles",
+    "title": "Croodles - Doodle your face",
+    "creator": "vijay verma",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://www.figma.com/community/file/966199982810283152"
+  },
+  {
+    "id": "croodlesNeutral",
+    "title": "Croodles - Doodle your face",
+    "creator": "vijay verma",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://www.figma.com/community/file/966199982810283152"
+  },
+  {
+    "id": "dylan",
+    "title": "Dylan! The Avatar Generator",
+    "creator": "Natalia Spivak",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://www.figma.com/community/file/1356575240759683500"
+  },
+  {
+    "id": "lorelei",
+    "title": "Lorelei",
+    "creator": "Lisa Wischofsky",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://www.figma.com/community/file/1198749693280469639"
+  },
+  {
+    "id": "loreleiNeutral",
+    "title": "Lorelei Neutral",
+    "creator": "Lisa Wischofsky",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://www.figma.com/community/file/1198749693280469639"
+  },
+  {
+    "id": "micah",
+    "title": "Avatar Illustration System",
+    "creator": "Micah Lanier",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://www.figma.com/community/file/829741575478342595"
+  },
+  {
+    "id": "miniavs",
+    "title": "Miniavs - Free Avatar Creator",
+    "creator": "Webpixels",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://www.figma.com/community/file/923211396597067458"
+  },
+  {
+    "id": "notionists",
+    "title": "Notionists",
+    "creator": "Zoish",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://heyzoish.gumroad.com/l/notionists"
+  },
+  {
+    "id": "notionistsNeutral",
+    "title": "Notionists",
+    "creator": "Zoish",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://heyzoish.gumroad.com/l/notionists"
+  },
+  {
+    "id": "openPeeps",
+    "title": "Open Peeps",
+    "creator": "Pablo Stanley",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://www.openpeeps.com/"
+  },
+  {
+    "id": "personas",
+    "title": "Personas by Draftbit",
+    "creator": "Draftbit - draftbit.com",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://personas.draftbit.com/"
+  },
+  {
+    "id": "pixelArt",
+    "title": "Pixel Art",
+    "creator": "DiceBear",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://www.figma.com/community/file/1198754108850888330"
+  },
+  {
+    "id": "pixelArtNeutral",
+    "title": "Pixel Art Neutral",
+    "creator": "DiceBear",
+    "license": "CC0 1.0",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "source": "https://www.figma.com/community/file/1198754108850888330"
+  },
+  {
+    "id": "toonHead",
+    "title": "ToonHead",
+    "creator": "Johan Melin",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "source": "https://www.figma.com/community/file/1589627891082866389"
+  }
+]

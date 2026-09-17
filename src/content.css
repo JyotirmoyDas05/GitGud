@@ -1,0 +1,380 @@
+/*
+ * Styles for the imported challenge HTML.
+ *
+ * git-it-electron's four stylesheets are not copied — they hardcode colors
+ * that would fight the token layer and have no dark mode. These are rewritten
+ * against the same semantic tokens the rest of the app uses, keeping only the
+ * class names the content already carries so the HTML stays untouched.
+ */
+
+.prose {
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+.prose h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  margin: 0 0 0.75rem;
+}
+
+.prose h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.prose h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 0 0 0.5rem;
+}
+
+.prose h4 {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin: 1rem 0 0.375rem;
+}
+
+.prose p {
+  margin: 0.625rem 0;
+}
+
+.prose ul,
+.prose ol {
+  margin: 0.625rem 0;
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li {
+  margin: 0.3125rem 0;
+}
+
+.prose .no-list-style {
+  list-style: none;
+  padding-left: 0;
+}
+
+.prose a {
+  color: var(--primary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose strong {
+  font-weight: 600;
+  color: var(--foreground);
+}
+
+.prose img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  margin: 0.75rem 0;
+  /* The diagrams are dark-on-white line art. Without this they sit as a
+     glaring white slab in dark mode. */
+  background: var(--color-white);
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--border);
+  padding-left: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0.75rem 0;
+}
+
+/* Inline code, and the `.shell` variant the content uses for commands the
+   learner is meant to type. */
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.8125em;
+  background: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.1em 0.35em;
+  word-break: break-word;
+}
+
+.prose code.shell {
+  display: block;
+  background: var(--accent);
+  padding: 0.5rem 0.75rem;
+  white-space: pre-wrap;
+}
+
+/* The original prefixed these with a `$` via CSS so the sign could not be
+   copied along with the command. Same trick, same reason. */
+.prose code.shell::before {
+  content: "$ ";
+  color: var(--muted-foreground);
+  user-select: none;
+}
+
+.prose code.comment {
+  display: block;
+  color: var(--muted-foreground);
+  background: transparent;
+  border-style: dashed;
+  padding: 0.5rem 0.75rem;
+}
+
+/* --- The callout boxes -------------------------------------------------- */
+
+.prose .border-box,
+.prose .solid-box,
+.prose .blue-border-box {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.875rem 1rem;
+  margin: 1rem 0;
+}
+
+/* The goal statement at the top of every challenge. */
+.prose .chal-goal {
+  border-color: color-mix(in srgb, var(--primary) 32%, transparent);
+  background: color-mix(in srgb, var(--primary) 5%, transparent);
+  font-size: 1rem;
+}
+
+.prose .chal-goal p {
+  margin: 0;
+}
+
+/* A step the learner performs. */
+.prose .chal-step {
+  border-left: 3px solid var(--primary);
+}
+
+/* Background explanation — context, not instruction. */
+.prose .chal-background,
+.prose .light-blue {
+  background: var(--muted);
+}
+
+/* Asides and troubleshooting. */
+.prose .chal-tip,
+.prose .inline-tip,
+.prose .grey-border {
+  background: var(--warning-surface);
+  border-color: color-mix(in srgb, var(--warning) 32%, transparent);
+}
+
+.prose .chal-no-pass {
+  background: var(--error-surface);
+  border-color: color-mix(in srgb, var(--error) 32%, transparent);
+}
+
+.prose .border-box > :first-child,
+.prose .solid-box > :first-child {
+  margin-top: 0;
+}
+
+.prose .border-box > :last-child,
+.prose .solid-box > :last-child {
+  margin-bottom: 0;
+}
+
+/* Superscript translations injected for non-English locales (the <n>, <v> and
+   <adj> tags in the translated content). */
+.prose .superscript {
+  font-size: 0.7em;
+  vertical-align: super;
+  color: var(--muted-foreground);
+  margin-right: 0.15em;
+}
+
+/* These are custom elements in the translated HTML; make sure they lay out as
+   inline text rather than block-level unknowns. */
+.prose n,
+.prose v,
+.prose adj {
+  display: inline;
+}
+
+/* --- Code blocks ---------------------------------------------------------
+   `Html.tsx` wraps every `code.shell` / `code.comment` in this chrome at
+   render time. The header carries a label and, for runnable commands, a copy
+   button — the thing that was missing when these were bare grey boxes. */
+
+.prose .gg-codeblock {
+  margin: 0.75rem 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--secondary);
+  overflow: hidden;
+}
+
+.dark .prose .gg-codeblock {
+  background: color-mix(in srgb, var(--input) 32%, transparent);
+  border-color: transparent;
+}
+
+.prose .gg-codeblock-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.25rem 0.375rem 0 0.75rem;
+  user-select: none;
+}
+
+.prose .gg-codeblock-label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  color: var(--muted-foreground);
+  letter-spacing: 0.02em;
+}
+
+.prose .gg-codeblock-copy {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: pointer;
+  /* 100ms: immediate-feedback range. Anything slower on a hover reads as lag. */
+  transition:
+    background-color 100ms ease-out,
+    color 100ms ease-out,
+    transform 100ms ease-out;
+}
+
+.prose .gg-codeblock-copy:hover {
+  background: var(--accent);
+  color: var(--foreground);
+}
+
+/* Press feedback — the interface should feel physical under the cursor. */
+.prose .gg-codeblock-copy:active {
+  transform: scale(0.92);
+}
+
+.prose .gg-codeblock-copy[data-copied="true"] {
+  color: var(--success-foreground);
+}
+
+.prose .gg-codeblock-copy[data-failed="true"] {
+  color: var(--error-foreground);
+}
+
+/* Both icons occupy the same grid cell so the button never changes width and
+   the swap is a crossfade rather than a reflow. */
+.prose .gg-codeblock-copy .gg-icon {
+  grid-area: 1 / 1;
+  width: 0.875rem;
+  height: 0.875rem;
+  /* The blur is the trick from Emil Kowalski's tip 7: a 2px blur during the
+     handover hides the fact that a rectangle is becoming a tick. Without it
+     the two shapes visibly fight; with it they read as one state becoming
+     another. */
+  transition:
+    opacity 150ms ease-out,
+    transform 150ms ease-out,
+    filter 150ms ease-out;
+}
+
+.prose .gg-codeblock-copy .gg-icon-check {
+  opacity: 0;
+  /* Not scale(0) — starting from 0.6 keeps it feeling like an object arriving
+     rather than something being inflated from nothing. */
+  transform: scale(0.6);
+  filter: blur(2px);
+}
+
+.prose .gg-codeblock-copy[data-copied="true"] .gg-icon-copy {
+  opacity: 0;
+  transform: scale(0.6);
+  filter: blur(2px);
+}
+
+.prose .gg-codeblock-copy[data-copied="true"] .gg-icon-check {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prose .gg-codeblock-copy,
+  .prose .gg-codeblock-copy .gg-icon {
+    transition-duration: 1ms;
+  }
+  .prose .gg-codeblock-copy .gg-icon {
+    filter: none;
+    transform: none;
+  }
+}
+
+/* Inside the block the snippet loses its own border and background — the
+   wrapper provides both now. */
+.prose .gg-codeblock code.shell,
+.prose .gg-codeblock code.comment {
+  display: block;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  padding: 0.25rem 0.75rem 0.625rem;
+}
+
+/* --- Syntax colouring for shell snippets --------------------------------- */
+
+.prose .gg-tok-command {
+  color: var(--code-command);
+  font-weight: 600;
+}
+
+.prose .gg-tok-subcommand {
+  color: var(--code-subcommand);
+  font-weight: 600;
+}
+
+.prose .gg-tok-flag {
+  color: var(--code-flag);
+}
+
+.prose .gg-tok-string {
+  color: var(--code-string);
+}
+
+.prose .gg-tok-placeholder {
+  color: var(--code-placeholder);
+  font-style: italic;
+}
+
+/* --- Site icons beside external links ------------------------------------- */
+
+.prose a .gg-favicon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 0.3em;
+  border-radius: 3px;
+  vertical-align: -0.125em;
+  user-select: none;
+}
+
+/* The GitHub mark and the globe fallback are inline SVGs in currentColor so
+   they follow the theme; a fetched favicon is whatever the site ships.
+   The `img` reset matters: `.prose img` above is written for the challenge
+   diagrams and gives every image a 12px vertical margin, a border and a white
+   plate. Inherited here that dropped each icon exactly 12px below its line. */
+.prose a .gg-favicon > * {
+  display: block;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: inherit;
+  background: none;
+}
