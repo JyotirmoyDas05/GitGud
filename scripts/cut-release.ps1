@@ -31,6 +31,14 @@ if ((git rev-parse --abbrev-ref HEAD) -ne "main") {
   throw "Releases are cut from main. You are on: $(git rev-parse --abbrev-ref HEAD)"
 }
 
+if (-not (Test-Path "CHANGELOG.md")) {
+  throw "CHANGELOG.md is missing. Add one with a ## [$Version] entry first."
+}
+$changelog = Get-Content "CHANGELOG.md" -Raw
+if ($changelog -notmatch "(?m)^## \[$([regex]::Escape($Version))\]") {
+  throw "No ## [$Version] entry in CHANGELOG.md. Add release notes first - the Release workflow publishes them."
+}
+
 function Set-JsonVersion([string]$path, [string]$version) {
   $text = Get-Content $path -Raw
   $updated = $text -replace '"version"\s*:\s*"[^"]+"', "`"version`": `"$version`""

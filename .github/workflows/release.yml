@@ -4,11 +4,13 @@ name: Release
 # installers to a GitHub Release.
 #
 # How to cut a release:
-#   1. Make sure package.json, src-tauri/tauri.conf.json and
+#   1. Add a CHANGELOG.md entry under ## [<x.y.z>].
+#   2. Make sure package.json, src-tauri/tauri.conf.json and
 #      src-tauri/Cargo.toml all carry the same version
 #      (or run scripts/cut-release.ps1 -Version <x.y.z>).
-#   2. Push the tag:  git push origin v<x.y.z>
-#   3. This workflow builds all platforms and creates a DRAFT release.
+#   3. Push the tag:  git push origin v<x.y.z>
+#   4. This workflow builds all platforms, creates a DRAFT release and
+#      replaces the notes with your CHANGELOG.md entry.
 #      Review the draft and publish it manually.
 #
 # You can also run it manually (Actions tab -> Release -> Run workflow)
@@ -123,3 +125,23 @@ jobs:
           draft: true
           generate_release_notes: true
           files: release-assets/**/*
+
+      # Replaces the auto-generated notes with the matching CHANGELOG.md
+      # section (## [<version>]) when one exists. Runs after the release
+      # is created, so the changelog is applied on top of every release.
+      - name: Update release notes from CHANGELOG
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          version="${GITHUB_REF_NAME#v}"
+          awk -v ver="$version" '
+            $0 ~ "^## \\[" ver "\\]" { capture = 1; next }
+            capture && /^## / { exit }
+            capture { print }
+          ' CHANGELOG.md > release-notes.md
+          if [ -s release-notes.md ]; then
+            gh release edit "$GITHUB_REF_NAME" --notes-file release-notes.md
+            echo "Release notes updated from CHANGELOG.md."
+          else
+            echo "No CHANGELOG.md entry for $version; keeping generated notes."
+          fi
