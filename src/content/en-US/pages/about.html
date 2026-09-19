@@ -1,0 +1,43 @@
+<p>Git Gud teaches the everyday Git commands developers actually use, along with the
+    GitHub Flow — the way people collaborate on GitHub.</p>
+
+<p>Some challenges need an internet connection, so you'll want to be online to finish.
+    You can always open the app and read the challenges and resources offline.</p>
+
+<h4>A real development environment</h4>
+
+<p>Git Gud uses the real terminal, real Git and real GitHub rather than emulating any of
+    them. When you finish you'll have actual repositories on your GitHub account and green
+    squares on your contribution chart. Nothing here is a simulation, which is also why
+    each challenge is checked by running Git against your own repositories — if a
+    challenge passes, it genuinely worked.</p>
+
+<h4>What you need</h4>
+
+<p>Git, and a GitHub account. The first and fourth challenges walk you through both.
+    You do <strong>not</strong> need Node.js, Python, or any other runtime — Git Gud
+    ships as a single native application.</p>
+
+<h4>How it's built</h4>
+
+<p>Git Gud is a <a href="https://tauri.app" target="_blank">Tauri</a> application: a Rust
+    backend that runs Git and talks to GitHub, and a React interface rendered by the
+    operating system's own web view. There's no bundled browser engine, which is why the
+    download is measured in megabytes rather than hundreds of them.</p>
+
+<p>The companion repository you fork during the challenges is
+    <a href="https://github.com/JyotirmoyDas05/git-gud-verifywork" target="_blank">git-gud-verifywork</a>.
+    Its automation runs entirely on GitHub Actions — there is no server to go down.</p>
+
+<h4>Credit where it's due</h4>
+
+<p>Git Gud is a port of <a href="https://github.com/jlord/git-it-electron" target="_blank">Git-it</a>,
+    an Electron app written by <a href="https://jlord.us" target="_blank">@jlord</a> and
+    many contributors, released under the BSD 2-Clause licence. The challenge structure and
+    much of the writing are theirs. This version rebuilds the application on Tauri, replaces
+    the retired verification service with GitHub Actions, and fixes a number of checks that
+    had stopped working as Git and GitHub changed.</p>
+
+<p>The interface design borrows its token system from
+    <a href="https://github.com/t3tools" target="_blank">T3 Code</a>, used under the MIT
+    licence.</p>
