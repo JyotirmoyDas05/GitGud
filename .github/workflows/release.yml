@@ -58,6 +58,9 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Install frontend dependencies
+        run: npm ci
+
       - name: Install Rust toolchain
         uses: dtolnay/rust-toolchain@stable
 
