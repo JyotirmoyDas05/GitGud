@@ -44,6 +44,32 @@
   /* Download page: version label + per-asset links + this-device highlight. */
   var page = document.getElementById("download-page");
 
+  /* Starfield: one box-shadow list per layer, generated once on load.
+   * Ported from animate-ui's StarsBackground (MIT); the CSS half lives in
+   * styles.css. Each layer is a 2000px band repeated at +2000px by its
+   * ::after, so scrolling up by exactly 2000px lands on an identical field
+   * and the loop has no visible seam. Play/pause is inherited from .hero
+   * (see homeMotion below), so an off-screen or hidden tab costs nothing. */
+  (function starfield() {
+    var layers = document.querySelectorAll(".star-layer");
+    if (!layers.length) return;
+    /* Stars are box-shadow offsets from a dot at left:0, so x has to span the
+     * widest this window can become — the monitor, not the current viewport —
+     * or maximising it reveals a bare strip down the right-hand side. */
+    var spread = Math.max(window.innerWidth, (window.screen && window.screen.width) || 0, 1280);
+    var counts = [800, 300, 120];
+    Array.prototype.forEach.call(layers, function (layer, i) {
+      var shadows = [];
+      for (var n = counts[i] || 200; n > 0; n--) {
+        shadows.push(
+          Math.floor(Math.random() * spread) + "px " +
+          Math.floor(Math.random() * 2000) + "px #fff"
+        );
+      }
+      layer.style.setProperty("--shadow", shadows.join(","));
+    });
+  })();
+
   /* Hero floating marks: drift only while visible, parallax against the
    * pointer on fine pointers. Ported from the T3 Code homepage motion
    * (MIT): marks-only gating, rAF-throttled, reduced-motion aware. */
@@ -62,18 +88,19 @@
     function canMove() {
       return visible && document.visibilityState === "visible" && !reducedMotion.matches;
     }
+    /* Everything motion-related is a custom property set on .hero and read by
+     * inheritance, so the floating marks and the starfield are driven by this
+     * one handler instead of a second copy of it. */
     function update() {
-      for (var i = 0; i < marks.length; i++) {
-        marks[i].style.setProperty("--home-motion-state", canMove() ? "running" : "paused");
-      }
+      hero.style.setProperty("--home-motion-state", canMove() ? "running" : "paused");
       var parallax = finePointer.matches && canMove();
-      field.style.setProperty("--parallax-duration", parallax ? "0.7s" : "0s");
+      hero.style.setProperty("--parallax-duration", parallax ? "0.7s" : "0s");
       if (!parallax) {
         if (pointerFrame !== undefined) cancelAnimationFrame(pointerFrame);
         pointerFrame = undefined;
         pointer = null;
-        field.style.setProperty("--px", "0px");
-        field.style.setProperty("--py", "0px");
+        hero.style.setProperty("--px", "0px");
+        hero.style.setProperty("--py", "0px");
       }
     }
     new IntersectionObserver(function (entries) {
@@ -89,8 +116,8 @@
           if (!pointer || !finePointer.matches || !canMove()) return;
           var bounds = hero.getBoundingClientRect();
           if (!bounds.width || !bounds.height) return;
-          field.style.setProperty("--px", (((pointer.x - bounds.left) / bounds.width - 0.5) * 36).toFixed(1) + "px");
-          field.style.setProperty("--py", (((pointer.y - bounds.top) / bounds.height - 0.5) * 28).toFixed(1) + "px");
+          hero.style.setProperty("--px", (((pointer.x - bounds.left) / bounds.width - 0.5) * 36).toFixed(1) + "px");
+          hero.style.setProperty("--py", (((pointer.y - bounds.top) / bounds.height - 0.5) * 28).toFixed(1) + "px");
         });
       }
     });
@@ -144,7 +171,26 @@
       .catch(function () { /* buttons keep pointing at download.html */ });
   })();
 
-  if (!page) return;
+  /* Terminal install rows: the whole row is the click target (see
+   * download.html — each is a <button>), so there is no separate Copy
+   * button to compete with the OS icons for attention. Without a clipboard
+   * API (any non-HTTPS origin) the rows are left as plain non-interactive
+   * buttons — the command text is still selectable by hand. */
+  (function copyRows() {
+    var rows = document.querySelectorAll(".cli-row");
+    if (!rows.length || !navigator.clipboard) return;
+    Array.prototype.forEach.call(rows, function (row) {
+      var timer;
+      row.addEventListener("click", function () {
+        navigator.clipboard.writeText(row.getAttribute("data-copy") || "").then(function () {
+          row.classList.add("is-copied");
+          clearTimeout(timer);
+          timer = setTimeout(function () { row.classList.remove("is-copied"); }, 1600);
+        });
+      });
+    });
+  })();
+
   if (!page) return;
 
   var versionLabel = document.getElementById("version-label");

@@ -61,8 +61,43 @@ fn write_progress<R: Runtime>(
     store::write(&app, &progress)
 }
 
+/// WebKitGTK renders through a DMA-BUF buffer it acquires from an EGL display,
+/// and on a good number of Linux machines it cannot get one:
+///
+/// ```text
+/// Could not create default EGL display: EGL_BAD_PARAMETER. Aborting...
+/// ```
+///
+/// It means it — there is no fallback after that line. The window opens,
+/// paints nothing, and the learner gets a white rectangle with the failure
+/// visible only on a terminal they were never told to launch the app from.
+///
+/// It bites hardest inside the AppImage, whose bundled GTK stack shadows the
+/// host's Mesa drivers so the real GPU vendor library never loads, but it is
+/// not an AppImage bug: Wayland sessions, VMs, remote desktops and hybrid
+/// graphics all report the same abort from ordinary installs. So the switch
+/// lives here, in the one place every Linux launch goes through, rather than
+/// in an AppImage-only wrapper that would leave every other Linux user with
+/// the same white screen.
+///
+/// Turning the DMA-BUF path off costs a page of text and CSS nothing
+/// measurable, and it is the difference between the app starting and not.
+/// Only set when unset, so `WEBKIT_DISABLE_DMABUF_RENDERER=0 git-gud` still
+/// opts back into the fast path on a machine where it works.
+#[cfg(target_os = "linux")]
+fn survive_missing_egl() {
+    if std::env::var_os("WEBKIT_DISABLE_DMABUF_RENDERER").is_none() {
+        std::env::set_var("WEBKIT_DISABLE_DMABUF_RENDERER", "1");
+    }
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
+    // Before the builder: WebKitGTK reads this when it brings up the web
+    // process, which the first window creation below triggers.
+    #[cfg(target_os = "linux")]
+    survive_missing_egl();
+
     tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())

@@ -183,6 +183,21 @@ Asset names come from `assetNamePattern` in the workflow rather than from the
 bundler — see the comment on the build matrix for why the AppImage in
 particular has to be renamed.
 
+**Three places now hard-code those names**, and a change to `assetNamePattern`
+has to be made in all of them or the others break silently:
+
+| File | Builds the name for |
+|---|---|
+| `.github/workflows/release.yml` | every asset, via `assetNamePattern` |
+| `site/install.sh` | `..._x86_64.AppImage`, `..._aarch64.AppImage`, `..._universal.app.tar.gz` |
+| `site/install.ps1` | `..._x64-setup.exe`, `..._arm64-setup.exe` |
+
+The install scripts fail loudly when an asset 404s, so a mismatch is not
+silent for the person running them — but it is silent for you until somebody
+reports it. `site/download.html`'s cards are the safe case: they resolve names
+against the live release and quietly fall back to the releases page, which is
+exactly how a `.deb` card outlived the `.deb` itself by a whole release.
+
 ## Things worth knowing
 
 - **The draft step is the safety net.** An update that bricks the app cannot be

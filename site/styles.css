@@ -25,6 +25,14 @@
   --radius: 12px;
   --radius-sm: 8px;
   --radius-lg: 16px;
+  /* T3 Code's own dark-mode glass numbers (apps/web/src/index.css,
+   * `--glass-blur`/`--glass-opacity`/`--glass-saturation`), also already
+   * ported into src/index.css's `surface-glass`/`panel-glass` for the app
+   * itself. This site is dark-only, so it takes the dark half of that pair
+   * directly rather than a light/dark split it never needs. */
+  --glass-blur: 16px;
+  --glass-opacity: 80%;
+  --glass-saturation: 1.08;
 }
 
 @font-face {
@@ -103,8 +111,31 @@ img, svg { display: block; max-width: 100%; }
 .btn:active { transform: translateY(1px); }
 .btn-primary { background: var(--fg); color: #09090b; font-weight: 600; }
 .btn-primary:hover { transform: translateY(-1px); background: #fff; }
-.btn-ghost { color: var(--fg-muted); border: 1px solid var(--border); background: transparent; }
-.btn-ghost:hover { color: var(--fg); border-color: var(--border-strong); background: rgba(255, 255, 255, 0.02); }
+/* Glass, matching T3 Code's own app UI — specifically the chat composer's
+ * surface (apps/web/src/components/chat/ComposerSurface.tsx) — rather than
+ * a generic frosted wash of my own invention. A flat `rgba(255,255,255,.06)`
+ * background is thin: it reads as blur for blur's sake. The composer's
+ * actual recipe is more opaque (80% of the real surface colour mixed
+ * toward transparent, not a thin white tint) and gets most of its "glass"
+ * read from two things blur alone doesn't provide — a 1px inset highlight
+ * along the top edge, and a soft shadow lifting it off what's behind it —
+ * with the blur/saturate doing comparatively little of the work.
+ * See PLAN.md §8 for the exact source lines this was read from. */
+.btn-ghost {
+  color: var(--fg-muted); border: 1px solid color-mix(in srgb, #fff 5%, transparent);
+  background: color-mix(in srgb, var(--bg-card) var(--glass-opacity), transparent);
+  backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturation));
+  box-shadow: inset 0 1px rgb(255 255 255 / 3%), 0 12px 28px -18px rgb(0 0 0 / 40%);
+}
+.btn-ghost:hover {
+  color: var(--fg);
+  border-color: color-mix(in srgb, #fff 10%, transparent);
+  background: color-mix(in srgb, var(--bg-card) calc(var(--glass-opacity) + 8%), transparent);
+}
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  .btn-ghost { background: var(--bg-card); }
+}
 .btn-lg { padding: 14px 22px; font-size: 15px; border-radius: 10px; }
 
 .tile {
@@ -128,6 +159,10 @@ img, svg { display: block; max-width: 100%; }
   html { scroll-behavior: auto; }
   .hero-float-card { animation: none; transform: rotate(var(--rot)); }
   .hero-float-mark { translate: none; transition: none; }
+  /* The stars stay — a still night sky is not motion. Only the drift goes. */
+  .star-layer { animation: none; }
+  .hero-stars-shift { translate: none; transition: none; }
+  .hero-preview, .hero-preview:hover { transform: none; transition: none; }
 }
 
 /* ── Nav ── */
@@ -176,14 +211,83 @@ img, svg { display: block; max-width: 100%; }
 .footer-links a:hover { color: var(--fg); }
 
 /* ── Hero ── */
-.hero { position: relative; text-align: center; padding: 96px 32px 0; max-width: 1240px; margin: 0 auto; width: 100%; }
-.hero > *:not(.hero-float) { position: relative; z-index: 2; }
+/* --px/--py live here rather than on .hero-float because the starfield reads
+ * the same pointer offset; a custom property set on the hero inherits into
+ * both, so one pointermove handler drives both parallaxes. */
+.hero {
+  position: relative; text-align: center; padding: 96px 32px 0;
+  max-width: 1240px; margin: 0 auto; width: 100%;
+  --px: 0px; --py: 0px;
+}
+.hero > *:not(.hero-float):not(.hero-stars) { position: relative; z-index: 2; }
+
+/* ── Starfield ──────────────────────────────────────────────
+ * Ported from animate-ui's StarsBackground (MIT) to vanilla CSS: each layer
+ * is a 2000px-tall band of stars drawn as one box-shadow list, duplicated at
+ * +2000px and scrolled up by exactly its own height, so the seam lands on an
+ * identical field and the loop is invisible. Three layers at different sizes
+ * and speeds give the parallax depth. Star coordinates come from app.js.
+ *
+ * The hero is a max-width column but the sky is not, so this breaks out to
+ * the full viewport. .page sets overflow-x: clip, so 100vw cannot scroll. */
+.hero-stars {
+  position: absolute; top: 0; left: 50%;
+  width: 100vw; height: 100%;
+  transform: translateX(-50%);
+  overflow: hidden; z-index: 0; pointer-events: none;
+  /* Deliberately far dimmer than the upstream ellipse-at-bottom
+   * #262626 → #000: that one lights a black void, while this hero sits on
+   * the same --bg as every section under it. Turned up, it reads as a smudge
+   * rather than a horizon.
+   *
+   * It sits at the height the screenshot starts, not at the foot of the hero
+   * — the screenshot is opaque and fills the bottom 57%, so a glow down there
+   * is a glow nobody can see. Here it rises from behind the top edge of the
+   * shot and spills into the gap either side of it. */
+  background:
+    radial-gradient(ellipse 110% 30% at 50% 46%, oklch(0.68 0.17 var(--accent-h) / 0.13) 0%, transparent 60%),
+    radial-gradient(ellipse 150% 38% at 50% 64%, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
+}
+/* Separate from .hero-stars for two reasons: the parallax translate would
+ * fight the centring translateX(-50%) above, and the fade has to mask only
+ * the stars — masking the parent would take the glow out with them. */
+.hero-stars-shift {
+  position: absolute; inset: 0;
+  /* Well under the floating marks' --depth of 0.9–1.1: the sky is the most
+   * distant thing on the page, so it should shift the least. Anything near
+   * the marks' own depth makes the whole hero swim with the cursor. The
+   * longer easing is the other half of that — the sky lags the marks into
+   * place instead of tracking them, which reads as weight. */
+  translate: calc(var(--px) * 0.28) calc(var(--py) * 0.28);
+  transition: translate calc(var(--parallax-duration, 0s) * 1.6) cubic-bezier(0.2, 0.7, 0.2, 1);
+  /* End the sky before the stats strip instead of cutting it at a seam. */
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 96%);
+  mask-image: linear-gradient(180deg, #000 0%, #000 60%, transparent 96%);
+}
+.star-layer {
+  position: absolute; top: 0; left: 0; width: 100%; height: 2000px;
+  animation: star-drift var(--speed) linear infinite;
+  animation-play-state: var(--home-motion-state, paused);
+}
+.star-layer::before,
+.star-layer::after {
+  content: ""; position: absolute; left: 0;
+  width: var(--size); height: var(--size);
+  border-radius: 50%;
+  box-shadow: var(--shadow);
+}
+.star-layer::before { top: 0; }
+.star-layer::after { top: 2000px; }
+@keyframes star-drift {
+  from { transform: translateY(0); }
+  to { transform: translateY(-2000px); }
+}
 
 /* Floating ecosystem marks, ported from the T3 Code homepage: each mark is
  * absolutely placed via --x/--y/--s, eases in (mark-in), idles on a slow
  * drift (mark-drift, gated by --home-motion-state), and shifts against the
  * pointer by --depth (see app.js). Pure decoration: aria-hidden upstream. */
-.hero-float { position: absolute; inset: 0; pointer-events: none; z-index: 1; --px: 0px; --py: 0px; }
+.hero-float { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
 .hero-float-mark {
   position: absolute;
   left: calc(50% + var(--x));
@@ -248,8 +352,18 @@ html:not([data-platform]) .dl-icon--windows { display: block; }
 .hero-sub { color: var(--fg-muted); font-size: 17px; max-width: 52ch; margin: 20px auto 0; }
 .hero-ctas { display: flex; gap: 12px; justify-content: center; margin-top: 30px; flex-wrap: wrap; }
 .hero-note { margin-top: 16px; font-size: 13px; color: var(--fg-dim); }
-.hero-shot { max-width: 1020px; margin: 56px auto 0; }
-.hero-shot img { width: 100%; border-radius: var(--radius-lg) var(--radius-lg) 0 0; border: 1px solid var(--border-strong); border-bottom: 0; }
+/* The screenshot sits tipped slightly away from the reader and lifts flat on
+ * hover, as on the T3 Code homepage. The tilt lives on this wrapper and
+ * [data-rise] on its parent: both animate `transform`, so on one element the
+ * rise keyframes would simply overwrite the tilt. */
+.hero-preview {
+  max-width: 1020px; margin: 56px auto 0;
+  transform: perspective(2000px) rotateX(2.5deg);
+  transition: transform 0.6s ease;
+}
+.hero-preview:hover { transform: perspective(2000px) rotateX(0deg); }
+.hero-shot { max-width: 1020px; margin: 0 auto; }
+.hero-shot img { width: 100%; display: block; border-radius: var(--radius-lg) var(--radius-lg) 0 0; border: 1px solid var(--border-strong); border-bottom: 0; }
 .hero-shot figcaption { padding: 12px 16px; font-size: 13px; color: var(--fg-dim); text-align: left; border-top: 1px solid var(--border); }
 
 /* ── Stats strip ── */
@@ -369,6 +483,129 @@ html:not([data-platform]) .dl-icon--windows { display: block; }
 .platform-note a { color: var(--fg-muted); text-decoration: underline; text-decoration-color: rgba(161, 161, 170, 0.4); text-underline-offset: 3px; }
 .platform-note a:hover { color: var(--fg); }
 .platform-note code { font-family: var(--font-mono); font-size: 12px; background: rgba(255,255,255,0.06); padding: 1px 6px; border-radius: 5px; }
+/* ── Terminal install ── */
+.cli { width: 100%; max-width: 720px; margin: 64px auto 0; }
+.cli-title { font-size: 22px; font-weight: 500; letter-spacing: -0.02em; text-align: center; }
+.cli-sub { margin-top: 8px; font-size: 14px; color: var(--fg-muted); text-align: center; }
+/* No `overflow: hidden` here — the tooltip on each icon renders above its
+ * row, and a clipped ancestor would cut it off no matter how long you
+ * hover (there is nothing to fade in; it's clipped out of existence). The
+ * corner rounding that `overflow: hidden` used to provide for free is done
+ * explicitly on the first/last row instead. */
+.cli-rows { margin-top: 22px; border: 1px solid var(--border); border-radius: var(--radius); }
+.cli-row:first-child, .cli-row:first-child .cli-feedback { border-top-left-radius: var(--radius); border-top-right-radius: var(--radius); }
+.cli-row:last-child, .cli-row:last-child .cli-feedback { border-bottom-left-radius: var(--radius); border-bottom-right-radius: var(--radius); }
+/* Each row is a <button>: the whole thing is the click target, so no
+ * separate Copy button competes with the icons for attention. Compact on
+ * purpose — the previous version gave the command its own full-width band
+ * with a copy button beside it, which read as a form field, not one line
+ * to glance at and click. */
+.cli-row {
+  position: relative;
+  display: flex; align-items: center; gap: 12px;
+  width: 100%; padding: 10px 14px;
+  border: 0; border-radius: 0; background: var(--bg-card);
+  font: inherit; text-align: left; cursor: pointer;
+  transition: background 0.18s ease;
+}
+.cli-row:hover, .cli-row:focus-visible { background: rgba(255, 255, 255, 0.03); }
+.cli-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+.cli-row + .cli-row { border-top: 1px solid var(--border); }
+.cli-icons { flex-shrink: 0; display: flex; gap: 6px; }
+/* The tooltip target and the hover surface are the same element on purpose:
+ * a separate hit area would leave a dead gap between icon and label. */
+.cli-icon {
+  position: relative;
+  display: grid; place-items: center;
+  width: 22px; height: 22px;
+  color: var(--fg-dim);
+}
+.cli-icon svg { width: 15px; height: 15px; }
+.cli-row:hover .cli-icon { color: var(--fg-muted); }
+/* CSS-only tooltip: the label lives in the attribute, not a second DOM node,
+ * so there is nothing to keep in sync and nothing extra for a screen reader
+ * to announce (the row's own aria-label already says which OS this is). */
+.cli-icon::after {
+  content: attr(data-tooltip);
+  position: absolute; bottom: calc(100% + 8px); left: 50%;
+  translate: -50% 4px;
+  padding: 5px 9px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-elev);
+  color: var(--fg);
+  font-family: var(--font-mono); font-size: 11px; white-space: nowrap;
+  box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.6);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.15s ease, translate 0.15s ease;
+}
+.cli-icon::before {
+  content: ""; position: absolute; bottom: calc(100% + 4px); left: 50%;
+  translate: -50% 0;
+  border: 5px solid transparent; border-top-color: var(--border-strong);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.15s ease;
+}
+.cli-icon:hover::after, .cli-icon:hover::before { opacity: 1; translate: -50% 0; }
+/* The command is the one thing here worth selecting by hand, so it scrolls
+ * rather than wrapping or being truncated. */
+.cli-cmd {
+  flex: 1; min-width: 0;
+  font-family: var(--font-mono); font-size: 12.5px; color: var(--fg);
+  overflow-x: auto; white-space: nowrap;
+  scrollbar-width: none;
+}
+.cli-cmd::-webkit-scrollbar { height: 0; }
+/* Copied state: a blurred crossfade rather than a plain opacity swap — the
+ * blur is what sells the transition as one continuous motion instead of two
+ * things instantly trading places. Icons and command blur+fade out exactly
+ * as the feedback blur+fades in, same duration and easing, so neither side
+ * arrives first. */
+.cli-icons, .cli-cmd {
+  transition: opacity 0.22s ease-out, filter 0.22s ease-out;
+  filter: blur(0);
+}
+.cli-row.is-copied .cli-icons,
+.cli-row.is-copied .cli-cmd {
+  opacity: 0;
+  filter: blur(4px);
+}
+/* Feedback replaces the row's contents rather than sitting beside them —
+ * a small badge next to a command that's still visible reads as decoration;
+ * this reads as confirmation. */
+.cli-feedback {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  background: var(--bg-card);
+  color: var(--accent);
+  font-family: var(--font-mono); font-size: 12.5px; font-weight: 500;
+  opacity: 0; filter: blur(4px);
+  transition: opacity 0.22s ease-out, filter 0.22s ease-out;
+  /* This covers the full row at all times, not only while `.is-copied` is
+   * active — only its opacity says otherwise. Without this, an invisible
+   * full-row hit target sits permanently on top of the icons and command
+   * text in stacking order, and silently owns every hover before it ever
+   * reaches them: the icon's own :hover rule never fires, no matter how
+   * long the pointer sits there, because the pointer is never actually
+   * over the icon as far as hit-testing is concerned. It is status text,
+   * never a click target, so it never needs to intercept anything. */
+  pointer-events: none;
+}
+.cli-feedback svg { width: 14px; height: 14px; }
+.cli-row.is-copied .cli-feedback { opacity: 1; filter: blur(0); }
+.cli-note { margin-top: 14px; font-size: 13px; color: var(--fg-dim); text-align: center; }
+.cli-note a { color: var(--fg-muted); text-decoration: underline; text-underline-offset: 3px; }
+.cli-note a:hover { color: var(--fg); }
+@media (prefers-reduced-motion: reduce) {
+  .cli-icon::after, .cli-icon::before,
+  .cli-icons, .cli-cmd, .cli-feedback { transition: none; }
+  /* Without a transition these would otherwise snap to a *held* blur for
+   * the full 1.6s the row stays in its copied state, which reads as a
+   * rendering glitch, not a design choice — reduced motion means no motion,
+   * not motion frozen mid-frame. Opacity still swaps; nothing moves. */
+  .cli-row.is-copied .cli-icons, .cli-row.is-copied .cli-cmd,
+  .cli-row.is-copied .cli-feedback, .cli-feedback { filter: none; }
+}
+
 .releases-link { margin-top: 48px; font-size: 13px; color: var(--fg-dim); }
 .releases-link a { color: var(--fg-muted); text-decoration: underline; text-decoration-color: rgba(161, 161, 170, 0.4); text-underline-offset: 3px; }
 .releases-link a:hover { color: var(--fg); }
