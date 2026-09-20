@@ -118,6 +118,10 @@ jobs:
 
       # Both Linux jobs, not just x86_64 — `startsWith` rather than `==`, or
       # the arm64 runner builds without WebKitGTK and fails at link time.
+      # `xdg-utils` specifically: `ubuntu-22.04-arm` doesn't ship `xdg-open`
+      # the way the x86_64 image apparently does, and Tauri's AppImage
+      # bundler refuses to run without it — "xdg-open binary not found"
+      # fails the whole build at the bundling step, after a full compile.
       - name: Install Linux dependencies
         if: startsWith(matrix.name, 'linux')
         run: |
@@ -129,7 +133,8 @@ jobs:
             libxdo-dev \
             libssl-dev \
             libayatana-appindicator3-dev \
-            librsvg2-dev
+            librsvg2-dev \
+            xdg-utils
 
       - name: Rust cache
         uses: Swatinem/rust-cache@v2
