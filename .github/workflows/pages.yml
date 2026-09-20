@@ -1,0 +1,49 @@
+# Deploys the static install site in `site/` to GitHub Pages.
+#
+# One-time setup (owner only, one click or one API call): enable Pages with
+# the "GitHub Actions" source. Until then this workflow has nowhere to send
+# its artifact and will fail at the deploy step — that failure is the signal
+# that Pages is not enabled yet, not a bug in the site.
+#
+# Only runs when the site itself changes, so app commits never trigger it.
+
+name: Site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - ".github/workflows/pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - name: Deploy to Pages
+        id: deployment
+        uses: actions/deploy-pages@v5
