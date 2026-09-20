@@ -137,7 +137,7 @@ workflow run. If `signature` is empty, `TAURI_SIGNING_PRIVATE_KEY` was not set.
 
 ## What ships, and why
 
-`bundle.targets` in `src-tauri/tauri.conf.json` is pinned to exactly three:
+`bundle.targets` in `src-tauri/tauri.conf.json` is pinned to exactly four:
 
 | Platform | Bundle | Asset |
 |---|---|---|
@@ -145,11 +145,23 @@ workflow run. If `signature` is empty, `TAURI_SIGNING_PRIVATE_KEY` was not set.
 | Windows arm64 | NSIS | `Git-Gud_<version>_arm64-setup.exe` |
 | Linux x86_64 | AppImage | `Git-Gud_<version>_x86_64.AppImage` |
 | Linux aarch64 | AppImage | `Git-Gud_<version>_aarch64.AppImage` |
-| macOS | DMG (universal) | `Git-Gud_<version>_universal.dmg` |
+| macOS | DMG (universal), for install | `Git-Gud_<version>_universal.dmg` |
+| macOS | `.app.tar.gz`, for the updater only | not a user-facing download |
 
 Each architecture builds on a runner of its own architecture rather than
 cross-compiling, as T3 Code does. `fail-fast: false` means an arm64 runner
 having a bad day costs you the arm64 assets for that release, not the release.
+
+**`"app"` has to be in `bundle.targets`, or macOS silently gets no updates.**
+`createUpdaterArtifacts` produces a `.app.tar.gz` + signature as a companion
+to whichever macOS target is built, but Tauri only treats `app`, `appimage`,
+`msi` and `nsis` as "updater-enabled" targets — `dmg` alone doesn't count,
+even though the DMG is what a person actually installs. v0.2.0's first build
+had only `dmg` and shipped a real DMG that installed fine and would **never
+have offered a single update to anyone who used it** — `latest.json` simply
+had no `darwin-*` entries, silently, with no error anywhere a user would see.
+The build log names its own fix: *"the bundler was configured to create
+updater artifacts but no updater-enabled targets were built."*
 
 It used to be `"all"`, which also produced an `.msi`, a `.deb` and an `.rpm`.
 Pinning it is not tidiness:
