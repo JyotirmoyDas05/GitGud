@@ -67,6 +67,24 @@ generator.
   that needed one, including the terminal challenges, which want a home
   directory and a practice folder
 
+## [0.2.1] - 2026-09-21
+
+### Added
+
+- Install from a terminal: `curl -fsSL .../install.sh | sh` (macOS + Linux, one AppImage/`.app.tar.gz` path for every distro, no per-distro branch) and `irm .../install.ps1 | iex` (Windows, silent NSIS install). Both resolve the current release from the updater's own `latest.json` manifest rather than the GitHub API, so there is no unauthenticated rate limit to hit
+- Hero background: a ported, dimmed version of animate-ui's stars background (three parallax star layers, no visible loop seam), with a glow repositioned behind the screenshot instead of the empty page floor, and a hover tilt on the screenshot itself
+- A blurred crossfade (not a flat opacity swap) between a terminal-install row's command and its "Copied" confirmation
+- Hero shows the current home screen (16 challenges, welcome, quilt art) instead of the old challenge screenshot.
+- Floating Git, GitHub, terminal and FCS marks with the t3.codes entrance/drift/pointer-parallax motion, reduced-motion aware.
+- Download CTAs carry Windows/macOS/Linux icons and follow the visitor's OS (icon, label, direct asset link); Linux header uses the real Tux artwork. All icon SVG paths byte-identical to the t3code marketing source.
+
+### Fixed
+
+- WebKitGTK's DMA-BUF renderer aborts with `Could not create default EGL display: EGL_BAD_PARAMETER` on a good number of Linux machines, and there is no fallback after that line — the window opens, paints nothing, and the only trace is on a terminal the learner was never told to launch from. It hits hardest inside the AppImage (whose bundled GTK stack shadows the host's real Mesa drivers), but the same abort is reported from ordinary installs on Wayland, VMs and hybrid graphics too, so the fix sets `WEBKIT_DISABLE_DMABUF_RENDERER=1` before the window is created on every Linux launch rather than in an AppImage-only wrapper
+- The download page carried a "Debian / Ubuntu — .deb package" card from v0.1.0. `bundle.targets` has shipped no `.deb` since v0.2.0, so the card matched no release asset and silently fell back to the releases page — a download button advertising a file nobody builds
+- The OS icon tooltips on the terminal-install rows never appeared, regardless of hover duration. Two independent causes: `.cli-rows` had `overflow: hidden` to round its outer corners, clipping the tooltip entirely since it renders above its row; and `.cli-feedback` (the copied-confirmation overlay) covers the full row at all times, hidden only by opacity, with no `pointer-events: none` — it silently owned every hover across the row before it ever reached the icons underneath
+- `.btn-ghost` used an invented `rgba(255,255,255,.06)` + blur wash instead of T3 Code's actual app-UI glass (the chat composer surface): more opaque, colour-mixed from the real surface tone rather than a white tint, and reliant on an inset top highlight and a drop shadow for most of its "glass" read rather than blur alone
+
 ## [0.2.0] - 2026-09-20
 
 ### Added
