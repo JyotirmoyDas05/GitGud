@@ -117,11 +117,25 @@ function readCommits(range) {
 
 /** Bullet lines directly in `text` (no heading scoping). */
 function bulletsIn(text) {
-  return text
-    .split("\n")
-    .map((l) => l.match(BULLET_RE))
-    .filter(Boolean)
-    .map((m) => m[1].trim());
+  const bullets = [];
+  for (const line of text.split("\n")) {
+    const bullet = line.match(BULLET_RE);
+    if (bullet) {
+      bullets.push(bullet[1].trim());
+      continue;
+    }
+    // A wrapped continuation line of the bullet above it — this repo's own
+    // commit bodies hard-wrap prose at ~72 columns rather than writing one
+    // giant line per bullet, and the first version of this function threw
+    // every line after the first away, silently truncating every bullet with
+    // more than one line to its opening clause. A blank line ends a bullet
+    // without starting a new one; it is not itself a continuation.
+    const trimmed = line.trim();
+    if (trimmed.length > 0 && bullets.length > 0) {
+      bullets[bullets.length - 1] += ` ${trimmed}`;
+    }
+  }
+  return bullets;
 }
 
 /** Route one commit's contribution into `groups`. Mutates in place because the
