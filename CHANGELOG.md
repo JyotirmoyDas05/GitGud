@@ -67,6 +67,24 @@ generator.
   that needed one, including the terminal challenges, which want a home
   directory and a practice folder
 
+## [0.2.0] - 2026-09-20
+
+### Added
+
+- Two new modules ahead of Git: The Terminal (what a terminal is, the
+- Shell-history verification (`src-tauri/src/shell.rs`, `src/lib/shell.ts`,
+- Sidebar redesigned: modules render as a rail-based track with a
+- In-app self-update from GitHub Releases (`src/lib/updater.ts`,
+- Fully automatic changelog and release notes (`scripts/generate-changelog.mjs`,
+- Release packaging fixed: AppImage was named with Debian's `amd64` instead
+
+### Fixed
+
+- Verifying a challenge and moving to the next one showed the previous
+- Inline tips rendered as broken half-boxes: they are `<span>` elements
+- Multi-line sample output (an `ls -l` listing, a directory tree)
+- The directory picker asked for "the repository folder" on every
+
 ## [0.1.0] - 2026-09-19
 
 Initial release of Git Gud, a desktop app for learning Git and GitHub
