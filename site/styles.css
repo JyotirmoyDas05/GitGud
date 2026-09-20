@@ -126,6 +126,8 @@ img, svg { display: block; max-width: 100%; }
 @media (prefers-reduced-motion: reduce) {
   [data-rise] { animation: none; }
   html { scroll-behavior: auto; }
+  .hero-float-card { animation: none; transform: rotate(var(--rot)); }
+  .hero-float-mark { translate: none; transition: none; }
 }
 
 /* ── Nav ── */
@@ -174,7 +176,64 @@ img, svg { display: block; max-width: 100%; }
 .footer-links a:hover { color: var(--fg); }
 
 /* ── Hero ── */
-.hero { text-align: center; padding: 96px 32px 0; max-width: 1240px; margin: 0 auto; width: 100%; }
+.hero { position: relative; text-align: center; padding: 96px 32px 0; max-width: 1240px; margin: 0 auto; width: 100%; }
+.hero > *:not(.hero-float) { position: relative; z-index: 2; }
+
+/* Floating ecosystem marks, ported from the T3 Code homepage: each mark is
+ * absolutely placed via --x/--y/--s, eases in (mark-in), idles on a slow
+ * drift (mark-drift, gated by --home-motion-state), and shifts against the
+ * pointer by --depth (see app.js). Pure decoration: aria-hidden upstream. */
+.hero-float { position: absolute; inset: 0; pointer-events: none; z-index: 1; --px: 0px; --py: 0px; }
+.hero-float-mark {
+  position: absolute;
+  left: calc(50% + var(--x));
+  top: var(--y);
+  width: var(--s);
+  height: var(--s);
+  margin-left: calc(var(--s) / -2);
+  translate: calc(var(--px) * var(--depth)) calc(var(--py) * var(--depth));
+  transition: translate var(--parallax-duration, 0s) cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.hero-float-card {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 25%;
+  background: radial-gradient(circle at 30% 25%, var(--tint, rgba(255, 255, 255, 0.08)), rgba(20, 20, 24, 0.92) 65%);
+  border: 1px solid var(--border);
+  box-shadow: 0 20px 48px -16px rgba(0, 0, 0, 0.65), 0 2px 0 0 rgba(255, 255, 255, 0.04) inset;
+  animation:
+    mark-in 1s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d) both,
+    mark-drift var(--dur) ease-in-out calc(var(--d) + 1s) infinite;
+  animation-play-state: running, var(--home-motion-state, paused);
+}
+.hero-float-card img { width: 56%; height: 56%; display: block; object-fit: contain; }
+.hero-float-card svg { width: 52%; height: 52%; color: var(--fg-muted); }
+/* The FCS mark ships on its own black tile, so it fills the card edge to
+ * edge instead of sitting inside it. */
+.hf-fcs .hero-float-card { background: #0d0d10; border-color: rgba(255, 255, 255, 0.1); }
+.hf-fcs .hero-float-card img { width: 100%; height: 100%; border-radius: inherit; object-fit: cover; }
+@keyframes mark-in {
+  from { opacity: 0; transform: translate(var(--fx), var(--fy)) rotate(calc(var(--rot) + 24deg)) scale(0.6); }
+  to { opacity: 1; transform: translate(0, 0) rotate(var(--rot)) scale(1); }
+}
+@keyframes mark-drift {
+  0%, 100% { transform: translate(0, 0) rotate(var(--rot)); }
+  50% { transform: translate(var(--dx), var(--dy)) rotate(calc(var(--rot) + var(--wob))); }
+}
+.hf-git    { --x: max(-520px, -36vw); --y: 120px; --s: 92px; --rot: -8deg; --depth: 1.1; --d: 380ms; --dur: 10.5s; --dx: 4px; --dy: -12px; --wob: -2deg; --fx: -160px; --fy: -40px; --tint: rgba(240, 80, 50, 0.20); }
+.hf-github { --x: min(520px, 36vw); --y: 120px; --s: 92px; --rot: 7deg; --depth: 1.1; --d: 460ms; --dur: 9.2s; --dx: -4px; --dy: -10px; --wob: 2deg; --fx: 160px; --fy: -40px; }
+.hf-term   { --x: max(-400px, -28vw); --y: 430px; --s: 76px; --rot: 5deg; --depth: 0.9; --d: 540ms; --dur: 11.5s; --dx: 3px; --dy: -9px; --wob: -3deg; --fx: -120px; --fy: 80px; --tint: rgba(105, 111, 234, 0.18); }
+.hf-fcs    { --x: min(400px, 28vw); --y: 430px; --s: 76px; --rot: -5deg; --depth: 0.9; --d: 620ms; --dur: 8.5s; --dx: -3px; --dy: -11px; --wob: 3deg; --fx: 120px; --fy: 80px; }
+
+/* Platform-aware download-button icons: exactly one shows, chosen by
+ * html[data-platform] (see app.js). No attribute yet → Windows default. */
+.dl-icon { display: none; width: 17px; height: 17px; flex-shrink: 0; }
+html[data-platform="mac"] .dl-icon--apple { display: block; }
+html[data-platform="win"] .dl-icon--windows { display: block; }
+html[data-platform="linux"] .dl-icon--linux { display: block; }
+html:not([data-platform]) .dl-icon--windows { display: block; }
 .hero-platforms {
   display: inline-flex; align-items: center; gap: 10px;
   font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
@@ -328,6 +387,11 @@ img, svg { display: block; max-width: 100%; }
   .footer-inner { align-items: flex-start; flex-direction: column; gap: 28px; }
   .footer-links { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); width: 100%; gap: 14px 20px; }
   .hero { padding-top: 64px; }
+  /* Two marks above the headline, two beside the CTAs. Keeps the copy clear. */
+  .hf-git    { --x: -30vw; --y: 30px; --s: 60px; --rot: -8deg; }
+  .hf-github { --x: 30vw; --y: 30px; --s: 60px; --rot: 7deg; }
+  .hf-term   { --x: -34vw; --y: 470px; --s: 56px; --rot: 5deg; }
+  .hf-fcs    { --x: 34vw; --y: 470px; --s: 56px; --rot: -5deg; }
 }
 @media (max-width: 640px) {
   .download-cards { grid-template-columns: 1fr; }

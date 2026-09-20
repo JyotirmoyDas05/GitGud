@@ -43,6 +43,108 @@
 
   /* Download page: version label + per-asset links + this-device highlight. */
   var page = document.getElementById("download-page");
+
+  /* Hero floating marks: drift only while visible, parallax against the
+   * pointer on fine pointers. Ported from the T3 Code homepage motion
+   * (MIT): marks-only gating, rAF-throttled, reduced-motion aware. */
+  (function homeMotion() {
+    var hero = document.querySelector(".hero");
+    var field = document.querySelector(".hero-float");
+    if (!hero || !field || typeof IntersectionObserver === "undefined") return;
+    var marks = Array.prototype.slice.call(field.querySelectorAll(".hero-float-mark"));
+    if (!marks.length) return;
+    var visible = false;
+    var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+    var finePointer = window.matchMedia("(pointer: fine)");
+    var pointerFrame = undefined;
+    var pointer = null;
+
+    function canMove() {
+      return visible && document.visibilityState === "visible" && !reducedMotion.matches;
+    }
+    function update() {
+      for (var i = 0; i < marks.length; i++) {
+        marks[i].style.setProperty("--home-motion-state", canMove() ? "running" : "paused");
+      }
+      var parallax = finePointer.matches && canMove();
+      field.style.setProperty("--parallax-duration", parallax ? "0.7s" : "0s");
+      if (!parallax) {
+        if (pointerFrame !== undefined) cancelAnimationFrame(pointerFrame);
+        pointerFrame = undefined;
+        pointer = null;
+        field.style.setProperty("--px", "0px");
+        field.style.setProperty("--py", "0px");
+      }
+    }
+    new IntersectionObserver(function (entries) {
+      visible = entries.some(function (e) { return e.isIntersecting; });
+      update();
+    }).observe(hero);
+    hero.addEventListener("pointermove", function (event) {
+      if (!finePointer.matches || !canMove()) return;
+      pointer = { x: event.clientX, y: event.clientY };
+      if (pointerFrame === undefined) {
+        pointerFrame = requestAnimationFrame(function () {
+          pointerFrame = undefined;
+          if (!pointer || !finePointer.matches || !canMove()) return;
+          var bounds = hero.getBoundingClientRect();
+          if (!bounds.width || !bounds.height) return;
+          field.style.setProperty("--px", (((pointer.x - bounds.left) / bounds.width - 0.5) * 36).toFixed(1) + "px");
+          field.style.setProperty("--py", (((pointer.y - bounds.top) / bounds.height - 0.5) * 28).toFixed(1) + "px");
+        });
+      }
+    });
+    hero.addEventListener("pointerleave", update);
+    document.addEventListener("visibilitychange", update);
+    update();
+  })();
+
+  /* Homepage CTAs follow the visitor's OS: icon, label, and a direct link
+   * to the right asset (same pattern as the T3 Code homepage). */
+  (function platformCtas() {
+    var ua = navigator.userAgent || "";
+    var os = /Win/i.test(ua) ? "win" : /Mac/i.test(ua) ? "mac" : /Linux/i.test(ua) ? "linux" : null;
+    if (!os) return;
+    document.documentElement.dataset.platform = os;
+    var labels = {
+      win: "Download for Windows",
+      mac: "Download for macOS",
+      linux: "Download for Linux"
+    };
+    var suffixes = {
+      win: ["_x64-setup.exe"],
+      mac: ["_universal.dmg"],
+      linux: ["_x86_64.AppImage", "_amd64.AppImage"]
+    };
+    var pairs = [
+      ["download-btn", "download-label"],
+      ["cta-download-btn", "cta-download-label"]
+    ];
+    pairs.forEach(function (pair) {
+      var label = document.getElementById(pair[1]);
+      if (label) label.textContent = labels[os];
+    });
+    fetch(LATEST_API_URL)
+      .then(function (r) { return r.json(); })
+      .then(function (release) {
+        var url = null;
+        var list = suffixes[os];
+        for (var i = 0; i < list.length && !url; i++) {
+          var match = (release.assets || []).find(function (a) {
+            return a.name && a.name.endsWith(list[i]);
+          });
+          if (match) url = match.browser_download_url;
+        }
+        if (!url) return;
+        pairs.forEach(function (pair) {
+          var btn = document.getElementById(pair[0]);
+          if (btn) btn.href = url;
+        });
+      })
+      .catch(function () { /* buttons keep pointing at download.html */ });
+  })();
+
+  if (!page) return;
   if (!page) return;
 
   var versionLabel = document.getElementById("version-label");
@@ -62,11 +164,6 @@
       section.classList.add("is-you");
       section.scrollIntoView({ block: "nearest" });
     }
-    /* Point same-page CTAs at the visitor's platform section. */
-    document.querySelectorAll('[data-dl]').forEach(function (el) {
-      var map = { windows: "windows", macos: "macos", linux: "linux" };
-      if (map[el.getAttribute("data-dl")] === guess) el.classList.add("btn-primary");
-    });
   }
 
   function load() {
