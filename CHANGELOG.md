@@ -71,19 +71,22 @@ generator.
 
 ### Added
 
-- Two new modules ahead of Git: The Terminal (what a terminal is, the
-- Shell-history verification (`src-tauri/src/shell.rs`, `src/lib/shell.ts`,
-- Sidebar redesigned: modules render as a rail-based track with a
-- In-app self-update from GitHub Releases (`src/lib/updater.ts`,
-- Fully automatic changelog and release notes (`scripts/generate-changelog.mjs`,
-- Release packaging fixed: AppImage was named with Debian's `amd64` instead
+- t3-style install website with live release download page ([`5291957`](https://github.com/JyotirmoyDas05/GitGud/commit/529195776f8bd2e4da171a4198992d9e50eefff1))
+- Two new modules ahead of Git: The Terminal (what a terminal is, the prompt, command/argument/option shape, `--help`) and Files & Folders (`pwd`, `ls`, `cd`, absolute/relative paths, `mkdir`/`touch`), five challenges total, verified against the learner's real shell history and real filesystem rather than a checkbox
+- Shell-history verification (`src-tauri/src/shell.rs`, `src/lib/shell.ts`, `src/lib/verify/shell.ts`): reads Bash, Zsh, Fish and PowerShell history to confirm a command was actually run, since `pwd`/`ls`/`cd` change nothing on disk to check afterwards
+- Sidebar redesigned: modules render as a rail-based track with a completion count per group instead of a flat list of sixteen rows; the scrollbar is gone in favour of a bottom fade
+- In-app self-update from GitHub Releases (`src/lib/updater.ts`, `src/components/UpdateButton.tsx`): check/download/install as one derived control, signed bundles, release notes shown before installing
+- Fully automatic changelog and release notes (`scripts/generate-changelog.mjs`, `CONTRIBUTING.md`): derived from `git log` at tag-push time from every contributor's commits, grouped by Conventional Commits type or a commit's own `### Added`/`### Fixed` body — nothing to hand-write
+- Release packaging fixed: AppImage was named with Debian's `amd64` instead of the universal `x86_64`, `productName`'s space corrupted every asset name, the `.msi` could silently become the updater's preferred Windows installer over the NSIS build actually shipped, and native arm64 builds (Linux, Windows) were added
 
 ### Fixed
 
-- Verifying a challenge and moving to the next one showed the previous
-- Inline tips rendered as broken half-boxes: they are `<span>` elements
-- Multi-line sample output (an `ls -l` listing, a directory tree)
-- The directory picker asked for "the repository folder" on every
+- ubuntu-22.04-arm has no xdg-open, unlike the x86_64 runner image, and Tauri's AppImage bundler refuses to run without it - the whole linux-arm64 job failed at the bundling step, after a full 4-minute compile, with 'xdg-open binary not found'. Installs xdg-utils alongside the other Linux packaging dependencies.
+- bulletsIn() only matched lines starting with - or *, so a bullet written as hard-wrapped prose (this repo's own commit style) lost every line after its first the moment it wrapped past one line. Continuation lines are now appended to the previous bullet; a blank line ends one without starting another. Verified against the real v0.2.0 commit that exposed it and against the existing structured-body regression case.
+- Verifying a challenge and moving to the next one showed the previous challenge's stale pass/fail list until Verify was pressed again — `VerifyBlock` had no key, so React reused its local state across navigation instead of resetting it
+- Inline tips rendered as broken half-boxes: they are `<span>` elements and an inline box cannot carry a border, so a tip that wrapped onto a second line drew as two ragged fragments
+- Multi-line sample output (an `ls -l` listing, a directory tree) collapsed onto one line for want of `white-space: pre-wrap`
+- The directory picker asked for "the repository folder" on every challenge that needed one, including the two terminal challenges that want a home directory and a practice folder
 
 ## [0.1.0] - 2026-09-19
 
