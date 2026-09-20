@@ -81,6 +81,7 @@ generator.
 
 ### Fixed
 
+- bundle.targets had dmg but not app. Tauri only treats app, appimage, msi and nsis as updater-enabled targets, so createUpdaterArtifacts silently produced no darwin-* entry in latest.json even though the .app.tar.gz + signature it needs were built on disk right next to the dmg. A learner on macOS would install a perfectly good DMG and then never be offered a single update, with no error anywhere. The build's own log names the fix: 'the bundler was configured to create updater artifacts but no updater-enabled targets were built.'
 - ubuntu-22.04-arm has no xdg-open, unlike the x86_64 runner image, and Tauri's AppImage bundler refuses to run without it - the whole linux-arm64 job failed at the bundling step, after a full 4-minute compile, with 'xdg-open binary not found'. Installs xdg-utils alongside the other Linux packaging dependencies.
 - bulletsIn() only matched lines starting with - or *, so a bullet written as hard-wrapped prose (this repo's own commit style) lost every line after its first the moment it wrapped past one line. Continuation lines are now appended to the previous bullet; a blank line ends one without starting another. Verified against the real v0.2.0 commit that exposed it and against the existing structured-body regression case.
 - Verifying a challenge and moving to the next one showed the previous challenge's stale pass/fail list until Verify was pressed again — `VerifyBlock` had no key, so React reused its local state across navigation instead of resetting it
