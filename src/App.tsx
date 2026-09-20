@@ -7,6 +7,8 @@ import { FALLBACK_LOCALE, resolveLocale } from "~/lib/content";
 import { gitVersion } from "~/lib/git";
 import { hydrate, useProgressUnreadable } from "~/lib/progress";
 import { useRoute } from "~/lib/router";
+import { checkForUpdate, initUpdates } from "~/lib/updater";
+import { strings } from "~/strings";
 import { ChallengeView } from "~/views/ChallengeView";
 import { Finale } from "~/views/Finale";
 import { Home } from "~/views/Home";
@@ -32,6 +34,7 @@ export default function App() {
 
   const [gitMissing, setGitMissing] = useState(false);
   const saveUnreadable = useProgressUnreadable();
+  const t = strings(locale);
 
   useEffect(() => {
     document.documentElement.classList.toggle("dark", dark);
@@ -66,6 +69,21 @@ export default function App() {
       .catch(() => setGitMissing(true));
   }, []);
 
+  // Look for a new release once the window has settled, then occasionally.
+  //
+  // T3 Code polls every four minutes, which suits a tool people leave open all
+  // day across three release channels. This one has a single stable channel
+  // and is used in sittings, so a check at launch plus one every six hours
+  // covers it without spending a learner's connection on release metadata.
+  useEffect(() => {
+    const first = window.setTimeout(() => void initUpdates(), 4_000);
+    const repeat = window.setInterval(() => void checkForUpdate({ silent: true }), 6 * 60 * 60_000);
+    return () => {
+      window.clearTimeout(first);
+      window.clearInterval(repeat);
+    };
+  }, []);
+
   return (
     <Shell locale={locale} onLocaleChange={setLocale} dark={dark} onDarkChange={setDark}>
       {gitMissing && (
@@ -73,8 +91,7 @@ export default function App() {
           className="alert-glass flex items-start gap-2 border-b px-6 py-2.5 text-sm text-warning-foreground">
           <TriangleAlert className="mt-0.5 size-4 shrink-0" />
           <span>
-            Git was not found on your PATH. Challenge 1 walks you through installing it — the
-            other challenges cannot be verified until it is.
+            {t.gitMissing}
           </span>
         </div>
       )}
@@ -84,17 +101,17 @@ export default function App() {
           className="alert-glass flex items-start gap-2 border-b px-6 py-2.5 text-sm text-warning-foreground">
           <TriangleAlert className="mt-0.5 size-4 shrink-0" />
           <span>
-            Your saved progress could not be read, so this session is not being saved to
-            disk. The old file was kept as <code className="font-mono text-xs">user-data.corrupt.json</code> in
-            the app data folder.
+            {t.saveUnreadable} {t.saveKeptPrefix}{" "}
+            <code className="font-mono text-xs">user-data.corrupt.json</code>{" "}
+            {t.saveKeptSuffix}
           </span>
         </div>
       )}
 
-      {route.name === "home" && <Home />}
+      {route.name === "home" && <Home locale={locale} />}
       {route.name === "challenge" && <ChallengeView id={route.id} locale={locale} />}
       {route.name === "page" && <PageView page={route.page} locale={locale} />}
-      {route.name === "finale" && <Finale />}
+      {route.name === "finale" && <Finale locale={locale} />}
     </Shell>
   );
 }

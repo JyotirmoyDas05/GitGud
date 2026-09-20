@@ -1,0 +1,103 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>找出你的終端機站在哪裡，看看周圍有什麼，並認出你的家目錄。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>終端機永遠在某個地方</h2>
+    <p>有一個想法能讓其他一切都通了：<strong>你的終端機永遠在恰好一個資料夾裡面。</strong>不是「開在」它——而是站在它裡面，就像檔案總管視窗一次只顯示一個資料夾一樣。</p>
+
+    <p>那個資料夾叫做<strong>目前目錄</strong>，或<strong>工作目錄</strong>。除非你另有說明，你輸入的每個指令都在 <em>那裡</em> 發生。<code>ls</code> 列出那個資料夾。<code>mkdir notes</code> 在它裡面建立新資料夾。之後的 <code>git init</code> 會把 <em>那個</em> 資料夾變成儲存庫——所以「我在哪個資料夾？」不再是冷知識，而是行動前要檢查的事。</p>
+
+    <p>新手在終端機裡幾乎每一次困惑——「檔案明明就在眼前卻說不存在」——都是這個。檔案存在。你站錯地方了。</p>
+
+    <h2>目錄就是資料夾</h2>
+    <p><strong>目錄</strong>和<strong>資料夾</strong>是同一個東西。「資料夾」是圖形桌面取的名字；「目錄」是更老的名字，終端機、文件和每個指令名稱用的都是它——<code>mkdir</code> 就是 <em>make directory</em>，<code>cd</code> 就是 <em>change directory</em>。看到兩個詞，都當同一個意思就好。</p>
+
+    <p>你的電腦存兩種東西：</p>
+
+    <ul>
+        <li><strong>檔案</strong>裝內容——文字、照片、程式碼。</li>
+        <li><strong>目錄</strong>裝別的檔案和目錄。就這樣而已。</li>
+    </ul>
+
+    <p>目錄裡面有目錄，裡面還有目錄，從一個起點一路往下。那個巢狀就是 <strong>檔案系統</strong>，它是一棵樹。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>顯示你在哪裡</h3>
+    <p>打開你的終端機。每個終端機使用者都學會信任的第一個指令：</p>
+
+    <code class="shell">pwd</code>
+
+    <p><strong>print working directory</strong> 的縮寫。它用完整地址回答問題：</p>
+
+    <p><code class="comment">/Users/jyoti</code></p>
+
+    <p>在 Git Bash 的 Windows 上你會看到像 <code>/c/Users/jyoti</code> 的東西——同一個地方，Git Bash 只是把 <code>C:</code> 碟用 Unix 寫法寫出來。</p>
+
+    <p>那個地址叫做<strong>路徑</strong>。由左往右當作指引來讀：從最頂端開始，進到 <code>Users</code>，再進到 <code>jyoti</code>。每個 <code>/</code> 就是再往裡一步。像這樣從最頂端開始的路徑是<strong>絕對路徑</strong>——不管你站在哪裡用，意思都一樣。</p>
+
+    <p><code>pwd</code> 免費、即時、什麼都不改。不確定的時候就執行。沒人會因為你執行 <code>pwd</code> 而看輕你。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>看看四周</h3>
+    <p>看看這裡實際上有什麼：</p>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">Desktop  Documents  Downloads  Music  Pictures</code></p>
+
+    <p>認得嗎？跟你在檔案總管看到的是同樣的資料夾，因為沒有什麼「終端機專用檔案系統」——是一台電腦、兩種看法。把檔案總管拉到終端機旁邊並排一次。整個感覺就沒那麼抽象了。</p>
+
+    <p>要一眼分出檔案和目錄，要求詳細版：</p>
+
+    <code class="shell">ls -l</code>
+
+    <p><code class="comment">drwxr-xr-x  5 jyoti staff  160 Sep 20 09:12 Documents
+-rw-r--r--  1 jyoti staff 1024 Sep 20 09:14 notes.txt</code></p>
+
+    <p>現在先忽略幾乎全部，只看每一行的第一個字。 <code>d</code> 是 <strong>目錄</strong> 的意思。 <code>-</code> 是普通 <strong>檔案</strong>。那一個字母就是答案。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>家，和波浪符號</h2>
+    <p>打開終端機時，它不是從隨機位置開始的。它從你的 <strong>家目錄</strong> 開始——屬於你的使用者帳號的那個資料夾，裝著你的桌面、文件和下載。</p>
+
+    <ul>
+        <li>macOS：<code>/Users/yourname</code></li>
+        <li>Linux：<code>/home/yourname</code></li>
+        <li>Windows：<code>C:\Users\yourname</code>，Git Bash 會顯示為 <code>/c/Users/yourname</code></li>
+    </ul>
+
+    <p>你會一直輸入它，所以它有個捷徑：<strong><code>~</code></strong>，波浪符號。凡是能寫路徑的地方， <code>~</code> 就是「我的家目錄」的意思。所以 <code>~/Documents</code> 就是你的文件資料夾，在每台機器、每個使用者手上寫法都一樣——這正是文件裡滿滿波浪符號的原因。</p>
+
+    <p>回頭看你的提示字元。裡面的那個 <code>~</code> 是同一個捷徑：提示字元在告訴你你在家。走進子資料夾，看著它變成 <code>~/Documents</code>。你的提示字元一直靜靜地在回答 <code>pwd</code>。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>證明它</h3>
+    <p>打開終端機，去別處之前先執行 <code>pwd</code>，讀它顯示的路徑。那就是你的家目錄。</p>
+
+    <p>再用下面的 <strong>Select directory</strong> 選取那個完全相同的資料夾。Git Gud 會自己算出你的家目錄在哪裡並比對——所以這是有對錯的真答案，不是勾選框。</p>
+
+    <p>順便也執行 <code>ls</code>，再用 <code>exit</code> 讓殼層存檔，按 Verify。</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>看看四周</h3>
+    <ul class="no-list-style">
+        <li><strong>我在哪裡？</strong></li>
+        <code class="shell">pwd</code>
+        <li><strong>這裡有什麼？</strong></li>
+        <code class="shell">ls</code>
+        <li><strong>連隱藏的也包括</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>附詳細——開頭的 <code>d</code> 是目錄的意思</strong></li>
+        <code class="shell">ls -l</code>
+        <li><strong>不過去，看別的資料夾裡有什麼</strong></li>
+        <code class="shell">ls ~/Documents</code>
+    </ul>
+</div>

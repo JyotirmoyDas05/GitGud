@@ -1,0 +1,160 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Muévete por el sistema de archivos con <code>cd</code> — baja a las carpetas, sube al padre y
+        vuelve a casa directamente.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Cambiar de directorio</h2>
+    <p>Ya sabes dónde estás. Ahora necesitas estar en otro sitio. Un comando lo hace:</p>
+
+    <p><code class="comment">cd &#60;WHERE&#62;</code></p>
+
+    <p><code>cd</code> es <strong>change directory</strong>. Es el equivalente en la terminal de
+        hacer doble clic en una carpeta, y es el comando que escribirás más que ningún otro el resto de
+        tu vida.</p>
+
+    <p>No muestra nada cuando funciona. Ese silencio es normal y es deliberado — en la terminal, sin
+        noticias son buenas noticias. Los comandos hablan cuando algo sale mal. Tu prueba de que funcionó es el
+        prompt, que ahora muestra la nueva carpeta, y <code>pwd</code>, que lo confirmará.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Baja a una carpeta</h3>
+    <p>Empieza en casa y mira qué hay:</p>
+
+    <code class="shell">cd ~</code>
+    <code class="shell">ls</code>
+
+    <p>Elige cualquier carpeta que veas — <code>Documents</code> y <code>Desktop</code> existen en casi todas las
+        máquinas — y entra en ella:</p>
+
+    <code class="shell">cd Documents</code>
+
+    <p>Mira el prompt. Cambió. Confírmalo como es debido:</p>
+
+    <code class="shell">pwd</code>
+
+    <p><code class="comment">/Users/jyoti/Documents</code></p>
+
+    <p>Acabas de usar una <strong>ruta relativa</strong>. Escribiste <code>Documents</code>, no toda la
+        dirección, y funcionó porque <code>cd</code> buscó ese nombre <em>empezando desde donde
+        ya estabas</em>. Las rutas relativas son cortas, y significan cosas distintas según
+        dónde estés situado — que es justo la idea.</p>
+
+    <p><span class="inline-tip">Escribe <code>cd Doc</code> y pulsa <strong>Tab</strong>. El shell
+        termina la palabra por ti. Esto es <strong>autocompletado con Tab</strong>, funciona con cada ruta que
+        escribas, y te ahorra errores además de pulsaciones. Acostúmbrate ya — es
+        la diferencia entre quienes encuentran la terminal tediosa y quienes no.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Sube de nuevo</h3>
+    <p>Cada directorio tiene un <strong>padre</strong> — el que lo contiene. Tiene una abreviatura permanente,
+        dos puntos:</p>
+
+    <code class="shell">cd ..</code>
+    <code class="shell">pwd</code>
+
+    <p>Estás de vuelta donde empezaste. <code>..</code> siempre significa «un nivel hacia arriba, desde aquí», así que funciona
+        en cualquier sitio sin saber ningún nombre.</p>
+
+    <p>Hay una abreviatura parecida para lo contrario: un solo punto, <code>.</code>, significa «justo aquí».
+        Parece inútil — hasta que conoces un comando que necesita que digas «esta carpeta» en voz alta.
+        <code>git add .</code>, que escribirás muchas veces más adelante, es exactamente eso.</p>
+
+    <p>Los puntos se acumulan. Esto sube dos niveles:</p>
+
+    <code class="shell">cd ../..</code>
+
+    <p>Y se combinan con nombres. Sube un nivel y luego baja a una carpeta hermana, en un solo movimiento:</p>
+
+    <code class="shell">cd ../Downloads</code>
+
+    <p>Ese es todo el vocabulario. Una ruta son solo estas piezas unidas con barras.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Absoluta y relativa</h2>
+    <p>Dos tipos de ruta, y saber cuál tienes en la mano elimina la mayoría de la confusión con las rutas para siempre.</p>
+
+    <ul>
+        <li>Una <strong>ruta absoluta</strong> empieza desde lo alto del sistema de archivos y está completa por sí
+            sola: <code>/Users/jyoti/Documents</code>. Significa lo mismo escrita desde cualquier sitio. Puedes
+            reconocerla al instante — empieza con <code>/</code> (o <code>~</code>, que se expande en una,
+            o una letra de unidad como <code>C:</code> en Windows).</li>
+        <li>Una <strong>ruta relativa</strong> empieza desde donde estás: <code>Documents</code>,
+            <code>../Downloads</code>, <code>notes/day-one.txt</code>. Más corta de escribir, pero solo correcta
+            desde el punto de partida adecuado.</li>
+    </ul>
+
+    <p>Piénsalo como una dirección postal frente a «la segunda puerta a la izquierda». Ambas te llevan allí. Solo una de
+        ellas sigue valiendo si se la repites a alguien que está en otro sitio.</p>
+
+    <p>Usa rutas relativas para todo lo cercano — que es la mayoría de las veces. Recurre a una ruta absoluta cuando
+        saltes a un sitio lejano, o cuando estés escribiendo la ruta para otra persona.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Salta a cualquier sitio</h3>
+    <p>Pasea hasta unos niveles más abajo, luego vuelve a casa en un movimiento:</p>
+
+    <code class="shell">cd ~</code>
+
+    <p><code>cd</code> sin nada después hace lo mismo — casa es el destino predeterminado,
+        porque es donde querrás estar tan a menudo que se ganó el atajo.</p>
+
+    <p>Y una ruta absoluta te lleva a cualquier sitio en un paso, sin importar lo lejos que esté:</p>
+
+    <code class="shell">cd ~/Documents</code>
+
+    <p>Esa es absoluta — <code>~</code> se expande a la dirección completa de tu directorio personal antes de que
+        <code>cd</code> la vea. En macOS o Linux también puedes apuntar a lo más alto de todo el
+        sistema de archivos y echar un vistazo; no hay nada allí que muerda.</p>
+
+    <code class="shell">cd /</code>
+    <code class="shell">ls</code>
+
+    <p>Un último atajo que merece la pena tener:</p>
+
+    <code class="shell">cd -</code>
+
+    <p>Eso te devuelve al directorio anterior, como el botón de atrás en un navegador. Dos de esos seguidos y
+        estás alternando entre dos carpetas — que es como se ve la mayor parte del trabajo real.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Qué se comprueba</h3>
+    <p>Este reto busca cuatro <em>formas</em> distintas de <code>cd</code> en tu historial del shell —
+        una por cada idea de arriba — en lugar de cuatro destinos concretos, para que puedas practicar con
+        las carpetas que realmente tengas:</p>
+
+    <ul>
+        <li><code>cd Documents</code> — bajar a una carpeta por su nombre (relativa)</li>
+        <li><code>cd ..</code> — subir al padre</li>
+        <li><code>cd ~</code> — casa</li>
+        <li><code>cd ~/Documents</code> o <code>cd /usr</code> — una ruta absoluta</li>
+    </ul>
+
+    <p>Ejecuta <code>pwd</code> después de cada uno para ver cómo funciona. Luego <code>exit</code> para guardar tu
+        historial y pulsa Verificar.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>Moverse</h3>
+    <ul class="no-list-style">
+        <li><strong>Dentro de una carpeta</strong></li>
+        <code class="shell">cd &#60;FOLDERNAME&#62;</code>
+        <li><strong>Subir al padre</strong></li>
+        <code class="shell">cd ..</code>
+        <li><strong>Subir dos, o subir uno y cruzar</strong></li>
+        <code class="shell">cd ../../</code>
+        <li><strong>Casa</strong></li>
+        <code class="shell">cd ~</code>
+        <li><strong>Volver a donde estabas</strong></li>
+        <code class="shell">cd -</code>
+        <li><strong>Y siempre, ante la duda</strong></li>
+        <code class="shell">pwd</code>
+    </ul>
+</div>

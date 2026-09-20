@@ -1,0 +1,137 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Open a terminal, run your first two commands, and learn to read the line it greets you with.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>What a Terminal Is</h2>
+    <p>A <strong>terminal</strong> is a window where you type instructions to your computer instead of
+        clicking them. That's the whole idea. Everything you already do — open a folder, make a new one,
+        rename a file, copy something — has a typed equivalent, and the typed version is usually faster
+        and always repeatable.</p>
+
+    <p>You will hear several words for roughly the same thing, and it's worth untangling them once:</p>
+
+    <ul>
+        <li>The <strong>terminal</strong> is the window. It draws text and takes your keystrokes.</li>
+        <li>The <strong>shell</strong> is the program running inside it that actually understands what you
+            type. Common ones are <strong>Bash</strong>, <strong>Zsh</strong> and <strong>PowerShell</strong>.</li>
+        <li><strong>Command line</strong> and <strong>CLI</strong> are general names for this way of working.</li>
+    </ul>
+
+    <p>In practice people use all four interchangeably, and so will we. If someone tells you to "open a
+        terminal", they mean this window.</p>
+
+    <p>It looks intimidating because it's empty and nothing tells you what to do. It isn't dangerous.
+        Nothing in this module can break anything — you'll be printing your own username and making a
+        practice folder. Nobody is judging your typing.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Open Your Terminal</h3>
+
+    <p><strong>Windows.</strong> Windows ships with PowerShell, but the commands in this module — and
+        nearly every tutorial, README and Stack Overflow answer you will ever read — are written for a
+        Unix-style shell. The easiest way to get one is <strong>Git Bash</strong>, which comes free with
+        <a href="https://git-scm.com/download/win">Git for Windows</a>. Install it with the default
+        options, then open <strong>Git Bash</strong> from the Start menu.</p>
+
+    <p><span class="inline-tip">That install also puts Git on your computer, which you will need later
+        anyway — a challenge further down confirms it's set up properly. Two birds.</span></p>
+
+    <p><strong>macOS.</strong> Press <code>Cmd</code> + <code>Space</code>, type <em>Terminal</em>, press
+        enter. It's also in Applications › Utilities.</p>
+
+    <p><strong>Linux.</strong> Usually <code>Ctrl</code> + <code>Alt</code> + <code>T</code>, or search
+        your applications for <em>Terminal</em>.</p>
+
+    <p>You should now be looking at a mostly empty window with one line of text and a blinking cursor.
+        That line is the next thing to understand.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Reading the Prompt</h2>
+    <p>The line waiting for you is called the <strong>prompt</strong>. It isn't decoration — it's a status
+        bar, and it's telling you three useful things before you type anything at all.</p>
+
+    <p><code class="comment">jyoti@laptop ~/code $</code></p>
+
+    <ul>
+        <li><code>jyoti</code> — who you are signed in as.</li>
+        <li><code>laptop</code> — which machine you're talking to. This matters more than you'd think
+            once you start connecting to other computers.</li>
+        <li><code>~/code</code> — <strong>where you are</strong>. The terminal is always standing in some
+            folder, and this is it. The next challenge but one is entirely about this part.</li>
+        <li><code>$</code> — "your turn". Everything after it is what you type.</li>
+    </ul>
+
+    <p>Yours will look different. Zsh on macOS often ends with <code>%</code> instead of <code>$</code>,
+        some prompts are two lines, some are colourful, some show the current Git branch. The parts move
+        around; the idea doesn't.</p>
+
+    <p>This is also why documentation writes commands with a <code>$</code> in front — it's shorthand for
+        "type this at your prompt". You never type the <code>$</code> itself. The code boxes in Git Gud
+        show it too, and the copy button leaves it out.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Say Hello</h3>
+    <p>Type this and press enter:</p>
+
+    <code class="shell">whoami</code>
+
+    <p>It prints your username. That's it. That's the whole command.</p>
+
+    <p><code class="comment">jyoti</code></p>
+
+    <p>Now try another:</p>
+
+    <code class="shell">date</code>
+
+    <p><code class="comment">Sat Sep 20 09:24:11 IST 2026</code></p>
+
+    <p>You have now used a terminal. The pattern you just met — type a word, press enter, read what comes
+        back — is the entire interaction. Everything else is more interesting words.</p>
+
+    <p><span class="inline-tip">Press the <strong>up arrow</strong>. Your shell remembers what you typed
+        and will hand it back to you. Press it a few times. This is the single biggest time-saver on this
+        page.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Closing the Terminal</h3>
+    <p>Clicking the window's close button works. But there's a proper way, and it's a command like any
+        other:</p>
+
+    <code class="shell">exit</code>
+
+    <p>The window closes. Reopen it the same way you did before — a terminal is a cheap, disposable thing,
+        and you'll open and close dozens a day without thinking about it.</p>
+
+    <p>One reason to prefer <code>exit</code>: that memory of what you typed lives in a file, and Bash and
+        Zsh only write it out when the shell closes properly. Which brings us to how this challenge is
+        checked.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>How Git Gud Checks This</h3>
+    <p>Commands like <code>whoami</code> don't change anything on your computer, so there's no folder or
+        file for the app to look at afterwards. Instead, Git Gud reads the <strong>history file your own
+        shell keeps</strong> — <code>~/.bash_history</code> for Bash, and the equivalent for Zsh, Fish and
+        PowerShell — and looks for the commands this challenge asked for.</p>
+
+    <p>It reads the last few hundred lines, on your machine only, and nothing is sent anywhere. Each check
+        below names the exact file it read.</p>
+
+    <p>So: run <code>whoami</code> and <code>date</code>, then <code>exit</code> to close the terminal so
+        your shell saves its history, open a fresh one, and come back here and press Verify.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>If the Check Can't See Your Commands</h3>
+    <p>Bash and Zsh save their history when the shell <em>exits</em>, not as you type. If you did the work
+        but the check can't find it, your terminal is almost certainly still open. Type <code>exit</code>
+        and press Verify again.</p>
+    <p>On Windows, <strong>cmd.exe</strong> keeps no history at all. Use Git Bash or PowerShell.</p>
+</div>

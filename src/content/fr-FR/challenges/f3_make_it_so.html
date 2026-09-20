@@ -1,0 +1,153 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Construisez une petite arborescence de dossiers depuis le terminal avec <code>mkdir</code> et <code>touch</code>.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Créer des choses</h2>
+    <p>Tout jusqu'ici était en lecture seule — regarder et se déplacer. Deux commandes couvrent presque toute la
+        création :</p>
+
+    <ul>
+        <li><strong><code>mkdir</code></strong> — <em>make directory</em> (créer un répertoire). Crée un dossier.</li>
+        <li><strong><code>touch</code></strong> — crée un fichier vide.</li>
+    </ul>
+
+    <p>Les deux créent des choses <strong>à l'intérieur du répertoire où vous vous tenez</strong>, sauf si vous
+        leur donnez un chemin qui dit le contraire. C'est là que le défi précédent paie : si vous n'êtes pas sûr
+        de l'endroit où un nouveau dossier va atterrir, exécutez d'abord <code>pwd</code>.</p>
+
+    <p><code>touch</code> porte un nom étrange parce que créer des fichiers est son second métier — son vrai but
+        est de mettre à jour l'horodatage d'un fichier, et en créer un qui n'existe pas encore était un accident
+        pratique. Tout le monde l'utilise pour l'accident.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Créez le dossier d'entraînement</h3>
+    <p>Partez de la maison, pour qu'il n'y ait aucun doute sur l'endroit où cela atterrit :</p>
+
+    <code class="shell">cd ~</code>
+
+    <p>Créez maintenant un dossier et entrez dedans :</p>
+
+    <code class="shell">mkdir gitgud-practice</code>
+    <code class="shell">cd gitgud-practice</code>
+
+    <p>Comme <code>cd</code>, <code>mkdir</code> ne dit rien quand elle réussit. Vérifiez avec <code>ls</code> si
+        vous voulez être rassuré — vous devriez, les premières fois.</p>
+
+    <p><span class="inline-tip">Nommez-le exactement <code>gitgud-practice</code> — la vérification cherche ce
+        nom. Et remarquez qu'il n'y a pas d'espace dedans. Les espaces dans les noms sont légales mais rendent
+        les chemins pénibles à taper, c'est pourquoi le monde de la programmation privilégie les traits
+        d'union.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Créez un fichier</h3>
+    <p>Vous devriez maintenant être à l'intérieur de <code>gitgud-practice</code>. Vérifiez-le si vous
+        voulez :</p>
+
+    <code class="shell">pwd</code>
+
+    <p>Créez ensuite un fichier vide :</p>
+
+    <code class="shell">touch hello.txt</code>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">hello.txt</code></p>
+
+    <p>Il existe et il est vide — zéro octet. <code>touch</code> fabrique le contenant ; y mettre quelque chose
+        est le travail d'un éditeur de texte. Ouvrez-le dans l'éditeur de votre choix et tapez quelque chose si
+        vous voulez ; rien ici n'en dépend.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Créez un dossier, puis un fichier dedans</h3>
+    <p>Toujours dans <code>gitgud-practice</code> :</p>
+
+    <code class="shell">mkdir notes</code>
+
+    <p>Maintenant — voici le point utile — créez un fichier à l'intérieur de <code>notes</code> <em>sans y
+        entrer</em>, en donnant à <code>touch</code> un chemin relatif au lieu d'un simple nom :</p>
+
+    <code class="shell">touch notes/day-one.txt</code>
+
+    <p>Lisez cet argument comme on lit un chemin : <em>le dossier <code>notes</code>, et à l'intérieur, un
+        fichier appelé <code>day-one.txt</code></em>. Les commandes prennent des chemins, pas seulement des noms,
+        partout. Vous n'aurez presque jamais besoin de faire <code>cd</code> quelque part juste pour y faire une
+        seule chose.</p>
+
+    <p>Vérifiez votre travail :</p>
+
+    <code class="shell">ls notes</code>
+
+    <p><span class="inline-tip">Tapez <code>ls no</code> et appuyez sur <strong>Tab</strong>. La complétion par
+        tabulation fonctionne sur les dossiers que vous venez de créer, comme sur tous les autres — et elle vous
+        évite la faute de frappe qui vous aurait fait fixer « No such file or directory » pendant une
+        minute.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Plusieurs dossiers à la fois</h3>
+    <p>Essayez de créer un dossier imbriqué de la façon évidente et regardez-le refuser :</p>
+
+    <code class="shell">mkdir notes/archive/2026</code>
+
+    <p><code class="comment">mkdir: cannot create directory 'notes/archive/2026': No such file or directory</code></p>
+
+    <p>Normal — <code>archive</code> n'existe pas encore, et <code>mkdir</code> crée un seul répertoire, pas une
+        chaîne. Plutôt que de créer chaque niveau à la main, demandez-le-lui :</p>
+
+    <code class="shell">mkdir -p notes/archive/2026</code>
+
+    <code class="shell">ls notes</code>
+
+    <p><code>-p</code> est l'abréviation de <em>parents</em> : créer les dossiers manquants en chemin. C'est cette
+        règle d'il y a deux défis en action — même commande, une option, un comportement différent, et
+        <code>mkdir --help</code> vous l'aurait dit.</p>
+
+    <p>Votre arbre ressemble maintenant à ceci :</p>
+
+    <p><code class="comment">gitgud-practice/
+├── hello.txt
+└── notes/
+    ├── day-one.txt
+    └── archive/
+        └── 2026/</code></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Ce qui est vérifié</h3>
+    <p>Deux choses, ensemble. Git Gud lit le dossier <code>gitgud-practice</code> pour confirmer que l'arbre est
+        vraiment là, <em>et</em> vérifie votre historique de shell pour <code>mkdir</code> et
+        <code>touch</code> — parce que n'importe qui peut faire un clic droit et choisir Nouveau dossier, et ce
+        n'est pas ce dont ce module parle.</p>
+
+    <p>Utilisez <strong>Sélectionner le répertoire</strong> ci-dessous pour choisir votre dossier
+        <code>gitgud-practice</code>, fermez le terminal avec <code>exit</code> pour que votre historique soit
+        enregistré, et appuyez sur Vérifier.</p>
+
+    <p>Gardez le dossier quand vous avez fini, ou supprimez-le — rien plus tard n'en dépend. Vous créerez bien
+        assez tôt un vrai dossier de projet, avec les deux mêmes commandes.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>Créer des choses</h3>
+    <ul class="no-list-style">
+        <li><strong>Créer un dossier</strong></li>
+        <code class="shell">mkdir &#60;FOLDERNAME&#62;</code>
+        <li><strong>Créer toute une chaîne de dossiers</strong></li>
+        <code class="shell">mkdir -p &#60;A&#62;/&#60;B&#62;/&#60;C&#62;</code>
+        <li><strong>Créer un fichier vide</strong></li>
+        <code class="shell">touch &#60;FILENAME&#62;</code>
+        <li><strong>En créer un à l'intérieur d'un autre dossier</strong></li>
+        <code class="shell">touch &#60;FOLDERNAME&#62;/&#60;FILENAME&#62;</code>
+        <li><strong>Vérifier que cela a fonctionné</strong></li>
+        <code class="shell">ls &#60;FOLDERNAME&#62;</code>
+    </ul>
+    <p>C'est tout le module terminal. Vous savez ouvrir un terminal, lire une invite, exécuter une commande avec
+        des options et des arguments, découvrir où vous êtes, aller ailleurs et créer des choses une fois sur
+        place. Tout ce que Git vous demandera ensuite, ce sont ces mêmes gestes avec des mots différents.</p>
+</div>

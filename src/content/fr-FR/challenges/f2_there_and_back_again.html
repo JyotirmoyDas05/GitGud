@@ -1,0 +1,165 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Déplacez-vous dans le système de fichiers avec <code>cd</code> — descendez dans les dossiers, remontez vers le parent, et rentrez directement à la maison.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Changer de répertoire</h2>
+    <p>Vous savez où vous êtes. Maintenant, il faut être ailleurs. Une seule commande le fait :</p>
+
+    <p><code class="comment">cd &#60;WHERE&#62;</code></p>
+
+    <p><code>cd</code> signifie <strong>change directory</strong> (changer de répertoire). C'est l'équivalent dans
+        le terminal du double-clic sur un dossier, et c'est la commande que vous taperez le plus, plus que toute
+        autre, pour le reste de votre vie.</p>
+
+    <p>Elle n'affiche rien quand elle réussit. Ce silence est normal et il est voulu — dans le terminal, pas de
+        nouvelles, bonnes nouvelles. Les commandes se manifestent quand quelque chose ne va pas. Votre preuve que
+        cela a fonctionné, c'est l'invite, qui affiche maintenant le nouveau dossier, et <code>pwd</code>, qui le
+        confirmera.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Descendez dans un dossier</h3>
+    <p>Partez de la maison et regardez ce qui s'y trouve :</p>
+
+    <code class="shell">cd ~</code>
+    <code class="shell">ls</code>
+
+    <p>Choisissez un dossier que vous avez vu — <code>Documents</code> et <code>Desktop</code> existent sur
+        presque chaque machine — et entrez dedans :</p>
+
+    <code class="shell">cd Documents</code>
+
+    <p>Regardez l'invite. Elle a changé. Vérifiez-le proprement :</p>
+
+    <code class="shell">pwd</code>
+
+    <p><code class="comment">/Users/jyoti/Documents</code></p>
+
+    <p>Vous venez d'utiliser un <strong>chemin relatif</strong>. Vous avez tapé <code>Documents</code>, pas
+        l'adresse entière, et cela a fonctionné parce que <code>cd</code> a cherché ce nom <em>à partir de
+        l'endroit où vous étiez déjà</em>. Les chemins relatifs sont courts, et ils désignent des choses
+        différentes selon l'endroit où vous vous tenez — c'est bien l'idée.</p>
+
+    <p><span class="inline-tip">Tapez <code>cd Doc</code> et appuyez sur <strong>Tab</strong>. Le shell termine
+        le mot pour vous. C'est la <strong>complétion par tabulation</strong>, elle fonctionne pour chaque chemin
+        que vous taperez un jour, et elle vous évite des fautes de frappe autant que des frappes. Prenez
+        l'habitude dès maintenant — c'est la différence entre ceux qui trouvent le terminal fastidieux et ceux
+        qui ne le trouvent pas.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Remontez</h3>
+    <p>Chaque répertoire a un <strong>parent</strong> — celui qui le contient. Il a un raccourci permanent, deux
+        points :</p>
+
+    <code class="shell">cd ..</code>
+    <code class="shell">pwd</code>
+
+    <p>Vous êtes de retour au point de départ. <code>..</code> signifie toujours « un niveau plus haut, d'ici »,
+        donc cela fonctionne partout sans connaître aucun nom.</p>
+
+    <p>Il existe un raccourci assorti pour l'inverse : un seul point, <code>.</code>, signifie « juste ici ».
+        Cela semble inutile — jusqu'à ce que vous rencontriez une commande qui exige que vous disiez « ce
+        dossier » à voix haute. <code>git add .</code>, que vous taperez bien des fois plus tard, est exactement
+        cela.</p>
+
+    <p>Les points s'empilent. Ceci remonte de deux niveaux :</p>
+
+    <code class="shell">cd ../..</code>
+
+    <p>Et ils se combinent avec des noms. Remonter d'un niveau, puis redescendre dans un dossier voisin, en un
+        seul geste :</p>
+
+    <code class="shell">cd ../Downloads</code>
+
+    <p>C'est tout le vocabulaire. Un chemin n'est que ces morceaux joints par des barres obliques.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Absolu et relatif</h2>
+    <p>Deux sortes de chemins, et savoir lequel vous tenez en main dissipe pour de bon la plupart des confusions
+        de chemins.</p>
+
+    <ul>
+        <li>Un <strong>chemin absolu</strong> part du haut du système de fichiers et est complet à lui seul :
+            <code>/Users/jyoti/Documents</code>. Il désigne la même chose, tapé depuis n'importe où. On le
+            repère instantanément — il commence par <code>/</code> (ou <code>~</code>, qui se développe en un
+            chemin absolu, ou une lettre de lecteur comme <code>C:</code> sur Windows).</li>
+        <li>Un <strong>chemin relatif</strong> part de l'endroit où vous êtes : <code>Documents</code>,
+            <code>../Downloads</code>, <code>notes/day-one.txt</code>. Plus court à taper, mais correct
+            uniquement depuis le bon point de départ.</li>
+    </ul>
+
+    <p>Voyez cela comme une adresse postale contre « deuxième porte à gauche ». Les deux vous y mènent. Une seule
+        des deux survit quand on la répète à quelqu'un qui se tient ailleurs.</p>
+
+    <p>Utilisez les chemins relatifs pour tout ce qui est proche — c'est le cas la plupart du temps. Prenez un
+        chemin absolu quand vous sautez quelque part au loin, ou quand vous notez le chemin pour quelqu'un
+        d'autre.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Sautez n'importe où</h3>
+    <p>Promenez-vous à quelques niveaux de profondeur, puis rentrez à la maison en un seul geste :</p>
+
+    <code class="shell">cd ~</code>
+
+    <p><code>cd</code> sans rien derrière fait la même chose — la maison est la destination par défaut, parce que
+        c'est là où vous voudrez être assez souvent pour avoir mérité le raccourci.</p>
+
+    <p>Et un chemin absolu vous emmène n'importe où en une étape, aussi loin soit-ce :</p>
+
+    <code class="shell">cd ~/Documents</code>
+
+    <p>C'est absolu — <code>~</code> se développe en l'adresse complète de votre répertoire personnel avant même
+        que <code>cd</code> ne le voie. Sur macOS ou Linux, vous pouvez aussi viser tout en haut du système de
+        fichiers et jeter un œil ; rien là-bas ne vous mordra.</p>
+
+    <code class="shell">cd /</code>
+    <code class="shell">ls</code>
+
+    <p>Un dernier raccourci qui vaut la peine :</p>
+
+    <code class="shell">cd -</code>
+
+    <p>Cela vous ramène au répertoire précédent, comme le bouton précédent d'un navigateur. Deux fois de suite et
+        vous basculez entre deux dossiers — ce à quoi ressemble l'essentiel du vrai travail.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Ce qui est vérifié</h3>
+    <p>Ce défi cherche quatre <em>formes</em> différentes de <code>cd</code> dans votre historique de shell —
+        une pour chaque idée ci-dessus — plutôt que quatre destinations précises, pour que vous puissiez vous
+        entraîner avec les dossiers que vous avez vraiment :</p>
+
+    <ul>
+        <li><code>cd Documents</code> — descendre dans un dossier par son nom (relatif)</li>
+        <li><code>cd ..</code> — remonter vers le parent</li>
+        <li><code>cd ~</code> — la maison</li>
+        <li><code>cd ~/Documents</code> ou <code>cd /usr</code> — un chemin absolu</li>
+    </ul>
+
+    <p>Exécutez <code>pwd</code> après chacune pour la voir fonctionner. Puis <code>exit</code> pour enregistrer
+        votre historique et appuyez sur Vérifier.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>Se déplacer</h3>
+    <ul class="no-list-style">
+        <li><strong>Entrer dans un dossier</strong></li>
+        <code class="shell">cd &#60;FOLDERNAME&#62;</code>
+        <li><strong>Remonter vers le parent</strong></li>
+        <code class="shell">cd ..</code>
+        <li><strong>Remonter de deux, ou remonter puis traverser</strong></li>
+        <code class="shell">cd ../../</code>
+        <li><strong>La maison</strong></li>
+        <code class="shell">cd ~</code>
+        <li><strong>Revenir là où vous étiez juste avant</strong></li>
+        <code class="shell">cd -</code>
+        <li><strong>Et toujours, en cas de doute</strong></li>
+        <code class="shell">pwd</code>
+    </ul>
+</div>

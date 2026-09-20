@@ -28,13 +28,29 @@
   },
   "bundle": {
     "active": true,
-    "targets": "all",
+    "targets": [
+      "nsis",
+      "appimage",
+      "dmg"
+    ],
     "icon": [
       "icons/32x32.png",
       "icons/128x128.png",
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "createUpdaterArtifacts": true
+  },
+  "plugins": {
+    "updater": {
+      "endpoints": [
+        "https://github.com/JyotirmoyDas05/GitGud/releases/latest/download/latest.json"
+      ],
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEEyRjE2M0UwMTEzQkRENzgKUldSNDNUc1I0R1B4b3FUV0I3SGwrYlFEcGZETEIzKzg1TG1CNVQ3Z2dPZys2ZWhWRkQyTS84a2kK",
+      "windows": {
+        "installMode": "passive"
+      }
+    }
   }
 }

@@ -1,108 +1,135 @@
-<p>Below are the terminal and Git commands used in the Git Gud challenges.</p>
+<p>以下是在 Git Gud 挑戰中使用的終端機與 Git 指令。</p>
 
-<h2>Bash/Terminal Basics</h2>
+<h2>Bash/終端機基礎</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
-        <li><strong>Make a new folder (aka make directory)</strong></li>
-        <code class="shell">mkdir &#60;FOLDERNAME&#62;</code>
-        <li><strong>Navigate into an existing folder (aka change directory)</strong></li>
-        <code class="shell">cd &#60;FOLDERNAME&#62;</code>
-        <li><strong>List the items in a folder</strong></li>
+        <li><strong>顯示你所在的資料夾（print working directory）</strong></li>
+        <code class="shell">pwd</code>
+        <li><strong>列出資料夾中的項目</strong></li>
         <code class="shell">ls </code>
+        <li><strong>列出所有東西，包括隱藏項目</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>列出詳細資訊 &mdash; 開頭的 <code>d</code> 表示目錄</strong></li>
+        <code class="shell">ls -l</code>
+        <li><strong>進入既有資料夾（也就是切換目錄）</strong></li>
+        <code class="shell">cd &#60;FOLDERNAME&#62;</code>
+        <li><strong>回到上一層資料夾</strong></li>
+        <code class="shell">cd ..</code>
+        <li><strong>前往你的家目錄</strong></li>
+        <code class="shell">cd ~</code>
+        <li><strong>回到上一個資料夾</strong></li>
+        <code class="shell">cd -</code>
+        <li><strong>建立新資料夾（也就是 make directory）</strong></li>
+        <code class="shell">mkdir &#60;FOLDERNAME&#62;</code>
+        <li><strong>一次建立一整串資料夾</strong></li>
+        <code class="shell">mkdir -p &#60;A&#62;/&#60;B&#62;/&#60;C&#62;</code>
+        <li><strong>建立空檔案</strong></li>
+        <code class="shell">touch &#60;FILENAME&#62;</code>
+        <li><strong>把某段文字顯示給你看</strong></li>
+        <code class="shell">echo hello</code>
+        <li><strong>清空視窗（不會刪除任何東西）</strong></li>
+        <code class="shell">clear</code>
+        <li><strong>關閉終端機</strong></li>
+        <code class="shell">exit</code>
+        <li><strong>詢問任何指令它能做什麼</strong></li>
+        <code class="shell">&#60;COMMAND&#62; --help</code>
     </ul>
+    <p><strong>比任何指令都重要的兩個按鍵：</strong> <code>Tab</code> 會自動補完你
+        開始輸入的檔案或資料夾名稱，而 <code>up arrow</code> 會叫回
+        你之前輸入的內容。</p>
 </div>
 
-<h2>Configuring Git</h2>
+<h2>設定 Git</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
-        <li><strong>Check Git version</strong></li>
+        <li><strong>查看 Git 版本</strong></li>
         <code>git --version</code>
-        <li><strong>Set your name</strong></li>
+        <li><strong>設定你的名稱</strong></li>
         <code>git config --global user.name "Your Name"</code>
-        <li><strong>Set your email</strong></li>
+        <li><strong>設定你的電子郵件</strong></li>
         <code>git config --global user.email youremail@example.com</code>
-        <li><strong>Set your Github account (case sensitive)</strong></li>
+        <li><strong>設定你的 Github 帳號（區分大小寫）</strong></li>
         <code>git config --global user.username uSeRnAmE</code>
     </ul>
 </div>
 
-<h2>Git Basics</h2>
+<h2>Git 基礎</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
-        <li><strong>Turn Git on for a folder</strong></li>
+        <li><strong>為資料夾啟用 Git</strong></li>
         <code class="shell">git init</code>
-        <li><strong>Check status of changes to a repository</strong></li>
+        <li><strong>查看儲存庫的變更狀態</strong></li>
         <code class="shell">git status</code>
-        <li><strong>View changes to files</strong></li>
+        <li><strong>查看檔案的變更</strong></li>
         <code class="shell">git diff</code>
-        <li><strong>Add a file's changes to be committed</strong></li>
+        <li><strong>把檔案的變更加入待提交區</strong></li>
         <code class="shell">git add &#60;FILENAME&#62;</code>
-        <li><strong>To add all files changes</strong></li>
+        <li><strong>加入所有檔案的變更</strong></li>
         <code class="shell">git add .</code>
-        <li><strong>To commit (aka save) the changes you've added with a short message describing the changes</strong>
+        <li><strong>提交（也就是儲存）你已加入的變更，並附上一段描述變更的簡短訊息</strong>
         </li>
         <code class="shell">git commit -m "your commit message"</code>
-        <li><strong>Copy a repository to your computer</strong></li>
+        <li><strong>把儲存庫複製到你的電腦</strong></li>
         <code class="shell">git clone &#60;URL&#62;</code>
     </ul>
 </div>
 
-<h2>Git Branches</h2>
+<h2>Git 分支</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
-        <li><strong>Create a new branch</strong></li>
+        <li><strong>建立新分支</strong></li>
         <code class="shell">git branch &#60;BRANCHNAME&#62;</code>
-        <li><strong>Move onto a branch</strong></li>
+        <li><strong>切換到某個分支</strong></li>
         <code class="shell">git checkout &#60;BRANCHNAME&#62;</code>
-        <li><strong>You can create and switch to a branch in one line</strong></li>
+        <li><strong>你可以用一行指令建立並切換到分支</strong></li>
         <code class="shell">git checkout -b &#60;BRANCHNAME&#62;</code>
-        <li><strong>List the branches</strong></li>
+        <li><strong>列出分支</strong></li>
         <code class="shell">git branch</code>
-        <li><strong>Rename a branch you're currently on</strong></li>
+        <li><strong>重新命名你所在的分支</strong></li>
         <code class="shell">git branch -m &#60;NEWBRANCHNAME&#62;</code>
     </ul>
 </div>
 
-<h2>Git Remotes</h2>
+<h2>Git 遠端</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
-        <li><strong>Add remote connections</strong></li>
+        <li><strong>新增遠端連線</strong></li>
         <code class="shell">git remote add &#60;REMOTENAME&#62; &#60;URL&#62;</code>
-        <li><strong>Set a URL to a remote</strong></li>
+        <li><strong>為遠端設定 URL</strong></li>
         <code class="shell">git remote set-url &#60;REMOTENAME&#62; &#60;URL&#62;</code>
-        <li><strong>View remote connections</strong></li>
+        <li><strong>查看遠端連線</strong></li>
         <code class="shell">git remote -v</code>
     </ul>
 </div>
 
-<h2>Pulling in Git</h2>
+<h2>在 Git 中拉取</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
-        <li><strong>Pull in changes</strong></li>
+        <li><strong>拉取變更</strong></li>
         <code class="shell">git pull</code>
-        <li><strong>Pull in changes from a remote branch</strong></li>
+        <li><strong>從遠端分支拉取變更</strong></li>
         <code class="shell">git pull &#60;REMOTENAME&#62; &#60;REMOTEBRANCH&#62;</code>
-        <li><strong>See changes to the remote before you pull in</strong></li>
+        <li><strong>在拉取之前先查看遠端的變更</strong></li>
         <code class="shell">git fetch --dry-run</code>
     </ul>
 </div>
 
-<h2>Push &#38; Merge in Git</h2>
+<h2>Git 中的推送 &#38; 合併</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
-        <li><strong>Push changes</strong></li>
+        <li><strong>推送變更</strong></li>
         <code class="shell">git push &#60;REMOTENAME&#62; &#60;BRANCHNAME&#62;</code>
-        <li><strong>Merge a branch into current branch</strong></li>
+        <li><strong>把分支合併進目前的分支</strong></li>
         <code class="shell">git merge &#60;BRANCHNAME&#62;</code>
     </ul>
 </div>
 
-<h2>Deleting Remotes and Branches in Git</h2>
+<h2>在 Git 中刪除遠端與分支</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
-        <li><strong>Delete a local branch</strong></li>
+        <li><strong>刪除本地分支</strong></li>
         <code class="shell">git branch -D &#60;BRANCHNAME&#62;</code>
-        <li><strong>Delete a remote branch</strong></li>
+        <li><strong>刪除遠端分支</strong></li>
         <code class="shell">git push &#60;REMOTENAME&#62; --delete &#60;BRANCHNAME&#62;</code>
     </ul>
 </div>

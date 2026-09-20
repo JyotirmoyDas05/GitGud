@@ -5,9 +5,20 @@ import { Check, Circle, FolderOpen, Loader2, RotateCcw, X } from "lucide-react";
 import type { Challenge } from "~/challenges";
 import { useProgress } from "~/lib/progress";
 import { passed, verifierFor, type CheckResult } from "~/lib/verify";
-import { strings } from "~/strings";
+import { strings, type UiStrings } from "~/strings";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
+
+/**
+ * The directory prompt in the learner's language. The English fallback lives
+ * on the challenge itself; these two terminal challenges are the only ones
+ * that override the default "repository folder" wording.
+ */
+function localizedDirPrompt(id: string, t: UiStrings): string | undefined {
+  if (id === "you_are_here") return t.dirPromptHome;
+  if (id === "make_it_so") return t.dirPromptPractice;
+  return undefined;
+}
 
 /**
  * The verify box. Replaces git-it-electron's `verify-button.html` /
@@ -69,7 +80,7 @@ export function VerifyBlock({ challenge, locale }: { challenge: Challenge; local
   if (!verifier) {
     return (
       <div className="my-6 rounded-lg border border-dashed p-4 text-center text-muted-foreground text-sm">
-        This challenge has no automatic check.
+        {t.noCheck}
       </div>
     );
   }
@@ -124,7 +135,7 @@ export function VerifyBlock({ challenge, locale }: { challenge: Challenge; local
             pathWarning ? "text-error-foreground" : "text-muted-foreground",
           )}
         >
-          {dir ?? t.pathRequired}
+          {dir ?? localizedDirPrompt(challenge.id, t) ?? challenge.dirPrompt ?? t.pathRequired}
         </p>
       )}
 
@@ -157,7 +168,7 @@ export function VerifyBlock({ challenge, locale }: { challenge: Challenge; local
               )}
               <span>
                 {result.message}
-                {result.optional && " — optional, not checked"}
+                {result.optional && ` ${t.optionalSuffix}`}
               </span>
             </li>
           ))}

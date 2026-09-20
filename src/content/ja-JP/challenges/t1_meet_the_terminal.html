@@ -1,0 +1,101 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>ターミナルを開き、最初の2つのコマンドを実行して、最初に表示される行の読み方を学びましょう。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>ターミナルとは</h2>
+    <p><strong>ターミナル</strong>とは、クリックの代わりにコンピュータへの指示を入力するためのウィンドウです。考え方はそれだけです。普段行っている操作——フォルダを開く、新規作成する、ファイル名を変更する、コピーする——にはすべて入力による同等の操作があり、入力版の方が速く、必ず再現できます。</p>
+
+    <p>ほぼ同じものを指すいくつかの言葉を耳にするはずなので、最初に一度だけ整理しておきます:</p>
+
+    <ul>
+        <li><strong>ターミナル</strong>はウィンドウそのものです。テキストを描画し、キー入力を受け取ります。</li>
+        <li><strong>シェル</strong>はその中で実際に動作し、入力内容を理解するプログラムです。代表的なものに <strong>Bash</strong>、<strong>Zsh</strong>、<strong>PowerShell</strong> があります。</li>
+        <li><strong>コマンドライン</strong>や <strong>CLI</strong> は、この作業方式の一般的な呼び名です。</li>
+    </ul>
+
+    <p>実際には4つとも同じ意味で使われますし、この教材でもそうします。「ターミナルを開いて」と言われたら、このウィンドウのことだと思ってください。</p>
+
+    <p>空っぽで何をすればいいのか教えてくれないため、威圧的に見えますが、危険ではありません。このモジュールで壊れるものは何もありません——自分のユーザー名を表示して、練習用フォルダを作るだけです。タイピングを誰かに評価されることもありません。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>ターミナルを開く</h3>
+
+    <p><strong>Windows。</strong> WindowsにはPowerShellが付属していますが、このモジュールのコマンド——そして今後読むほぼすべてのチュートリアル、README、Stack Overflowの回答——はUnix風シェル向けに書かれています。最も簡単な入手方法は <strong>Git Bash</strong> で、<a href="https://git-scm.com/download/win">Git for Windows</a> に無料で付属しています。既定のオプションでインストールし、スタートメニューから <strong>Git Bash</strong> を開いてください。</p>
+
+    <p><span class="inline-tip">このインストールで後で必要になるGitも一緒に入ります——後のチャレンジで正しく設定されたか確認します。一石二鳥です。</span></p>
+
+    <p><strong>macOS。</strong> <code>Cmd</code> + <code>Space</code> を押して <em>Terminal</em> と入力し、enterを押します。アプリケーション › ユーティリティにもあります。</p>
+
+    <p><strong>Linux。</strong> 通常は <code>Ctrl</code> + <code>Alt</code> + <code>T</code> か、アプリケーションから <em>Terminal</em> を検索します。</p>
+
+    <p>1行のテキストと点滅するカーソルがある、ほぼ空のウィンドウが表示されるはずです。その行が次に理解すべきものです。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>プロンプトを読む</h2>
+    <p>待機している行は <strong>プロンプト</strong> と呼ばれます。飾りではなくステータスバーであり、何も入力する前から3つの役立つ情報を伝えています。</p>
+
+    <p><code class="comment">jyoti@laptop ~/code $</code></p>
+
+    <ul>
+        <li><code>jyoti</code> — 誰としてサインインしているか。</li>
+        <li><code>laptop</code> — どのマシンと話しているか。他のコンピュータに接続するようになると、思った以上に重要になります。</li>
+        <li><code>~/code</code> — <strong>今いる場所</strong>。ターミナルは常にどこかのフォルダの中に立っており、それがこの場所です。次の次のチャレンジは丸ごとこの部分についてです。</li>
+        <li><code>$</code> —「あなたの番です」という意味です。これより後が入力する部分です。</li>
+    </ul>
+
+    <p>皆さんのものは見た目が違うはずです。macOSのZshは <code>%</code> で終わることが多く( <code>$</code> ではなく)、2行のプロンプト、カラフルなもの、現在のGitブランチを表示するものもあります。配置は変わりますが、考え方は同じです。</p>
+
+    <p>ドキュメントがコマンドの前に <code>$</code> を付けて書くのもこのためです——「プロンプトでこれを入力して」という略記です。 <code>$</code> 自体を入力することはありません。Git Gudのコードボックスにも表示されますが、コピーボタンでは除外されます。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>あいさつしてみる</h3>
+    <p>以下を入力してenterを押してください:</p>
+
+    <code class="shell">whoami</code>
+
+    <p>ユーザー名が表示されます。それだけです。それがこのコマンドのすべてです。</p>
+
+    <p><code class="comment">jyoti</code></p>
+
+    <p>もう1つ試してみましょう:</p>
+
+    <code class="shell">date</code>
+
+    <p><code class="comment">Sat Sep 20 09:24:11 IST 2026</code></p>
+
+    <p>これでターミナルを使えました。今体験したパターン——単語を入力し、enterを押して、返ってきたものを読む——が対話のすべてです。後はもっと面白い単語が増えるだけです。</p>
+
+    <p><span class="inline-tip"><strong>上矢印</strong>を押してください。シェルは入力内容を記憶していて、呼び戻してくれます。何度か押してみてください。このページで最も時間を節約できる技です。</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>ターミナルを閉じる</h3>
+    <p>ウィンドウの閉じるボタンを押しても閉じられます。ただ正式な方法があり、それも他のコマンドと同じコマンドです:</p>
+
+    <code class="shell">exit</code>
+
+    <p>ウィンドウが閉じます。先ほどと同じ方法で開き直してください——ターミナルは安価で使い捨てのものであり、1日に何十回も何も考えずに開閉するようになります。</p>
+
+    <p><code>exit</code> を使う理由の1つ: 入力の記憶はファイルに保存され、BashやZshはシェルが正しく閉じたときにだけ書き出します。このチャレンジのチェック方法に関係してきます。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Git Gudのチェック方法</h3>
+    <p><code>whoami</code> のようなコマンドは何も変更しないため、後から確認できるフォルダやファイルが残りません。代わりにGit Gudは、シェル自身が保持する<strong>履歴ファイル</strong>——Bashなら <code>~/.bash_history</code>、Zsh、Fish、PowerShellなら相当するもの——を読み、このチャレンジで求めたコマンドを探します。</p>
+
+    <p>最後の数百行だけを皆さんのマシン上でのみ読み取り、どこにも送信しません。各チェックでは読み取った正確なファイル名を示します。</p>
+
+    <p>手順: <code>whoami</code> と <code>date</code> を実行し、履歴を保存するために <code>exit</code> でターミナルを閉じ、新しいものを開いて、ここに戻ってVerifyを押してください。</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>コマンドが見えない場合</h3>
+    <p>BashとZshは入力中ではなくシェルが<em>終了</em>するときに履歴を保存します。作業したのにチェックで見つからない場合、ほぼ確実にターミナルがまだ開いています。 <code>exit</code> と入力して、もう一度Verifyを押してください。</p>
+    <p>Windowsでは <strong>cmd.exe</strong> は履歴を一切残しません。Git BashかPowerShellを使ってください。</p>
+</div>

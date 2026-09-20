@@ -1,0 +1,145 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Apprenez les trois parties dont chaque commande est composée, et comment demander à une commande ce qu'elle sait faire.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Commande, arguments, options</h2>
+    <p>Chaque ligne que vous tapez à une invite a la même forme. Une fois que vous la voyez, les commandes
+        inconnues cessent de ressembler à des formules magiques et commencent à ressembler à des phrases.</p>
+
+    <p><code class="comment">command  [options]  [arguments]</code></p>
+
+    <ul>
+        <li>La <strong>commande</strong> est le verbe — le programme que vous voulez exécuter. Elle vient toujours
+            en premier. <code>ls</code>, <code>echo</code>, <code>git</code>.</li>
+        <li>Les <strong>arguments</strong> sont ce sur quoi la commande doit agir. Le nom.
+            Dans <code>cd Documents</code>, l'argument est <code>Documents</code>.</li>
+        <li>Les <strong>options</strong> (aussi appelées <strong>drapeaux</strong> ou <strong>commutateurs</strong>)
+            changent <em>la façon</em> dont la commande se comporte. Elles commencent par un tiret :
+            <code>-a</code>, <code>-l</code>, <code>--help</code>.</li>
+    </ul>
+
+    <p>Ainsi <code>ls -l Documents</code> se lit : <em>lister</em> (commande), <em>en version détaillée</em>
+        (option), <em>le dossier Documents</em> (argument). Trois parties, séparées par des espaces.</p>
+
+    <p>Ces espaces comptent plus que les débutants ne l'imaginent. <code>ls-l</code> est un seul mot et le shell
+        vous dira qu'aucune commande de ce nom n'existe. Les espaces sont la façon dont le shell sait où une
+        partie se termine et où la suivante commence.</p>
+
+    <h2>Options courtes et longues</h2>
+    <p>La plupart des options existent en deux orthographes pour la même chose :</p>
+
+    <ul>
+        <li><strong>Courte</strong>, un tiret et une lettre : <code>-a</code>. Rapide à taper. On peut
+            généralement les regrouper — <code>ls -la</code> signifie <code>-l</code> et <code>-a</code>
+            ensemble.</li>
+        <li><strong>Longue</strong>, deux tirets et un mot : <code>--all</code>. Plus lente à taper, mais vous
+            pourrez la relire dans six mois et savoir ce qu'elle faisait.</li>
+    </ul>
+
+    <p>Utilisez les courtes quand vous tapez, les longues quand vous notez quelque chose pour quelqu'un
+        d'autre — y compris vous dans le futur.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Une commande avec un argument</h3>
+    <p><code>echo</code> fait exactement une chose : elle réaffiche ce que vous lui donnez.</p>
+
+    <code class="shell">echo hello</code>
+
+    <p><code class="comment">hello</code></p>
+
+    <p>Seule, <code>echo</code> sans rien derrière affiche une ligne vide — la commande sans argument n'a rien
+        à dire. Donnez-lui plusieurs mots et elle les affiche tous :</p>
+
+    <code class="shell">echo I am talking to my computer</code>
+
+    <p>Cela semble inutile. Cela ne l'est pas : <code>echo</code> sert à vérifier ce que quelque chose contient
+        avant d'en faire quoi que ce soit de risqué, et c'est la première chose que vous saisirez quand un
+        script ne fera pas ce que vous attendiez.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Une commande avec une option</h3>
+    <p><code>ls</code> liste ce qui se trouve dans le dossier où vous êtes. Essayez-la d'abord sans rien :</p>
+
+    <code class="shell">ls</code>
+
+    <p>Ajoutez maintenant une option et regardez la même commande répondre différemment :</p>
+
+    <code class="shell">ls -a</code>
+
+    <p><code>-a</code> est l'abréviation de <em>all</em> (tout), et soudain il y a des entrées supplémentaires
+        qui commencent par un point — <code>.bashrc</code>, <code>.gitconfig</code>. Un point en tête signifie
+        « caché », et caché veut simplement dire que <code>ls</code> les saute sauf si on le lui demande. Il n'y
+        a aucune permission en jeu ; ce sont des fichiers ordinaires au nom discret. Git conserve tout son dépôt
+        dans l'un d'eux, une astuce que vous rencontrerez plus tard.</p>
+
+    <p>Encore une :</p>
+
+    <code class="shell">ls -l</code>
+
+    <p><code>-l</code> signifie <em>long</em> — un élément par ligne, avec sa taille et sa date de dernière
+        modification. Même commande, même dossier, un niveau de détail différent, parce que vous l'avez
+        demandé.</p>
+
+    <p>Et comme les options courtes se regroupent, ceci fait les deux à la fois :</p>
+
+    <code class="shell">ls -la</code>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Demandez à la commande elle-même</h3>
+    <p>Personne ne mémorise les options. Ce que les gens expérimentés font vraiment, c'est demander, et presque
+        chaque commande répond à la même question :</p>
+
+    <code class="shell">ls --help</code>
+
+    <p>Un mur de texte apparaît. Ne le lisez pas en entier — lisez les premières lignes, qui disent à quoi sert
+        la commande, puis parcourez la liste des options sur la gauche jusqu'à ce que quelque chose ressemble à
+        ce que vous voulez. C'est cela, la compétence : parcourir, pas mémoriser.</p>
+
+    <p>Essayez avec une commande que vous n'avez jamais utilisée de votre vie :</p>
+
+    <code class="shell">mkdir --help</code>
+
+    <p>Vous savez maintenant ce que fait <code>mkdir</code> et à peu près comment la piloter, sans que personne
+        ne vous l'ait dit. C'est le geste qui rend le terminal apprenables au lieu d'une liste de choses à
+        mémoriser — et vous rencontrerez <code>mkdir</code> pour de bon dans deux défis.</p>
+
+    <p><span class="inline-tip">Sur macOS, certaines commandes répondent à <code>man ls</code> au lieu de
+        <code>--help</code> — <code>man</code> est l'abréviation de <em>manual</em> (manuel). Appuyez sur
+        <code>q</code> pour en sortir.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Faire le ménage</h3>
+    <p>Après toute cette sortie, la fenêtre est en désordre. Une commande arrange cela :</p>
+
+    <code class="shell">clear</code>
+
+    <p>Rien n'est supprimé — votre historique est intact et la flèche du haut fonctionne toujours. Cela fait
+        simplement défiler le bruit hors de vue pour que vous puissiez réfléchir.</p>
+
+    <p>Quand vous aurez exécuté <code>echo</code> avec quelque chose à dire, <code>ls</code> avec une option, et
+        <code>--help</code> sur n'importe quoi, fermez le terminal avec <code>exit</code> pour que votre shell
+        enregistre son historique, puis appuyez sur Vérifier.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>La forme, à chaque fois</h3>
+    <ul class="no-list-style">
+        <li><strong>Commande seule</strong></li>
+        <code class="shell">ls</code>
+        <li><strong>Commande avec une option</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>Commande avec un argument</strong></li>
+        <code class="shell">echo hello</code>
+        <li><strong>Les trois ensemble</strong></li>
+        <code class="shell">ls -l Documents</code>
+        <li><strong>Demander à une commande ce qu'elle fait</strong></li>
+        <code class="shell">ls --help</code>
+    </ul>
+</div>

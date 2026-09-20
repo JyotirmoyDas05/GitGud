@@ -2,6 +2,7 @@ import { Menu } from "@base-ui/react/menu";
 import { Check, Globe } from "lucide-react";
 
 import { LOCALES } from "~/lib/content";
+import { strings } from "~/strings";
 import { cn } from "~/lib/utils";
 
 /**
@@ -58,7 +59,7 @@ export function LocaleMenu({
             )}
           >
             <div className="px-2 py-1.5 font-medium text-muted-foreground text-xs">
-              Language
+              {strings(locale).langLabel}
             </div>
             <Menu.Separator className="-mx-1 my-1 h-px bg-border" />
 

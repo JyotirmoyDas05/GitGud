@@ -1,0 +1,148 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Build a small folder tree from the terminal with <code>mkdir</code> and <code>touch</code>.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Making Things</h2>
+    <p>Everything so far has been read-only — looking and moving. Two commands cover almost all of the
+        making:</p>
+
+    <ul>
+        <li><strong><code>mkdir</code></strong> — <em>make directory</em>. Creates a folder.</li>
+        <li><strong><code>touch</code></strong> — creates an empty file.</li>
+    </ul>
+
+    <p>Both create things <strong>inside the directory you're currently standing in</strong>, unless you
+        give them a path that says otherwise. This is where the last challenge pays off: if you're not
+        sure where a new folder is about to land, run <code>pwd</code> first.</p>
+
+    <p><code>touch</code> has an odd name because creating files is its side job — its actual purpose is
+        updating a file's timestamp, and creating one that doesn't exist yet was a convenient accident.
+        Everyone uses it for the accident.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Make the Practice Folder</h3>
+    <p>Start from home, so there's no doubt about where this lands:</p>
+
+    <code class="shell">cd ~</code>
+
+    <p>Now make a folder and step into it:</p>
+
+    <code class="shell">mkdir gitgud-practice</code>
+    <code class="shell">cd gitgud-practice</code>
+
+    <p>Like <code>cd</code>, <code>mkdir</code> says nothing when it works. Check with <code>ls</code> if
+        you want the reassurance — you should, the first few times.</p>
+
+    <p><span class="inline-tip">Name it exactly <code>gitgud-practice</code> — the check looks for that
+        name. And notice there's no space in it. Spaces in names are legal but make paths awkward to type,
+        which is why the programming world leans on hyphens.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Make a File</h3>
+    <p>You should now be inside <code>gitgud-practice</code>. Confirm it if you like:</p>
+
+    <code class="shell">pwd</code>
+
+    <p>Then create an empty file:</p>
+
+    <code class="shell">touch hello.txt</code>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">hello.txt</code></p>
+
+    <p>It exists and it's empty — zero bytes. <code>touch</code> makes the container; putting something in
+        it is a text editor's job. Open it in whatever editor you like and type something if you want;
+        nothing here depends on it.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Make a Folder, Then a File Inside It</h3>
+    <p>Still in <code>gitgud-practice</code>:</p>
+
+    <code class="shell">mkdir notes</code>
+
+    <p>Now — here's the useful bit — create a file inside <code>notes</code> <em>without going in
+        there</em>, by giving <code>touch</code> a relative path instead of a bare name:</p>
+
+    <code class="shell">touch notes/day-one.txt</code>
+
+    <p>Read that argument the way you read a path: <em>the folder <code>notes</code>, and inside it, a
+        file called <code>day-one.txt</code></em>. Commands take paths, not just names, everywhere. You
+        almost never have to <code>cd</code> somewhere just to do one thing to it.</p>
+
+    <p>Check your work:</p>
+
+    <code class="shell">ls notes</code>
+
+    <p><span class="inline-tip">Type <code>ls no</code> and press <strong>Tab</strong>. Tab completion
+        works on the folders you just made, same as any other — and it saves you from the typo that would
+        otherwise have you staring at "No such file or directory" for a minute.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Several Folders at Once</h3>
+    <p>Try making a nested folder the obvious way and watch it refuse:</p>
+
+    <code class="shell">mkdir notes/archive/2026</code>
+
+    <p><code class="comment">mkdir: cannot create directory 'notes/archive/2026': No such file or directory</code></p>
+
+    <p>Fair enough — <code>archive</code> doesn't exist yet, and <code>mkdir</code> makes one directory,
+        not a chain of them. Rather than making each level by hand, ask it to:</p>
+
+    <code class="shell">mkdir -p notes/archive/2026</code>
+
+    <code class="shell">ls notes</code>
+
+    <p><code>-p</code> is short for <em>parents</em>: make any missing folders along the way. This is that
+        rule from two challenges ago in action — same command, one option, different behaviour, and
+        <code>mkdir --help</code> would have told you about it.</p>
+
+    <p>Your tree now looks like this:</p>
+
+    <p><code class="comment">gitgud-practice/
+├── hello.txt
+└── notes/
+    ├── day-one.txt
+    └── archive/
+        └── 2026/</code></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>What Gets Checked</h3>
+    <p>Two things, together. Git Gud reads the <code>gitgud-practice</code> folder to confirm the tree is
+        really there, <em>and</em> checks your shell history for <code>mkdir</code> and <code>touch</code>
+        — because anyone can right-click and choose New Folder, and that isn't what this module is
+        about.</p>
+
+    <p>Use <strong>Select directory</strong> below to pick your <code>gitgud-practice</code> folder, close
+        the terminal with <code>exit</code> so your history is saved, and press Verify.</p>
+
+    <p>Keep the folder when you're done, or delete it — nothing later depends on it. You'll make a real
+        project folder soon enough, with the same two commands.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>Making Things</h3>
+    <ul class="no-list-style">
+        <li><strong>Make a folder</strong></li>
+        <code class="shell">mkdir &#60;FOLDERNAME&#62;</code>
+        <li><strong>Make a whole chain of folders</strong></li>
+        <code class="shell">mkdir -p &#60;A&#62;/&#60;B&#62;/&#60;C&#62;</code>
+        <li><strong>Make an empty file</strong></li>
+        <code class="shell">touch &#60;FILENAME&#62;</code>
+        <li><strong>Make one inside another folder</strong></li>
+        <code class="shell">touch &#60;FOLDERNAME&#62;/&#60;FILENAME&#62;</code>
+        <li><strong>Check it worked</strong></li>
+        <code class="shell">ls &#60;FOLDERNAME&#62;</code>
+    </ul>
+    <p>That's the whole terminal module. You can open a terminal, read a prompt, run a command with options
+        and arguments, find out where you are, go somewhere else, and make things once you're there.
+        Everything Git asks of you from here is those same moves with different words.</p>
+</div>

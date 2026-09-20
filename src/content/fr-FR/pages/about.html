@@ -1,0 +1,55 @@
+<p>Git Gud enseigne les commandes Git du quotidien que les développeurs utilisent réellement, ainsi que le
+    GitHub Flow — la façon dont les gens collaborent sur GitHub. Il commence plus tôt que la plupart
+    des tutoriels : les cinq premiers défis portent sur le terminal lui-même, car
+    « ouvrez un terminal et exécutez <code>git init</code> » n'est pas une seule instruction si vous
+    n'avez jamais ouvert de terminal.</p>
+
+<p>Certains défis nécessitent une connexion internet, vous devrez donc être en ligne pour les terminer.
+    Vous pouvez toujours ouvrir l'application et lire les défis et les ressources hors ligne.</p>
+
+<h4>Un véritable environnement de développement</h4>
+
+<p>Git Gud utilise le vrai terminal, le vrai Git et le vrai GitHub plutôt que de les émuler. Quand vous
+    aurez terminé, vous aurez de véritables dépôts sur votre compte GitHub et des carrés verts
+    sur votre graphique de contributions. Rien ici n'est une simulation, c'est aussi pourquoi
+    chaque défi est vérifié en exécutant Git sur vos propres dépôts — si un
+    défi est réussi, c'est qu'il a réellement fonctionné.</p>
+
+<h4>Ce dont vous avez besoin</h4>
+
+<p>Rien, pour commencer — le module sur le terminal utilise ce que votre ordinateur possède déjà.
+    Ensuite, Git et un compte GitHub, que deux des défis vous aident à mettre en place.
+    Vous n'avez <strong>pas</strong> besoin de Node.js, de Python ni d'aucun autre environnement d'exécution — Git Gud
+    est distribué sous la forme d'une seule application native.</p>
+
+<h4>À propos des défis sur le terminal</h4>
+
+<p>Des commandes comme <code>pwd</code> et <code>ls</code> ne modifient rien sur votre ordinateur, il n'y a
+    donc aucun fichier à inspecter ensuite pour vérifier que vous les avez exécutées. Ces défis sont
+    vérifiés en lisant le fichier d'historique que votre propre shell conserve — <code>~/.bash_history</code>
+    et ses équivalents pour Zsh, Fish et PowerShell. Seules les quelques centaines de lignes les plus récentes
+    sont lues, tout se passe entièrement sur votre machine, rien n'est envoyé ailleurs, et chaque vérification
+    nomme le fichier qu'elle a lu.</p>
+
+<h4>Comment c'est construit</h4>
+
+<p>Git Gud est une application <a href="https://tauri.app" target="_blank">Tauri</a> : un backend Rust
+    qui exécute Git et communique avec GitHub, et une interface React affichée par la
+    vue web native du système d'exploitation. Il n'y a pas de moteur de navigateur intégré, c'est pourquoi le
+    téléchargement se mesure en mégaoctets plutôt qu'en centaines de mégaoctets.</p>
+
+<p>Le dépôt compagnon que vous forkez pendant les défis est
+    <a href="https://github.com/JyotirmoyDas05/git-gud-verifywork" target="_blank">git-gud-verifywork</a>.
+    Son automatisation s'exécute entièrement sur GitHub Actions — il n'y a aucun serveur qui puisse tomber en panne.</p>
+
+<h4>Crédit à qui de droit</h4>
+
+<p>Git Gud est un portage de <a href="https://github.com/jlord/git-it-electron" target="_blank">Git-it</a>,
+    une application Electron écrite par <a href="https://jlord.us" target="_blank">@jlord</a> et
+    de nombreux contributeurs, publiée sous la licence BSD 2-Clause. La structure des défis et
+    une grande partie des textes sont les leurs. Cette version reconstruit l'application sur Tauri, remplace
+    le service de vérification retiré par GitHub Actions, et corrige un certain nombre de vérifications qui
+    avaient cessé de fonctionner à mesure que Git et GitHub évoluaient.</p>
+
+<p>La conception de l'interface emprunte son système de tokens à
+    <a href="https://github.com/t3tools" target="_blank">T3 Code</a>, utilisé sous la licence MIT.</p>

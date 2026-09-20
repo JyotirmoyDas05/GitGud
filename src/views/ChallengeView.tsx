@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 
-import { byId, indexOf } from "~/challenges";
+import { byId, challengeTitle, indexOf, moduleOf, moduleTitle, TOTAL_CHALLENGES } from "~/challenges";
 import { Html } from "~/components/Html";
 import { Mascot, mascotAt } from "~/components/Mascot";
 import { Outline } from "~/components/Outline";
@@ -10,6 +10,7 @@ import { loadChallenge } from "~/lib/content";
 import { useProgress } from "~/lib/progress";
 import { navigate } from "~/lib/router";
 import { setHeaderTitle } from "~/lib/headerTitle";
+import { strings } from "~/strings";
 import { Button } from "~/components/ui/button";
 
 export function ChallengeView({ id, locale }: { id: string; locale: string }) {
@@ -18,14 +19,15 @@ export function ChallengeView({ id, locale }: { id: string; locale: string }) {
   const { isComplete } = useProgress();
   const bodyRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
+  const t = strings(locale);
 
   if (!challenge) {
     // A stale bookmark or a typed hash should not leave a blank window.
     return (
       <div className="mx-auto max-w-2xl px-6 py-10">
-        <h1 className="font-semibold text-xl">Challenge not found</h1>
+        <h1 className="font-semibold text-xl">{t.notFoundTitle}</h1>
         <Button variant="link" className="mt-4 px-0" onClick={() => navigate({ name: "home" })}>
-          Back to all challenges
+          {t.notFoundBack}
         </Button>
       </div>
     );
@@ -74,6 +76,12 @@ function ChallengeBody({
   useEffect(() => setMascotOffset(0), [challenge.id]);
 
   const mascotId = mascotAt(index, mascotOffset)?.id;
+  const t = strings(locale);
+  const title = challengeTitle(challenge, locale);
+  // "Challenge 7 of 16" alone no longer says what kind of challenge it is,
+  // now that the first five are not about Git at all.
+  const moduleName = moduleOf(challenge) ? moduleTitle(moduleOf(challenge)!, locale) : t.challenges;
+  const eyebrow = `${moduleName} · ${index + 1} ${t.eyebrowOf} ${TOTAL_CHALLENGES}`;
 
   // Hand the heading — and the guide that belongs to it — to the title bar
   // once the real one leaves the viewport, and take it back when it returns.
@@ -88,11 +96,7 @@ function ChallengeBody({
         setHeaderTitle(
           entry.isIntersecting
             ? null
-            : {
-                eyebrow: `Challenge ${index + 1} of 11`,
-                title: challenge.title,
-                mascotId,
-              },
+            : { eyebrow, title, mascotId },
         );
       },
       { rootMargin: "-52px 0px 0px 0px", threshold: 0 },
@@ -103,7 +107,7 @@ function ChallengeBody({
       observer.disconnect();
       setHeaderTitle(null);
     };
-  }, [challenge.title, index, mascotId, titleRef]);
+  }, [title, eyebrow, mascotId, titleRef]);
 
   return (
     // The row is centred as a *pair*: content and outline are sized by their
@@ -120,28 +124,32 @@ function ChallengeBody({
         />
         <div>
           <div className="flex items-baseline gap-3">
-            <span className="text-muted-foreground text-xs tabular-nums">
-              Challenge {index + 1} of 11
-            </span>
+            <span className="text-muted-foreground text-xs tabular-nums">{eyebrow}</span>
             {done && (
               <span className="rounded-full bg-success-surface px-2 py-0.5 font-medium text-[11px] text-success-foreground">
-                Completed
+                {t.completedBadge}
               </span>
             )}
           </div>
-          <h1 className="font-semibold text-2xl tracking-tight">{challenge.title}</h1>
+          <h1 className="font-semibold text-2xl tracking-tight">{title}</h1>
         </div>
       </div>
 
       <Html className="prose mt-6" html={body.before} />
 
       {/* Sits at the marker's original position — several challenges put tips
-          below the button, so appending it would reorder the lesson. */}
-      <VerifyBlock challenge={challenge} locale={locale} />
+          below the button, so appending it would reorder the lesson.
+          `key` forces a remount on navigation: without it, `results`/`error`
+          are local state that outlives the `challenge` prop change, so
+          verifying challenge N and clicking through to N+1 showed N's
+          pass/fail list rendered under N+1's own verifier until the next
+          click — the same class of bug `Outline`'s `contentKey` already
+          exists to prevent. */}
+      <VerifyBlock key={challenge.id} challenge={challenge} locale={locale} />
 
       {body.after && <Html className="prose" html={body.after} />}
 
-      <PrevNext current={index} />
+      <PrevNext current={index} locale={locale} />
       </div>
 
       <Outline containerRef={bodyRef} contentKey={challenge?.id ?? ""} />

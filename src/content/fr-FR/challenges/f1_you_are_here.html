@@ -1,0 +1,138 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Découvrez où se tient votre terminal, regardez ce qui vous entoure et identifiez votre dossier personnel.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Le terminal est toujours quelque part</h2>
+    <p>Voici l'idée unique qui fait tout comprendre : <strong>votre terminal est toujours à l'intérieur d'exactement
+        un dossier.</strong> Pas « ouvert sur » lui — debout dedans, comme une fenêtre d'explorateur de fichiers
+        affiche un dossier à la fois.</p>
+
+    <p>Ce dossier s'appelle le <strong>répertoire courant</strong>, ou <strong>répertoire de
+        travail</strong>. Chaque commande que vous tapez s'exécute <em>là</em>, sauf indication contraire.
+        <code>ls</code> liste ce dossier. <code>mkdir notes</code> y crée le nouveau dossier. Plus tard,
+        <code>git init</code> transformera <em>ce</em> dossier en dépôt — c'est pourquoi « dans quel dossier
+        suis-je ? » cesse d'être une question anecdotique et devient ce que vous vérifiez avant d'agir.</p>
+
+    <p>Presque tous les moments de confusion des débutants avec le terminal — « il dit que le fichier n'existe pas
+        alors que je le vois juste là » — viennent de là. Le fichier existe. C'est vous qui êtes ailleurs.</p>
+
+    <h2>Répertoire signifie dossier</h2>
+    <p><strong>Répertoire</strong> et <strong>dossier</strong> sont la même chose. « Dossier » est le nom que le
+        bureau graphique lui a donné ; « répertoire » est le nom plus ancien, et c'est celui qu'utilisent le
+        terminal, la documentation et chaque nom de commande — <code>mkdir</code> signifie <em>make
+        directory</em> (créer un répertoire), <code>cd</code> signifie <em>change directory</em> (changer de
+        répertoire). Attendez-vous aux deux mots, et entendez la même chose par les deux.</p>
+
+    <p>Votre ordinateur stocke deux sortes de choses :</p>
+
+    <ul>
+        <li>Les <strong>fichiers</strong> contiennent du contenu — du texte, une photo, du code.</li>
+        <li>Les <strong>répertoires</strong> contiennent d'autres fichiers et répertoires. C'est tout ce qu'ils font.</li>
+    </ul>
+
+    <p>Des répertoires dans des répertoires dans des répertoires, jusqu'en bas depuis un point de départ unique.
+        Cet emboîtement est le <strong>système de fichiers</strong>, et c'est un arbre.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Affichez où vous êtes</h3>
+    <p>Ouvrez votre terminal. La première commande à laquelle tout utilisateur de terminal apprend à faire
+        confiance :</p>
+
+    <code class="shell">pwd</code>
+
+    <p>Abréviation de <strong>print working directory</strong> (afficher le répertoire de travail). Elle répond à
+        la question avec une adresse complète :</p>
+
+    <p><code class="comment">/Users/jyoti</code></p>
+
+    <p>Sur Windows avec Git Bash, vous verrez quelque chose comme <code>/c/Users/jyoti</code> — le même endroit,
+        Git Bash écrit simplement le disque <code>C:</code> à la manière Unix.</p>
+
+    <p>Cette adresse s'appelle un <strong>chemin</strong>. Lisez-la de gauche à droite comme un itinéraire :
+        partez tout en haut, entrez dans <code>Users</code>, puis dans <code>jyoti</code>. Chaque
+        <code>/</code> est un pas de plus vers l'intérieur. Un chemin qui part ainsi tout en haut s'appelle un
+        <strong>chemin absolu</strong> — il désigne la même chose, où que vous soyez quand vous l'utilisez.</p>
+
+    <p><code>pwd</code> est gratuit, instantané et ne change rien. Exécutez-le dès que vous doutez. Personne ne
+        vous estimera jamais moins pour avoir exécuté <code>pwd</code>.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Regardez autour de vous</h3>
+    <p>Voyez maintenant ce qui se trouve réellement ici :</p>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">Desktop  Documents  Downloads  Music  Pictures</code></p>
+
+    <p>Vous les reconnaissez ? Ce sont les mêmes dossiers que dans votre explorateur de fichiers, car il n'existe
+        pas de « système de fichiers du terminal » séparé — c'est un seul ordinateur et deux façons de le
+        regarder. Ouvrez une fois votre explorateur à côté du terminal, côte à côte. Cela rend le tout moins
+        abstrait.</p>
+
+    <p>Pour distinguer fichiers et répertoires d'un coup d'œil, demandez le détail :</p>
+
+    <code class="shell">ls -l</code>
+
+    <p><code class="comment">drwxr-xr-x  5 jyoti staff  160 Sep 20 09:12 Documents
+-rw-r--r--  1 jyoti staff 1024 Sep 20 09:14 notes.txt</code></p>
+
+    <p>Ignorez presque tout cela pour l'instant et regardez le tout premier caractère de chaque ligne. Un
+        <code>d</code> signifie <strong>répertoire</strong>. Un <code>-</code> signifie un
+        <strong>fichier</strong> ordinaire. Cette seule lettre est la réponse.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>La maison, et la tilde</h2>
+    <p>Quand vous ouvrez un terminal, il ne démarre pas à un endroit au hasard. Il démarre dans votre
+        <strong>répertoire personnel</strong> — le dossier qui appartient à votre compte utilisateur, celui qui
+        contient votre Bureau, vos Documents et vos Téléchargements.</p>
+
+    <ul>
+        <li>macOS : <code>/Users/yourname</code></li>
+        <li>Linux : <code>/home/yourname</code></li>
+        <li>Windows : <code>C:\Users\yourname</code>, que Git Bash affiche comme <code>/c/Users/yourname</code></li>
+    </ul>
+
+    <p>Vous le taperez constamment, il a donc un raccourci : <strong><code>~</code></strong>, la tilde. Partout où
+        un chemin est attendu, <code>~</code> signifie « mon répertoire personnel ». Ainsi
+        <code>~/Documents</code> est votre dossier Documents, orthographié de la même façon sur chaque machine
+        et par chaque utilisateur — c'est exactement pourquoi la documentation est pleine de tildes.</p>
+
+    <p>Regardez à nouveau votre invite. Ce <code>~</code> qui s'y trouve est le même raccourci : l'invite vous dit
+        que vous êtes à la maison. Allez dans un sous-dossier et regardez-la devenir
+        <code>~/Documents</code>. Votre invite répondait discrètement à <code>pwd</code> depuis le début.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Prouvez-le</h3>
+    <p>Ouvrez un terminal, exécutez <code>pwd</code> avant d'aller où que ce soit, et lisez le chemin qu'il
+        affiche. C'est votre répertoire personnel.</p>
+
+    <p>Utilisez ensuite <strong>Sélectionner le répertoire</strong> ci-dessous et choisissez exactement ce
+        dossier. Git Gud détermine seul où se trouve votre répertoire personnel et compare les deux — c'est donc
+        une vraie réponse, avec un juste et un faux, pas une case à cocher.</p>
+
+    <p>Exécutez aussi <code>ls</code> pendant que vous y êtes, puis <code>exit</code> pour que votre shell
+        enregistre son historique, et appuyez sur Vérifier.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>Regarder autour de soi</h3>
+    <ul class="no-list-style">
+        <li><strong>Où suis-je ?</strong></li>
+        <code class="shell">pwd</code>
+        <li><strong>Qu'y a-t-il ici ?</strong></li>
+        <code class="shell">ls</code>
+        <li><strong>Y compris les éléments cachés</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>Avec le détail — un <code>d</code> en tête signifie répertoire</strong></li>
+        <code class="shell">ls -l</code>
+        <li><strong>Ce qu'il y a dans un autre dossier, sans y aller</strong></li>
+        <code class="shell">ls ~/Documents</code>
+    </ul>
+</div>

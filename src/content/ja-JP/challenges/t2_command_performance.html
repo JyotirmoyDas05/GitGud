@@ -1,0 +1,114 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>すべてのコマンドに共通する3つの部品と、コマンド自身に使い方を尋ねる方法を学びましょう。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>コマンド、引数、オプション</h2>
+    <p>プロンプトに入力する1行はすべて同じ形をしています。一度見抜けば、見慣れないコマンドが魔法の呪文ではなく文に見えるようになります。</p>
+
+    <p><code class="comment">command  [options]  [arguments]</code></p>
+
+    <ul>
+        <li><strong>コマンド</strong>は動詞——実行したいプログラムです。常に最初に来ます。<code>ls</code>、<code>echo</code>、<code>git</code> などです。</li>
+        <li><strong>引数</strong>はコマンドの対象です。名詞にあたります。<code>cd Documents</code> では、引数は <code>Documents</code> です。</li>
+        <li><strong>オプション</strong>(<strong>フラグ</strong>や<strong>スイッチ</strong>とも呼びます)はコマンドの動作を変える<em>方法</em>です。ダッシュで始まります: <code>-a</code>、<code>-l</code>、<code>--help</code> などです。</li>
+    </ul>
+
+    <p>つまり <code>ls -l Documents</code> は、<em>一覧表示して</em>(コマンド)、<em>詳しく</em>(オプション)、<em>Documentsフォルダを</em>(引数)と読みます。3つの部品がスペースで区切られています。</p>
+
+    <p>この間隔は初心者が思う以上に重要です。 <code>ls-l</code> は1つの単語であり、シェルはそのようなコマンドはないと言います。どこで1つの部品が終わり次が始まるかを、シェルはスペースで判断しています。</p>
+
+    <h2>短いオプションと長いオプション</h2>
+    <p>ほとんどのオプションには同じ意味の2つの書き方があります:</p>
+
+    <ul>
+        <li><strong>短い</strong>ものはダッシュ1つと1文字です: <code>-a</code>。入力が速いです。通常はまとめられます—— <code>ls -la</code> は <code>-l</code> と <code>-a</code> を合わせた意味です。</li>
+        <li><strong>長い</strong>ものはダッシュ2つと単語です: <code>--all</code>。入力は遅いですが、半年後に読み返しても何をしたか分かります。</li>
+    </ul>
+
+    <p>入力するときは短いもの、誰かのために書き残すとき——未来の自分も含めて——は長いものを使いましょう。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>引数付きのコマンド</h3>
+    <p><code>echo</code> は1つのことだけをします: 渡されたものをそのまま表示します。</p>
+
+    <code class="shell">echo hello</code>
+
+    <p><code class="comment">hello</code></p>
+
+    <p>単独の <code>echo</code> は何も付けないと空行を表示します——引数なしのコマンドには言うことがありません。複数の単語を渡すとすべて表示します:</p>
+
+    <code class="shell">echo I am talking to my computer</code>
+
+    <p>無意味に見えますが、そうではありません: <code>echo</code> は危険な操作の前に中身を確認する方法であり、スクリプトが思った通りに動かないときに最初に使うものです。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>オプション付きのコマンド</h3>
+    <p><code>ls</code> は今立っているフォルダの中身を一覧表示します。まず何も付けずに試してください:</p>
+
+    <code class="shell">ls</code>
+
+    <p>次にオプションを付けて、同じコマンドがどう答えを変えるか見てみましょう:</p>
+
+    <code class="shell">ls -a</code>
+
+    <p><code>-a</code> は <em>all</em> の略で、突然ドットで始まる項目が増えます—— <code>.bashrc</code>、<code>.gitconfig</code> などです。先頭のドットは「隠し」という意味で、隠しとは単に <code>ls</code> が頼まれない限り飛ばすということです。権限は関係なく、控えめな名前の普通のファイルです。Gitはリポジトリ全体をそのような1つに保存しており、後で出会います。</p>
+
+    <p>もう1つ:</p>
+
+    <code class="shell">ls -l</code>
+
+    <p><code>-l</code> は <em>long</em> の意味——1行に1項目ずつ、サイズと最終更新日時付きで表示します。同じコマンド、同じフォルダでも、頼み方で詳しさが変わります。</p>
+
+    <p>短いオプションはまとめられるので、これは両方を同時に行います:</p>
+
+    <code class="shell">ls -la</code>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>コマンド自身に尋ねる</h3>
+    <p>オプションを暗記する人はいません。経験者が実際にやるのは尋ねることであり、ほぼすべてのコマンドが同じ質問に答えてくれます:</p>
+
+    <code class="shell">ls --help</code>
+
+    <p>大量のテキストが出てきます。全部読まず、最初数行だけ読んでコマンドの目的を掴み、左側のオプション一覧から欲しいものに似たものを探します。その技術は流し読みであり、暗記ではありません。</p>
+
+    <p>使ったことのないコマンドで試してみましょう:</p>
+
+    <code class="shell">mkdir --help</code>
+
+    <p>誰に教わらなくても、 <code>mkdir</code> が何をするか、おおよその使い方が分かりました。ターミナルを暗記物ではなく学べるものにするのはこの動きです——そして <code>mkdir</code> には2つ後のチャレンジで正式に出会います。</p>
+
+    <p><span class="inline-tip">macOSでは一部のコマンドが <code>man ls</code> で答えます( <code>--help</code> ではなく)—— <code>man</code> は <em>manual</em> の略です。抜けるには <code>q</code> を押します。</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>散らかった画面を片付ける</h3>
+    <p>これだけ出力すると画面はぐちゃぐちゃです。1つのコマンドで直ります:</p>
+
+    <code class="shell">clear</code>
+
+    <p>何も削除されません——履歴は残り、上矢印も使えます。考えるために邪魔な出力をどかすだけです。</p>
+
+    <p><code>echo</code> で何か表示し、 <code>ls</code> にオプションを付け、何かに <code>--help</code> を使ったら、履歴保存のために <code>exit</code> でターミナルを閉じてVerifyを押してください。</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>毎回同じ形</h3>
+    <ul class="no-list-style">
+        <li><strong>コマンド単独</strong></li>
+        <code class="shell">ls</code>
+        <li><strong>オプション付きコマンド</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>引数付きコマンド</strong></li>
+        <code class="shell">echo hello</code>
+        <li><strong>3つ全部</strong></li>
+        <code class="shell">ls -l Documents</code>
+        <li><strong>コマンドに使い方を尋ねる</strong></li>
+        <code class="shell">ls --help</code>
+    </ul>
+</div>

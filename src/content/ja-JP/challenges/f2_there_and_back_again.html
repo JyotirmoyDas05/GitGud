@@ -1,0 +1,130 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p><code>cd</code> でファイルシステムを移動しましょう——フォルダの中へ、親へ、そしてまっすぐホームへ戻ります。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>ディレクトリの変更</h2>
+    <p>今いる場所が分かりました。次は別の場所へ行く必要があります。そのためのコマンドは1つです:</p>
+
+    <p><code class="comment">cd &#60;WHERE&#62;</code></p>
+
+    <p><code>cd</code> は <strong>change directory</strong> の意味です。フォルダをダブルクリックする操作のターミナル版であり、今後の人生で最も多く入力するコマンドになります。</p>
+
+    <p>うまくいっても何も表示しません。その沈黙は正常で意図的です——ターミナルでは、何も言わないのが良い知らせです。何か問題があるときにコマンドは声を上げます。うまくいった証拠は、新しいフォルダを示すプロンプトと、それを裏付ける <code>pwd</code> です。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>フォルダの中へ進む</h3>
+    <p>ホームから始めて、何があるか見てみましょう:</p>
+
+    <code class="shell">cd ~</code>
+    <code class="shell">ls</code>
+
+    <p>見えたフォルダを1つ選んでください—— <code>Documents</code> と <code>Desktop</code> はほぼすべてのマシンにあります——中に入ります:</p>
+
+    <code class="shell">cd Documents</code>
+
+    <p>プロンプトを見てください。変わりました。きちんと確認しましょう:</p>
+
+    <code class="shell">pwd</code>
+
+    <p><code class="comment">/Users/jyoti/Documents</code></p>
+
+    <p><strong>相対パス</strong>を使いました。全体の住所ではなく <code>Documents</code> と入力したのに動いたのは、 <code>cd</code> が<em>今いる場所を起点に</em>その名前を探したからです。相対パスは短く、立っている場所によって意味が変わります——そこが要点です。</p>
+
+    <p><span class="inline-tip"><code>cd Doc</code> と入力して <strong>Tab</strong> を押してください。シェルが単語を補完してくれます。これが<strong>タブ補完</strong>であり、今後入力するすべてのパスで使え、入力の手間だけでなく入力ミスも防いでくれます。今のうちに習慣にしましょう——ターミナルを面倒に感じる人とそうでない人の差はここです。</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>上へ戻る</h3>
+    <p>すべてのディレクトリには<strong>親</strong>——それを含む側——があります。永続的な略記があり、2つのドットです:</p>
+
+    <code class="shell">cd ..</code>
+    <code class="shell">pwd</code>
+
+    <p>開始地点に戻りました。 <code>..</code> は常に「ここから1段上」という意味なので、名前を知らなくてもどこでも使えます。</p>
+
+    <p>対になる略記もあります: 1つのドット <code>.</code> は「まさにここ」という意味です。無用に見えますが——「このフォルダ」と声に出して言う必要があるコマンドに出会うまでは。後に何度も入力する <code>git add .</code> がまさにそれです。</p>
+
+    <p>ドットは重ねられます。これは2段上がります:</p>
+
+    <code class="shell">cd ../..</code>
+
+    <p>名前とも組み合わせられます。1段上がってから隣のフォルダへ降りる動きを1回で:</p>
+
+    <code class="shell">cd ../Downloads</code>
+
+    <p>語彙はこれだけです。パスとはこれらの部品をスラッシュでつないだものにすぎません。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>絶対パスと相対パス</h2>
+    <p>2種類のパスがあり、どちらを持っているか分かれば、ほとんどのパス混乱はきれいに解消します。</p>
+
+    <ul>
+        <li><strong>絶対パス</strong>はファイルシステムの頂上から始まり、それ単体で完全です: <code>/Users/jyoti/Documents</code>。どこから入力しても同じ意味です。見分け方は一瞬です—— <code>/</code> で始まります(または <code>~</code>。展開すると絶対パスになります。Windowsでは <code>C:</code> のようなドライブ文字です)。</li>
+        <li><strong>相対パス</strong>は今いる場所から始まります: <code>Documents</code>、<code>../Downloads</code>、<code>notes/day-one.txt</code> などです。入力は短いですが、正しい起点からのみ正しくなります。</li>
+    </ul>
+
+    <p>住所と「左側の2番目のドア」の違いだと考えてください。どちらでもたどり着けます。別の場所にいる人に伝えても通じるのは片方だけです。</p>
+
+    <p>近くのもの——たいていはこちらです——には相対パスを使いましょう。遠くへ一気に跳ぶときや、誰かのためにパスを書き残すときは絶対パスを使います。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>どこへでも跳ぶ</h3>
+    <p>数段深いところまでさまよってから、1回でホームに戻りましょう:</p>
+
+    <code class="shell">cd ~</code>
+
+    <p>何も付けない <code>cd</code> も同じことです——ホームが既定の行き先です。行きたくなることが十分多いため略記が与えられました。</p>
+
+    <p>絶対パスなら距離に関係なく1手順でどこへでも行けます:</p>
+
+    <code class="shell">cd ~/Documents</code>
+
+    <p>これは絶対パスです—— <code>~</code> は <code>cd</code> が見る前にホームディレクトリの完全な住所に展開されます。macOSやLinuxではファイルシステム全体の頂上を目指して周りを見てもかまいません。そこにあるものが噛みつくことはありません。</p>
+
+    <code class="shell">cd /</code>
+    <code class="shell">ls</code>
+
+    <p>最後に持っておく価値のある略記です:</p>
+
+    <code class="shell">cd -</code>
+
+    <p>直前のディレクトリに戻ります。ブラウザの戻るボタンのようなものです。これを2回続ければ2つのフォルダを行き来します——実際の作業のほとんどはその繰り返しです。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>チェック内容</h3>
+    <p>このチャレンジではシェル履歴から4種類の<em>形</em>の <code>cd</code> を探します——上の考え方に1つずつ対応し、行き先そのものは問いません。実際にあるフォルダで練習できます:</p>
+
+    <ul>
+        <li><code>cd Documents</code> — 名前でフォルダの中へ(相対)</li>
+        <li><code>cd ..</code> — 親へ上る</li>
+        <li><code>cd ~</code> — ホーム</li>
+        <li><code>cd ~/Documents</code> または <code>cd /usr</code> — 絶対パス</li>
+    </ul>
+
+    <p>それぞれの後に <code>pwd</code> を実行して動作を確認してください。次に履歴保存のため <code>exit</code> してVerifyを押します。</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>移動方法</h3>
+    <ul class="no-list-style">
+        <li><strong>フォルダの中へ</strong></li>
+        <code class="shell">cd &#60;FOLDERNAME&#62;</code>
+        <li><strong>親へ上る</strong></li>
+        <code class="shell">cd ..</code>
+        <li><strong>2段上へ、または上へ行って横へ</strong></li>
+        <code class="shell">cd ../../</code>
+        <li><strong>ホーム</strong></li>
+        <code class="shell">cd ~</code>
+        <li><strong>直前にいた場所へ戻る</strong></li>
+        <code class="shell">cd -</code>
+        <li><strong>迷ったらいつでも</strong></li>
+        <code class="shell">pwd</code>
+    </ul>
+</div>

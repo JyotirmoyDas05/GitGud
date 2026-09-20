@@ -1,0 +1,137 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Find out where your terminal is standing, see what's around you, and identify your home directory.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>The Terminal Is Always Somewhere</h2>
+    <p>Here is the one idea that makes everything else click: <strong>your terminal is always inside
+        exactly one folder.</strong> Not "open at" it — standing in it, the way a file explorer window is
+        showing one folder at a time.</p>
+
+    <p>That folder is called the <strong>current directory</strong>, or the <strong>working
+        directory</strong>. Every command you type happens <em>there</em> unless you say otherwise.
+        <code>ls</code> lists that folder. <code>mkdir notes</code> makes the new folder inside it. Later,
+        <code>git init</code> will turn <em>that</em> folder into a repository — which is why "which
+        folder am I in?" stops being a trivia question and becomes the thing you check before you act.</p>
+
+    <p>Almost every confusing moment a beginner has with the terminal — "it says the file doesn't exist
+        but I can see it right there" — is this. The file exists. You're standing somewhere else.</p>
+
+    <h2>Directory Means Folder</h2>
+    <p><strong>Directory</strong> and <strong>folder</strong> are the same thing. "Folder" is what the
+        graphical desktop called it; "directory" is the older name, and it's the one the terminal, the
+        documentation and every command name use — <code>mkdir</code> is <em>make directory</em>,
+        <code>cd</code> is <em>change directory</em>. Expect both words, mean the same thing by them.</p>
+
+    <p>Your computer stores two kinds of thing:</p>
+
+    <ul>
+        <li><strong>Files</strong> hold content — text, a photo, some code.</li>
+        <li><strong>Directories</strong> hold other files and directories. That's all they do.</li>
+    </ul>
+
+    <p>Directories inside directories inside directories, all the way down from one starting point. That
+        nesting is the <strong>filesystem</strong>, and it's a tree.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Print Where You Are</h3>
+    <p>Open your terminal. The first command every terminal user learns to trust:</p>
+
+    <code class="shell">pwd</code>
+
+    <p>Short for <strong>print working directory</strong>. It answers the question with a full address:</p>
+
+    <p><code class="comment">/Users/jyoti</code></p>
+
+    <p>On Windows with Git Bash you'll see something like <code>/c/Users/jyoti</code> — same place, Git
+        Bash just writes the <code>C:</code> drive in Unix style.</p>
+
+    <p>That address is called a <strong>path</strong>. Read it left to right as a set of directions: start
+        at the very top, go into <code>Users</code>, then into <code>jyoti</code>. Each <code>/</code> is
+        a step further in. A path that starts from the very top like this is an <strong>absolute
+        path</strong> — it means the same thing no matter where you happen to be standing when you use
+        it.</p>
+
+    <p><code>pwd</code> is free, instant, and changes nothing. Run it whenever you're unsure. Nobody will
+        ever think less of you for running <code>pwd</code>.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Look Around</h3>
+    <p>Now see what's actually here:</p>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">Desktop  Documents  Downloads  Music  Pictures</code></p>
+
+    <p>Recognise those? They're the same folders you see in your file explorer, because there is no
+        separate "terminal filesystem" — it's one computer and two ways of looking at it. Open your file
+        explorer next to the terminal and put them side by side once. It makes the whole thing feel less
+        abstract.</p>
+
+    <p>To tell files and directories apart at a glance, ask for detail:</p>
+
+    <code class="shell">ls -l</code>
+
+    <p><code class="comment">drwxr-xr-x  5 jyoti staff  160 Sep 20 09:12 Documents
+-rw-r--r--  1 jyoti staff 1024 Sep 20 09:14 notes.txt</code></p>
+
+    <p>Ignore almost all of that for now and look at the very first character of each line. A
+        <code>d</code> means <strong>directory</strong>. A <code>-</code> means an ordinary
+        <strong>file</strong>. That single letter is the answer.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Home, and the Squiggle</h2>
+    <p>When you open a terminal it doesn't start at a random spot. It starts in your <strong>home
+        directory</strong> — the folder that belongs to your user account, the one holding your Desktop,
+        Documents and Downloads.</p>
+
+    <ul>
+        <li>macOS: <code>/Users/yourname</code></li>
+        <li>Linux: <code>/home/yourname</code></li>
+        <li>Windows: <code>C:\Users\yourname</code>, which Git Bash shows as <code>/c/Users/yourname</code></li>
+    </ul>
+
+    <p>You will type it constantly, so it has a shortcut: <strong><code>~</code></strong>, the tilde.
+        Anywhere a path is expected, <code>~</code> means "my home directory". So <code>~/Documents</code>
+        is your Documents folder, spelled the same way on every machine and by every user — which is
+        exactly why documentation is full of tildes.</p>
+
+    <p>Look back at your prompt. That <code>~</code> sitting in it is the same shortcut: the prompt is
+        telling you you're at home. Wander into a subfolder and watch it change to
+        <code>~/Documents</code>. Your prompt has been quietly answering <code>pwd</code> this whole
+        time.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Prove It</h3>
+    <p>Open a terminal, run <code>pwd</code> before going anywhere, and read the path it prints. That's
+        your home directory.</p>
+
+    <p>Then use <strong>Select directory</strong> below and pick that exact folder. Git Gud works out
+        where your home directory is on its own and compares the two — so this is a real answer with a
+        right and a wrong, not a checkbox.</p>
+
+    <p>Run <code>ls</code> while you're there too, then <code>exit</code> so your shell saves its history,
+        and press Verify.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>Looking Around</h3>
+    <ul class="no-list-style">
+        <li><strong>Where am I?</strong></li>
+        <code class="shell">pwd</code>
+        <li><strong>What's in here?</strong></li>
+        <code class="shell">ls</code>
+        <li><strong>Including hidden things</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>With detail — a leading <code>d</code> means directory</strong></li>
+        <code class="shell">ls -l</code>
+        <li><strong>What's in some other folder, without going there</strong></li>
+        <code class="shell">ls ~/Documents</code>
+    </ul>
+</div>

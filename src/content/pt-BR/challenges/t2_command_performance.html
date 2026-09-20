@@ -1,0 +1,143 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Aprenda as três partes de que todo comando é feito e como perguntar a um comando o que ele sabe fazer.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Comando, Argumentos, Opções</h2>
+    <p>Toda linha que você digita em um prompt tem o mesmo formato. Uma vez que você enxerga isso, comandos desconhecidos param
+        de parecer feitiços e começam a parecer frases.</p>
+
+    <p><code class="comment">command  [options]  [arguments]</code></p>
+
+    <ul>
+        <li>O <strong>comando</strong> é o verbo — o programa que você quer executar. Ele sempre vem primeiro.
+            <code>ls</code>, <code>echo</code>, <code>git</code>.</li>
+        <li><strong>Argumentos</strong> são sobre o que o comando deve agir. O substantivo.
+            Em <code>cd Documents</code>, o argumento é <code>Documents</code>.</li>
+        <li><strong>Opções</strong> (também chamadas de <strong>flags</strong> ou <strong>switches</strong>)
+            mudam <em>como</em> o comando se comporta. Elas começam com um traço: <code>-a</code>,
+            <code>-l</code>, <code>--help</code>.</li>
+    </ul>
+
+    <p>Então <code>ls -l Documents</code> se lê como: <em>liste</em> (comando), <em>do jeito detalhado</em> (opção),
+        <em>a pasta Documents</em> (argumento). Três partes, separadas por espaços.</p>
+
+    <p>Esse espaçamento importa mais do que iniciantes esperam. <code>ls-l</code> é uma palavra só e o shell vai
+        dizer que esse comando não existe. Os espaços são como o shell sabe onde uma parte termina e a próxima
+        começa.</p>
+
+    <h2>Opções Curtas e Longas</h2>
+    <p>A maioria das opções vem em duas grafias para a mesma coisa:</p>
+
+    <ul>
+        <li><strong>Curta</strong>, um traço e uma letra: <code>-a</code>. Rápida de digitar. Normalmente pode ser
+            combinada — <code>ls -la</code> significa <code>-l</code> e <code>-a</code> juntas.</li>
+        <li><strong>Longa</strong>, dois traços e uma palavra: <code>--all</code>. Mais lenta de digitar, mas você consegue
+            ler daqui a seis meses e saber o que ela fez.</li>
+    </ul>
+
+    <p>Use as curtas quando estiver digitando, as longas quando estiver escrevendo algo para
+        outra pessoa — incluindo você do futuro.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Um Comando Com Argumento</h3>
+    <p><code>echo</code> faz exatamente uma coisa: ele devolve o que você der para ele.</p>
+
+    <code class="shell">echo hello</code>
+
+    <p><code class="comment">hello</code></p>
+
+    <p>Sozinho, <code>echo</code> sem nada depois mostra uma linha vazia — o comando sem
+        argumento não tem nada a dizer. Dê várias palavras para ele e ele mostra todas:</p>
+
+    <code class="shell">echo I am talking to my computer</code>
+
+    <p>Parece inútil. Não é: <code>echo</code> é como você confere o que algo contém antes de
+        fazer qualquer coisa arriscada com isso, e é a primeira coisa que você vai usar quando um script não estiver fazendo
+        o que você esperava.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Um Comando Com Opção</h3>
+    <p><code>ls</code> lista o que está na pasta onde você está parado agora. Tente sem nada primeiro:</p>
+
+    <code class="shell">ls</code>
+
+    <p>Agora adicione uma opção e veja o mesmo comando responder de outro jeito:</p>
+
+    <code class="shell">ls -a</code>
+
+    <p><code>-a</code> é a forma curta de <em>all</em>, e de repente aparecem entradas extras começando com ponto
+        — <code>.bashrc</code>, <code>.gitconfig</code>. Um ponto no começo significa "oculto", e oculto
+        só significa que o <code>ls</code> pula esses arquivos a menos que peçam. Não há permissão envolvida; são
+        arquivos comuns com um nome discreto. O Git guarda seu repositório inteiro em um deles, que é
+        um truque que você vai conhecer mais adiante.</p>
+
+    <p>Mais um:</p>
+
+    <code class="shell">ls -l</code>
+
+    <p><code>-l</code> é <em>long</em> — um item por linha, com seu tamanho e quando foi alterado pela última vez. Mesmo
+        comando, mesma pasta, uma quantidade diferente de detalhe, porque você pediu.</p>
+
+    <p>E como opções curtas se combinam, isso faz as duas coisas de uma vez:</p>
+
+    <code class="shell">ls -la</code>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Pergunte ao Próprio Comando</h3>
+    <p>Ninguém decora opções. O que pessoas experientes realmente fazem é perguntar, e quase todo comando
+        responde à mesma pergunta:</p>
+
+    <code class="shell">ls --help</code>
+
+    <p>Sai uma parede de texto. Não leia tudo — leia as primeiras linhas, que dizem para que o comando
+        serve, depois passe o olho na lista de opções à esquerda até algo parecer o que você quer.
+        Essa é a habilidade: passar o olho, não decorar.</p>
+
+    <p>Tente com um comando que você nunca usou na vida:</p>
+
+    <code class="shell">mkdir --help</code>
+
+    <p>Você agora sabe o que <code>mkdir</code> faz e mais ou menos como usar, sem ninguém ter explicado.
+        Esse é o truque que faz o terminal ser algo que dá para aprender em vez de uma lista de coisas para decorar — e
+        você vai conhecer o <code>mkdir</code> direito daqui a dois desafios.</p>
+
+    <p><span class="inline-tip">No macOS, alguns comandos respondem a <code>man ls</code> em vez de
+        <code>--help</code> — <code>man</code> é a forma curta de <em>manual</em>. Pressione <code>q</code> para
+        sair.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Limpando a Bagunça</h3>
+    <p>Depois de tanta saída, a janela está uma bagunça. Um comando resolve:</p>
+
+    <code class="shell">clear</code>
+
+    <p>Nada é apagado — seu histórico continua intacto e a seta para cima ainda funciona. Ele só rola a sujeira
+        para fora do caminho para você conseguir pensar.</p>
+
+    <p>Quando você tiver executado <code>echo</code> com algo a dizer, <code>ls</code> com uma opção, e
+        <code>--help</code> em qualquer coisa, feche o terminal com <code>exit</code> para que seu shell
+        salve o histórico, depois pressione Verificar.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>O Formato, Sempre</h3>
+    <ul class="no-list-style">
+        <li><strong>Comando sozinho</strong></li>
+        <code class="shell">ls</code>
+        <li><strong>Comando com opção</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>Comando com argumento</strong></li>
+        <code class="shell">echo hello</code>
+        <li><strong>Os três juntos</strong></li>
+        <code class="shell">ls -l Documents</code>
+        <li><strong>Pergunte a um comando o que ele faz</strong></li>
+        <code class="shell">ls --help</code>
+    </ul>
+</div>

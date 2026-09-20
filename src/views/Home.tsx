@@ -2,23 +2,22 @@ import { useState } from "react";
 import { Check, RotateCcw } from "lucide-react";
 import { confirm } from "@tauri-apps/plugin-dialog";
 
-import { CHALLENGES } from "~/challenges";
+import { CHALLENGES, challengeTitle, grouped, moduleTitle } from "~/challenges";
 import { nextIncomplete, useProgress } from "~/lib/progress";
 import { pixelTransition } from "~/lib/pixelTransition";
 import { href, navigate } from "~/lib/router";
+import { strings } from "~/strings";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
-export function Home() {
+export function Home({ locale }: { locale: string }) {
   const { progress, completedCount, total, allDone, clearAll } = useProgress();
+  const t = strings(locale);
   const started = completedCount > 0;
   const [launching, setLaunching] = useState(false);
 
   async function onClearAll() {
-    const yes = await confirm(
-      "This clears the completed status for every challenge. Your repositories are not touched.",
-      { title: "Clear all progress?", kind: "warning" },
-    );
+    const yes = await confirm(t.homeClearMsg, { title: t.homeClearTitle, kind: "warning" });
     if (yes) clearAll();
   }
 
@@ -36,105 +35,106 @@ export function Home() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-6 py-10">
-      <section className="relative overflow-hidden rounded-lg border bg-card p-4">
-        {/* The same sky as the sidebar. A scrim fades it out under the text
-            so the numbers stay legible and the clouds keep the right half. */}
-        <img
-          src="/brand/home-art.png"
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full select-none object-cover dark:opacity-80 dark:saturate-75"
-          style={{ imageRendering: "pixelated" }}
-        />
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 bg-gradient-to-r from-card/85 via-card/35 to-transparent"
-        />
-
-        <div className="relative">
+    // The landscape is painted by the shell, behind the title bar as well as
+    // this column, so all that is left here is the content that floats on it.
+    <div className="relative mx-auto max-w-2xl px-6 py-10">
+      {/* Glass, because the text sits on a bright sky in one theme and a night
+          sky in the other, and neither one is a reliable backdrop for body
+          copy on its own. */}
+      <section className="panel-glass rounded-lg border p-4">
+        <div>
           <div className="flex items-center justify-between gap-3">
             <p className="font-medium text-sm">
-              Challenges completed
+              {t.homeProgressLabel}
               <span className="ml-2 text-muted-foreground tabular-nums">
                 {completedCount} / {total}
               </span>
             </p>
 
             {started && (
-              <Button variant="ghost" size="icon-sm" onClick={onClearAll} title="Clear status">
+              <Button variant="ghost" size="icon-sm" onClick={onClearAll} title={t.clearStatus}>
                 <RotateCcw />
               </Button>
             )}
           </div>
 
-          <ol className="mt-3 flex flex-wrap gap-1.5">
-            {CHALLENGES.map((challenge, i) => {
-              const done = Boolean(progress.completed[challenge.id]);
-              return (
-                <li key={challenge.id}>
-                  <a
-                    href={href({ name: "challenge", id: challenge.id })}
-                    title={`${i + 1}. ${challenge.title}`}
-                    className={cn(
-                      "flex size-7 items-center justify-center rounded-full border text-[11px] tabular-nums transition-colors",
-                      done
-                        ? "border-success bg-success text-white"
-                        : "border-border bg-card/70 text-muted-foreground backdrop-blur-[2px] hover:border-primary hover:text-foreground",
-                    )}
-                  >
-                    {done ? <Check className="size-3.5" /> : i + 1}
-                  </a>
-                </li>
-              );
-            })}
-          </ol>
+          {/* One row per module rather than sixteen circles in a wrapping
+              block — the wrap point moves with the window, so an ungrouped
+              row would split the modules in a different place at every
+              width. */}
+          <div className="mt-3 space-y-2">
+            {grouped().map(({ module, items }) => (
+              <div key={module.id} className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+                <span className="w-24 shrink-0 text-[11px] text-muted-foreground">
+                  {moduleTitle(module, locale)}
+                </span>
+                <ol className="flex flex-wrap gap-1.5">
+                  {items.map(({ challenge, index }) => {
+                    const done = Boolean(progress.completed[challenge.id]);
+                    return (
+                      <li key={challenge.id}>
+                        <a
+                          href={href({ name: "challenge", id: challenge.id })}
+                          title={`${index + 1}. ${challengeTitle(challenge, locale)}`}
+                          className={cn(
+                            "flex size-7 items-center justify-center rounded-full border text-[11px] tabular-nums transition-colors",
+                            done
+                              ? "border-success bg-success text-white"
+                              : "border-border bg-card/70 text-muted-foreground backdrop-blur-[2px] hover:border-primary hover:text-foreground",
+                          )}
+                        >
+                          {done ? <Check className="size-3.5" /> : index + 1}
+                        </a>
+                      </li>
+                    );
+                  })}
+                </ol>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
 
       {!started && (
-        <section className="mt-8">
-          <h1 className="font-semibold text-2xl tracking-tight">Welcome</h1>
+        <section className="panel-glass mt-6 rounded-lg border p-5">
+          <h1 className="font-semibold text-2xl tracking-tight">{t.homeWelcome}</h1>
           <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
-            Git Gud teaches the basics of Git and GitHub — not just beginner moves, but the
-            commands you will reach for over and over. Every challenge is checked against your
-            real repositories, so finishing one means it actually worked.
+            {t.homeIntro1}
           </p>
           <p className="mt-3 text-muted-foreground text-sm leading-relaxed">
-            You will need Git installed and a GitHub account. The first two challenges cover
-            both.
+            {t.homeIntro2}
           </p>
           <span className="gg-mario-stage mt-6" data-play={launching || undefined}>
             <img className="gg-coin" src="/brand/coin.svg" alt="" width={36} height={36} />
             <img className="gg-mario" src="/brand/mario.svg" alt="" width={44} height={40} />
             <Button variant="default" size="lg" onClick={onStart}>
-              Start challenge one
+              {t.homeStart}
             </Button>
           </span>
         </section>
       )}
 
       {started && !allDone && (
-        <section className="mt-8">
-          <h1 className="font-semibold text-2xl tracking-tight">On your way</h1>
+        <section className="panel-glass mt-6 rounded-lg border p-5">
+          <h1 className="font-semibold text-2xl tracking-tight">{t.homeOnWay}</h1>
           <p className="mt-2 text-muted-foreground text-sm">
-            Pick up where you left off.
+            {t.homePickup}
           </p>
           <Button variant="default" size="lg" className="mt-6" onClick={() =>
               navigate({ name: "challenge", id: nextIncomplete(progress.completed) })}>
-            Continue
+            {t.homeContinue}
           </Button>
         </section>
       )}
 
       {allDone && (
-        <section className="mt-8">
-          <h1 className="font-semibold text-2xl tracking-tight">Congratulations</h1>
+        <section className="panel-glass mt-6 rounded-lg border p-5">
+          <h1 className="font-semibold text-2xl tracking-tight">{t.homeCongrats}</h1>
           <p className="mt-2 text-muted-foreground text-sm">
-            You finished every challenge and are primed for social coding.
+            {t.homeFinished}
           </p>
           <Button variant="default" size="lg" className="mt-6" onClick={() => navigate({ name: "finale" })}>
-            See what is next
+            {t.homeSeeNext}
           </Button>
         </section>
       )}

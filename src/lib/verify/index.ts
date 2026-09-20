@@ -1,6 +1,13 @@
 import type { Verifier } from "./types";
 import { verifyGetGit } from "./get_git";
 import {
+  verifyCommandPerformance,
+  verifyMakeItSo,
+  verifyMeetTheTerminal,
+  verifyThereAndBackAgain,
+  verifyYouAreHere,
+} from "./shell";
+import {
   verifyBranches,
   verifyCommitToIt,
   verifyForksAndClones,
@@ -15,6 +22,11 @@ import {
 
 /** Challenge id → verifier. Keys match `user-data.json` and `challenges.ts`. */
 export const VERIFIERS: Partial<Record<string, Verifier>> = {
+  meet_the_terminal: verifyMeetTheTerminal,
+  command_performance: verifyCommandPerformance,
+  you_are_here: verifyYouAreHere,
+  there_and_back_again: verifyThereAndBackAgain,
+  make_it_so: verifyMakeItSo,
   get_git: verifyGetGit,
   repository: verifyRepository,
   commit_to_it: verifyCommitToIt,

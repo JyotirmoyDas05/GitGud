@@ -3,13 +3,40 @@
 <h2>Comandos básico Bash/Terminal</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
-        <li><strong>Crear nueva carpeta (crear nuevo directorio)</strong></li>
-        <code class="shell">mkdir &#60;NOMBREDELDIRECTORIO&#62;</code>
-        <li><strong>Navegar hacia una carpeta (directorio) existente</strong></li>
-        <code class="shell">cd &#60;NOMBREDELDIRECTORIO&#62;</code>
+        <li><strong>Mostrar la carpeta en la que estás (mostrar el directorio de trabajo)</strong></li>
+        <code class="shell">pwd</code>
         <li><strong>Listar los elementos que hay dentro de una carpeta</strong></li>
         <code class="shell">ls </code>
+        <li><strong>Listar todo, incluidos los elementos ocultos</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>Listar con detalle &mdash; una <code>d</code> inicial significa directorio</strong></li>
+        <code class="shell">ls -l</code>
+        <li><strong>Navegar hacia una carpeta (directorio) existente</strong></li>
+        <code class="shell">cd &#60;NOMBREDELDIRECTORIO&#62;</code>
+        <li><strong>Subir a la carpeta padre</strong></li>
+        <code class="shell">cd ..</code>
+        <li><strong>Ir a tu directorio personal</strong></li>
+        <code class="shell">cd ~</code>
+        <li><strong>Volver a la carpeta anterior</strong></li>
+        <code class="shell">cd -</code>
+        <li><strong>Crear nueva carpeta (crear nuevo directorio)</strong></li>
+        <code class="shell">mkdir &#60;NOMBREDELDIRECTORIO&#62;</code>
+        <li><strong>Crear toda una cadena de carpetas de una vez</strong></li>
+        <code class="shell">mkdir -p &#60;A&#62;/&#60;B&#62;/&#60;C&#62;</code>
+        <li><strong>Crear un archivo vacío</strong></li>
+        <code class="shell">touch &#60;NOMBREDEARCHIVO&#62;</code>
+        <li><strong>Imprimir algo de vuelta</strong></li>
+        <code class="shell">echo hello</code>
+        <li><strong>Limpiar la ventana (no se borra nada)</strong></li>
+        <code class="shell">clear</code>
+        <li><strong>Cerrar la terminal</strong></li>
+        <code class="shell">exit</code>
+        <li><strong>Preguntar a cualquier comando qué puede hacer</strong></li>
+        <code class="shell">&#60;COMANDO&#62; --help</code>
     </ul>
+    <p><strong>Dos teclas que valen más que ningún comando:</strong> <code>Tab</code> completa el
+        nombre del archivo o carpeta que empezaste a escribir, y la <code>flecha hacia arriba</code>
+        recupera lo que escribiste antes.</p>
 </div>
 
 <h2>Configuración de Git</h2>

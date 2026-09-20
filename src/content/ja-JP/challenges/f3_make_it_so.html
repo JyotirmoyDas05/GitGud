@@ -1,0 +1,123 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p><code>mkdir</code> と <code>touch</code> でターミナルから小さなフォルダツリーを作りましょう。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>ものを作る</h2>
+    <p>ここまでは読み取り専用でした——見て、移動するだけです。作る作業のほぼすべては2つのコマンドで足ります:</p>
+
+    <ul>
+        <li><strong><code>mkdir</code></strong> — <em>make directory</em> の意味。フォルダを作ります。</li>
+        <li><strong><code>touch</code></strong> — 空のファイルを作ります。</li>
+    </ul>
+
+    <p>どちらも、別の道筋を示すパスを渡さない限り、<strong>今立っているディレクトリの中</strong>に作ります。ここで前のチャレンジが効いてきます: 新しいフォルダがどこにできるか不安なら、まず <code>pwd</code> を実行してください。</p>
+
+    <p><code>touch</code> という奇妙な名前は、ファイル作成が本業ではないからです——本来の目的はファイルのタイムスタンプ更新であり、まだ存在しないものを作るのはついでの偶然でした。皆がその偶然のために使っています。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>練習用フォルダを作る</h3>
+    <p>作り場所に疑いがないよう、ホームから始めます:</p>
+
+    <code class="shell">cd ~</code>
+
+    <p>フォルダを作って中に入ります:</p>
+
+    <code class="shell">mkdir gitgud-practice</code>
+    <code class="shell">cd gitgud-practice</code>
+
+    <p><code>cd</code> と同じく、 <code>mkdir</code> はうまくいっても何も言いません。安心したければ <code>ls</code> で確認してください——最初の数回はそうすべきです。</p>
+
+    <p><span class="inline-tip">名前は必ず <code>gitgud-practice</code> にしてください——チェックはその名前を探します。スペースがないことにも注意してください。名前のスペースは合法ですが入力しづらくなるため、プログラミングの世界ではハイフンが好まれます。</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>ファイルを作る</h3>
+    <p>今いる場所は <code>gitgud-practice</code> の中のはずです。よければ確認してください:</p>
+
+    <code class="shell">pwd</code>
+
+    <p>次に空ファイルを作ります:</p>
+
+    <code class="shell">touch hello.txt</code>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">hello.txt</code></p>
+
+    <p>存在し、中身は空です——0バイトです。 <code>touch</code> は容器を作ります。中に何か入れるのはテキストエディタの仕事です。よければ好きなエディタで開いて何か入力してください。ここでは何も依存しません。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>フォルダを作り、その中にファイルを作る</h3>
+    <p>まだ <code>gitgud-practice</code> の中にいます:</p>
+
+    <code class="shell">mkdir notes</code>
+
+    <p>ここが役立つ点です——<code>notes</code> の中に <em>中に入らずに</em> ファイルを作ります。ただの名前ではなく相対パスを <code>touch</code> に渡します:</p>
+
+    <code class="shell">touch notes/day-one.txt</code>
+
+    <p>その引数はパスとして読みます: <em>フォルダ <code>notes</code> の中の <code>day-one.txt</code> というファイル</em>。コマンドはどこでも名前だけでなくパスを受け取ります。1つの作業のためだけにわざわざ <code>cd</code> する必要はほぼありません。</p>
+
+    <p>作業を確認します:</p>
+
+    <code class="shell">ls notes</code>
+
+    <p><span class="inline-tip"><code>ls no</code> と入力して <strong>Tab</strong> を押してください。タブ補完は今作ったフォルダにも他のものと同じく使えます——おかげで入力ミスを防げます。入力ミスがなければ「No such file or directory」を眺めて1分悩まずに済みます。</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>複数のフォルダを一度に</h3>
+    <p>入れ子のフォルダを素直な方法で作ろうとして、拒まれる様子を見てみましょう:</p>
+
+    <code class="shell">mkdir notes/archive/2026</code>
+
+    <p><code class="comment">mkdir: cannot create directory 'notes/archive/2026': No such file or directory</code></p>
+
+    <p>もっともです—— <code>archive</code> はまだ存在せず、 <code>mkdir</code> は連鎖ではなく1つのディレクトリを作ります。各階層を手作りする代わりに、そう頼みます:</p>
+
+    <code class="shell">mkdir -p notes/archive/2026</code>
+
+    <code class="shell">ls notes</code>
+
+    <p><code>-p</code> は <em>parents</em> の略です: 途中で欠けているフォルダも作ります。これは2つ前のチャレンジの規則が動いています——同じコマンドに1つのオプションで動作が変わり、 <code>mkdir --help</code> が教えてくれたはずのことです。</p>
+
+    <p>ツリーは今こうなっています:</p>
+
+    <p><code class="comment">gitgud-practice/
+├── hello.txt
+└── notes/
+    ├── day-one.txt
+    └── archive/
+        └── 2026/</code></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>チェック内容</h3>
+    <p>2つを合わせた内容です。Git Gudは <code>gitgud-practice</code> フォルダを読んでツリーが本当にあるか確認し、<em>かつ</em>シェル履歴で <code>mkdir</code> と <code>touch</code> を確認します——右クリックの新規フォルダーでも作れてしまい、このモジュールの趣旨ではないからです。</p>
+
+    <p>下の<strong>Select directory</strong>で自分の <code>gitgud-practice</code> フォルダを選び、履歴保存のために <code>exit</code> でターミナルを閉じてVerifyを押してください。</p>
+
+    <p>終わったらフォルダは残しても消してもかまいません——後は何にも依存しません。同じ2つのコマンドで、すぐに本物のプロジェクトフォルダを作ります。</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>ものを作る</h3>
+    <ul class="no-list-style">
+        <li><strong>フォルダを作る</strong></li>
+        <code class="shell">mkdir &#60;FOLDERNAME&#62;</code>
+        <li><strong>フォルダの連鎖を一気に作る</strong></li>
+        <code class="shell">mkdir -p &#60;A&#62;/&#60;B&#62;/&#60;C&#62;</code>
+        <li><strong>空ファイルを作る</strong></li>
+        <code class="shell">touch &#60;FILENAME&#62;</code>
+        <li><strong>別のフォルダの中に作る</strong></li>
+        <code class="shell">touch &#60;FOLDERNAME&#62;/&#60;FILENAME&#62;</code>
+        <li><strong>うまくいったか確認する</strong></li>
+        <code class="shell">ls &#60;FOLDERNAME&#62;</code>
+    </ul>
+    <p>ターミナルモジュールは以上です。ターミナルを開き、プロンプトを読み、オプションと引数付きでコマンドを実行し、今いる場所を調べ、別の場所へ行き、着いたらものを作れます。これからGitが求めるのは、言葉が違うだけで同じ動きです。</p>
+</div>

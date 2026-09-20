@@ -1,0 +1,143 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Learn the three parts every command is made of, and how to ask a command what it can do.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Command, Arguments, Options</h2>
+    <p>Every line you type at a prompt has the same shape. Once you see it, unfamiliar commands stop
+        looking like magic spells and start looking like sentences.</p>
+
+    <p><code class="comment">command  [options]  [arguments]</code></p>
+
+    <ul>
+        <li>The <strong>command</strong> is the verb — the program you want to run. It always comes first.
+            <code>ls</code>, <code>echo</code>, <code>git</code>.</li>
+        <li><strong>Arguments</strong> are what the command should act on. The noun.
+            In <code>cd Documents</code>, the argument is <code>Documents</code>.</li>
+        <li><strong>Options</strong> (also called <strong>flags</strong> or <strong>switches</strong>)
+            change <em>how</em> the command behaves. They start with a dash: <code>-a</code>,
+            <code>-l</code>, <code>--help</code>.</li>
+    </ul>
+
+    <p>So <code>ls -l Documents</code> reads as: <em>list</em> (command), <em>the long way</em> (option),
+        <em>the Documents folder</em> (argument). Three parts, separated by spaces.</p>
+
+    <p>That spacing matters more than beginners expect. <code>ls-l</code> is one word and the shell will
+        tell you no such command exists. Spaces are how the shell knows where one part ends and the next
+        begins.</p>
+
+    <h2>Short and Long Options</h2>
+    <p>Most options come in two spellings for the same thing:</p>
+
+    <ul>
+        <li><strong>Short</strong>, one dash and one letter: <code>-a</code>. Quick to type. Can usually be
+            bundled — <code>ls -la</code> means <code>-l</code> and <code>-a</code> together.</li>
+        <li><strong>Long</strong>, two dashes and a word: <code>--all</code>. Slower to type, but you can
+            read it back in six months and know what it did.</li>
+    </ul>
+
+    <p>Use the short ones when you're typing, the long ones when you're writing something down for
+        someone else — including future you.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>A Command With an Argument</h3>
+    <p><code>echo</code> does exactly one thing: it prints back whatever you give it.</p>
+
+    <code class="shell">echo hello</code>
+
+    <p><code class="comment">hello</code></p>
+
+    <p>On its own, <code>echo</code> with nothing after it prints an empty line — the command with no
+        argument has nothing to say. Give it several words and it prints all of them:</p>
+
+    <code class="shell">echo I am talking to my computer</code>
+
+    <p>It looks pointless. It isn't: <code>echo</code> is how you check what something contains before you
+        do anything risky with it, and it's the first thing you'll reach for when a script isn't doing
+        what you expected.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>A Command With an Option</h3>
+    <p><code>ls</code> lists what's in the folder you're currently standing in. Try it bare first:</p>
+
+    <code class="shell">ls</code>
+
+    <p>Now add an option and watch the same command answer differently:</p>
+
+    <code class="shell">ls -a</code>
+
+    <p><code>-a</code> is short for <em>all</em>, and suddenly there are extra entries beginning with a
+        dot — <code>.bashrc</code>, <code>.gitconfig</code>. A leading dot means "hidden", and hidden
+        simply means <code>ls</code> skips it unless asked. There's no permission involved; they're
+        ordinary files with an unassuming name. Git keeps its entire repository in one of them, which is
+        a trick you'll meet later.</p>
+
+    <p>One more:</p>
+
+    <code class="shell">ls -l</code>
+
+    <p><code>-l</code> is <em>long</em> — one item per line, with its size and when it last changed. Same
+        command, same folder, a different amount of detail, because you asked for it.</p>
+
+    <p>And because short options bundle, this does both at once:</p>
+
+    <code class="shell">ls -la</code>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Ask the Command Itself</h3>
+    <p>Nobody memorises options. What experienced people actually do is ask, and almost every command
+        answers the same question:</p>
+
+    <code class="shell">ls --help</code>
+
+    <p>Out comes a wall of text. Don't read it all — read the first few lines, which say what the command
+        is for, then skim the list of options down the left until something looks like what you want.
+        That's the skill: skimming, not memorising.</p>
+
+    <p>Try it on a command you have never used in your life:</p>
+
+    <code class="shell">mkdir --help</code>
+
+    <p>You now know what <code>mkdir</code> does and roughly how to drive it, without anyone telling you.
+        That's the move that makes the terminal learnable instead of a list of things to memorise — and
+        you'll meet <code>mkdir</code> properly two challenges from now.</p>
+
+    <p><span class="inline-tip">On macOS, some commands answer <code>man ls</code> instead of
+        <code>--help</code> — <code>man</code> is short for <em>manual</em>. Press <code>q</code> to get
+        out of it.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Clearing the Clutter</h3>
+    <p>After all that output the window is a mess. One command fixes it:</p>
+
+    <code class="shell">clear</code>
+
+    <p>Nothing is deleted — your history is intact and the up arrow still works. It just scrolls the noise
+        out of the way so you can think.</p>
+
+    <p>When you've run <code>echo</code> with something to say, <code>ls</code> with an option, and
+        <code>--help</code> on anything at all, close the terminal with <code>exit</code> so your shell
+        saves its history, then press Verify.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>The Shape, Every Time</h3>
+    <ul class="no-list-style">
+        <li><strong>Command alone</strong></li>
+        <code class="shell">ls</code>
+        <li><strong>Command with an option</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>Command with an argument</strong></li>
+        <code class="shell">echo hello</code>
+        <li><strong>All three together</strong></li>
+        <code class="shell">ls -l Documents</code>
+        <li><strong>Ask a command what it does</strong></li>
+        <code class="shell">ls --help</code>
+    </ul>
+</div>

@@ -22,9 +22,12 @@ const PULSE_MS = 650;
 const HOLD_MS = 1575;
 const FADE_MS = 450;
 const TOTAL_MS = 1.5 * PULSE_MS + HOLD_MS + FADE_MS;
-const PEAK = 0.45;
+/** Full strength: `--hit-mark` is already chosen to keep text readable under it. */
+const PEAK = 1;
 
 const HIGHLIGHT_NAME = "gg-search-hit";
+/** The passage around the match, washed faintly so a short word has a big target. */
+const LINE_NAME = "gg-search-line";
 const OPACITY = "--gg-hit-opacity";
 
 /** Headings end a section, the same boundary the search index and outline use. */
@@ -125,40 +128,94 @@ export function revealSearchHit({
   headingId: string;
   query: string;
 }) {
+  // Selecting a result navigates first, so the section does not exist yet.
+  whenPresent(
+    () => (headingId ? document.getElementById(headingId) : document.querySelector("main .prose")),
+    (target) => {
+      if (headingId) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      // Waiting matters: the blink is the payload, and starting it mid-flight
+      // spends the first half of it off-screen.
+      whenSettled(target.closest("main"), () => flash(headingId, query));
+    },
+  );
+}
+
+/** Polls for an element across frames, giving up rather than hanging. */
+function whenPresent(find: () => Element | null, done: (el: Element) => void, deadlineMs = 800) {
+  const stopAt = performance.now() + deadlineMs;
+  const tick = () => {
+    const el = find();
+    if (el) done(el);
+    else if (performance.now() < stopAt) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+
+/**
+ * Builds the ranges and paints them, re-resolving the section each attempt.
+ *
+ * `Html` does its work imperatively after mount — wrapping code blocks,
+ * inserting favicons, replacing shell snippets with coloured spans — and any
+ * of it can replace the very text nodes just measured. A range whose nodes
+ * were swapped stays technically valid but renders nothing, which showed up as
+ * a highlight that was "set" and invisible. Rather than guess when that work
+ * has finished, this measures, checks that the range still covers text, and
+ * retries on the next frame if it does not.
+ */
+function flash(headingId: string, query: string, attempt = 0) {
   const heading = headingId ? document.getElementById(headingId) : null;
   const root = heading ?? document.querySelector("main .prose");
   if (!root) return;
 
-  const scroller = root.closest("main");
-  if (heading) heading.scrollIntoView({ behavior: "smooth", block: "start" });
-
-  // Waiting matters: the blink is the payload, and starting it mid-flight
-  // spends the first half of it off-screen.
-  whenSettled(scroller, () => flash(heading, root, query));
-}
-
-function flash(heading: Element | null, root: Element, query: string) {
   const nodes = textNodes(heading, root);
-  if (nodes.length === 0) return;
-
-  const match = findBestMatch(nodes.map((n) => n.data), query);
+  const match = nodes.length > 0 ? findBestMatch(nodes.map((n) => n.data), query) : null;
 
   const range = document.createRange();
+  // The passage the match sits in. A five-letter word is a tiny target; washing
+  // its paragraph gives the eye something page-sized to land on first.
+  const line = document.createRange();
+
   if (match) {
     range.setStart(nodes[match.startPart]!, match.startOffset);
     range.setEnd(nodes[match.endPart]!, match.endOffset);
+    line.setStartBefore(nodes[match.startPart]!);
+    line.setEndAfter(nodes[match.endPart]!);
   } else if (heading) {
     // Not a single term survived into the rendered text — the match came from
     // the heading itself. Mark that, so the landing is never unmarked.
     range.selectNodeContents(heading);
+    line.selectNodeContents(heading);
   } else {
     return;
   }
 
-  paint(range);
+  if (!range.toString().trim()) {
+    if (attempt < 8) requestAnimationFrame(() => flash(headingId, query, attempt + 1));
+    return;
+  }
+
+  // Landing on the heading is not enough: the words that matched can easily be
+  // a screen further down a long section, which is exactly the "I still cannot
+  // find it" case. If they are off-screen, centre them and re-settle.
+  const scroller = root.closest("main");
+  if (scroller && !isInView(range, scroller)) {
+    const anchor = range.startContainer.parentElement;
+    anchor?.scrollIntoView({ behavior: "smooth", block: "center" });
+    whenSettled(scroller, () => paint(range, line));
+    return;
+  }
+
+  paint(range, line);
 }
 
-function paint(range: Range) {
+/** Generous margins: "technically one pixel visible" is not findable. */
+function isInView(range: Range, scroller: Element): boolean {
+  const box = range.getBoundingClientRect();
+  const view = scroller.getBoundingClientRect();
+  return box.top >= view.top + 56 && box.bottom <= view.bottom - 24;
+}
+
+function paint(range: Range, line: Range) {
   running?.cancel();
 
   // Safari before 17.2 and any older WebView have no highlight registry. The
@@ -170,6 +227,7 @@ function paint(range: Range) {
     return;
   }
 
+  CSS.highlights.set(LINE_NAME, new Highlight(line));
   CSS.highlights.set(HIGHLIGHT_NAME, new Highlight(range));
 
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -205,7 +263,9 @@ function paint(range: Range) {
 export function clearHighlight() {
   running?.cancel();
   running = null;
-  if (typeof CSS !== "undefined" && CSS.highlights) CSS.highlights.delete(HIGHLIGHT_NAME);
+  if (typeof CSS === "undefined" || !CSS.highlights) return;
+  CSS.highlights.delete(HIGHLIGHT_NAME);
+  CSS.highlights.delete(LINE_NAME);
 }
 
 /** Every non-blank text node of a section: the heading, then its siblings. */

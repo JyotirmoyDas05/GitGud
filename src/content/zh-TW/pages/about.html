@@ -1,0 +1,56 @@
+<p>Git Gud 教授開發者實際每天使用的 Git 指令，以及
+    GitHub Flow——人們在 GitHub 上協作的方式。它的起點比大多數
+    教學更早：前五個挑戰是關於終端機本身，因為
+    如果你從未開啟過終端機，「開啟終端機並執行 <code>git init</code>」並不是一道
+    指令而已。</p>
+
+<p>有些挑戰需要網路連線，因此你會想保持連線以完成所有挑戰。
+    你隨時都可以離線開啟應用程式，閱讀挑戰與資源。</p>
+
+<h4>真實的開發環境</h4>
+
+<p>Git Gud 使用真正的終端機、真正的 Git 與真正的 GitHub，而不是模擬
+    它們。完成之後，你的 GitHub 帳號上會有貨真價實的儲存庫，貢獻圖上也會有
+    綠色方塊。這裡沒有任何模擬，這也是為什麼
+    每個挑戰都是對你自己的儲存庫執行 Git 來驗證——如果一個
+    挑戰通過了，就表示它真的成功了。</p>
+
+<h4>你需要什麼</h4>
+
+<p>一開始什麼都不需要——終端機模組只用你的電腦本來就有的東西。
+    之後需要 Git 和一個 GitHub 帳號，其中有兩個挑戰會帶你完成設定。
+    你<strong>不</strong>需要 Node.js、Python 或任何其他執行環境——Git Gud
+    以單一原生應用程式的形式發佈。</p>
+
+<h4>關於終端機挑戰</h4>
+
+<p>像 <code>pwd</code> 和 <code>ls</code> 這樣的指令不會改變你電腦上的任何東西，所以
+    事後沒有檔案可以檢查你是否執行過它們。這些挑戰是
+    透過讀取你自己的 shell 所保存的歷史紀錄檔來驗證的——<code>~/.bash_history</code>
+    以及 Zsh、Fish 和 PowerShell 的對應檔案。只會讀取最近的幾百行，
+    整個過程完全在你的電腦上進行，不會把任何東西傳送到別處，而且每次檢查
+    都會說明它讀取了哪個檔案。</p>
+
+<h4>它是怎麼打造的</h4>
+
+<p>Git Gud 是一個 <a href="https://tauri.app" target="_blank">Tauri</a> 應用程式：以後端 Rust
+    執行 Git 並與 GitHub 溝通，再以作業系統自帶的
+    網頁檢視渲染 React 介面。它沒有內嵌瀏覽器引擎，這就是為什麼
+    下載大小是以 MB 而不是數百 MB 來計算。</p>
+
+<p>你在挑戰過程中 fork 的配套儲存庫是
+    <a href="https://github.com/JyotirmoyDas05/git-gud-verifywork" target="_blank">git-gud-verifywork</a>。
+    它的自動化完全在 GitHub Actions 上執行——沒有會故障的伺服器。</p>
+
+<h4>歸功於應得之人</h4>
+
+<p>Git Gud 是 <a href="https://github.com/jlord/git-it-electron" target="_blank">Git-it</a> 的移植版本，
+    Git-it 是由 <a href="https://jlord.us" target="_blank">@jlord</a> 與
+    眾多貢獻者撰寫的 Electron 應用程式，以 BSD 2-Clause 授權釋出。挑戰結構與
+    大部分文字都出自他們之手。這個版本以 Tauri 重建應用程式，以
+    GitHub Actions 取代已退役的驗證服務，並修復了多個因
+    Git 與 GitHub 改變而失效的檢查。</p>
+
+<p>介面設計借用了
+    <a href="https://github.com/t3tools" target="_blank">T3 Code</a> 的設計 token 系統，以 MIT
+    授權使用。</p>

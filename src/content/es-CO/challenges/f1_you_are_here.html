@@ -1,0 +1,136 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Averigua dónde está situada tu terminal, mira qué hay a tu alrededor e identifica tu directorio personal.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>La terminal siempre está en algún lado</h2>
+    <p>Aquí está la idea que hace que todo lo demás encaje: <strong>tu terminal siempre está dentro de
+        exactamente una carpeta.</strong> No «abierta en» ella — ubicada en ella, igual que una ventana del explorador de
+        archivos muestra una carpeta cada vez.</p>
+
+    <p>Esa carpeta se llama <strong>directorio actual</strong>, o <strong>directorio de
+        trabajo</strong>. Cada comando que escribes ocurre <em>ahí</em> a menos que digas lo contrario.
+        <code>ls</code> lista esa carpeta. <code>mkdir notes</code> crea la nueva carpeta dentro de ella. Más adelante,
+        <code>git init</code> convertirá <em>esa</em> carpeta en un repositorio — por eso «¿en qué
+        carpeta estoy?» deja de ser una pregunta trivial y se convierte en lo que revisas antes de actuar.</p>
+
+    <p>Casi todos los momentos confusos de un principiante con la terminal — «dice que el archivo no existe
+        pero lo estoy viendo ahí mismo» — son esto. El archivo existe. Estás ubicado en otro lado.</p>
+
+    <h2>Directorio significa carpeta</h2>
+    <p><strong>Directorio</strong> y <strong>carpeta</strong> son lo mismo. «Carpeta» es como lo llamó el
+        escritorio gráfico; «directorio» es el nombre más antiguo, y es el que usan la terminal, la
+        documentación y todos los nombres de comandos — <code>mkdir</code> es <em>make directory</em>,
+        <code>cd</code> es <em>change directory</em>. Verás ambas palabras, y significan lo mismo.</p>
+
+    <p>Tu computadora guarda dos tipos de cosas:</p>
+
+    <ul>
+        <li>Los <strong>archivos</strong> contienen contenido — texto, una foto, algo de código.</li>
+        <li>Los <strong>directorios</strong> contienen otros archivos y directorios. Eso es todo lo que hacen.</li>
+    </ul>
+
+    <p>Directorios dentro de directorios dentro de directorios, desde un punto inicial. Ese
+        anidamiento es el <strong>sistema de archivos</strong>, y es un árbol.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Muestra dónde estás</h3>
+    <p>Abre tu terminal. El primer comando en el que todo usuario de terminal aprende a confiar:</p>
+
+    <code class="shell">pwd</code>
+
+    <p>Es la forma corta de <strong>print working directory</strong>. Responde a la pregunta con una dirección completa:</p>
+
+    <p><code class="comment">/Users/jyoti</code></p>
+
+    <p>En Windows con Git Bash verás algo como <code>/c/Users/jyoti</code> — el mismo sitio, Git
+        Bash solo escribe la unidad <code>C:</code> al estilo Unix.</p>
+
+    <p>Esa dirección se llama <strong>ruta</strong>. Léela de izquierda a derecha como unas indicaciones: empieza
+        desde lo más alto, entra en <code>Users</code>, luego en <code>jyoti</code>. Cada <code>/</code> es
+        un paso más adentro. Una ruta que empieza desde lo más alto como esta es una <strong>ruta
+        absoluta</strong> — significa lo mismo sin importar dónde estés ubicado cuando la uses.</p>
+
+    <p><code>pwd</code> es gratis, instantáneo y no cambia nada. Ejecútalo cuando tengas dudas. Nadie
+        pensará nunca mal de ti por ejecutar <code>pwd</code>.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Mira alrededor</h3>
+    <p>Ahora mira qué hay aquí:</p>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">Desktop  Documents  Downloads  Music  Pictures</code></p>
+
+    <p>¿Te suenan? Son las mismas carpetas que ves en tu explorador de archivos, porque no hay un
+        «sistema de archivos de la terminal» aparte — es una computadora y dos formas de mirarla. Abre tu explorador
+        de archivos junto a la terminal y ponlos lado a lado una vez. Hace que todo se sienta menos
+        abstracto.</p>
+
+    <p>Para distinguir archivos y directorios de un vistazo, pide detalle:</p>
+
+    <code class="shell">ls -l</code>
+
+    <p><code class="comment">drwxr-xr-x  5 jyoti staff  160 Sep 20 09:12 Documents
+-rw-r--r--  1 jyoti staff 1024 Sep 20 09:14 notes.txt</code></p>
+
+    <p>Ignora casi todo eso por ahora y mira el primer carácter de cada línea. Una
+        <code>d</code> significa <strong>directorio</strong>. Un <code>-</code> significa un
+        <strong>archivo</strong> normal. Esa sola letra es la respuesta.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Home, y la virgulilla</h2>
+    <p>Cuando abres una terminal no empieza en un sitio al azar. Empieza en tu <strong>directorio
+        personal</strong> — la carpeta que pertenece a tu cuenta de usuario, la que contiene tu Escritorio,
+        Documentos y Descargas.</p>
+
+    <ul>
+        <li>macOS: <code>/Users/yourname</code></li>
+        <li>Linux: <code>/home/yourname</code></li>
+        <li>Windows: <code>C:\Users\yourname</code>, que Git Bash muestra como <code>/c/Users/yourname</code></li>
+    </ul>
+
+    <p>La escribirás constantemente, así que tiene un atajo: <strong><code>~</code></strong>, la virgulilla.
+        Donde se espere una ruta, <code>~</code> significa «mi directorio personal». Así que <code>~/Documents</code>
+        es tu carpeta Documentos, escrita igual en cada máquina y por cada usuario — que es
+        justo por lo que la documentación está llena de virgulillas.</p>
+
+    <p>Mira tu prompt. Esa <code>~</code> que hay en él es el mismo atajo: el prompt te está
+        diciendo que estás en casa. Entra en una subcarpeta y mira cómo cambia a
+        <code>~/Documents</code>. Tu prompt ha estado respondiendo a <code>pwd</code> en silencio todo este
+        tiempo.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Demuéstralo</h3>
+    <p>Abre una terminal, ejecuta <code>pwd</code> antes de ir a ningún lado, y lee la ruta que muestra. Ese es
+        tu directorio personal.</p>
+
+    <p>Luego usa <strong>Select directory</strong> aquí abajo y elige esa misma carpeta. Git Gud averigua
+        dónde está tu directorio personal por su cuenta y los compara — así que esta es una respuesta real con un
+        acierto y un fallo, no una casilla.</p>
+
+    <p>Ejecuta <code>ls</code> mientras estés ahí también, luego <code>exit</code> para que tu shell guarde su historial,
+        y presiona Verificar.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>Mirar alrededor</h3>
+    <ul class="no-list-style">
+        <li><strong>¿Dónde estoy?</strong></li>
+        <code class="shell">pwd</code>
+        <li><strong>¿Qué hay aquí?</strong></li>
+        <code class="shell">ls</code>
+        <li><strong>Incluyendo lo oculto</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>Con detalle — una <code>d</code> inicial significa directorio</strong></li>
+        <code class="shell">ls -l</code>
+        <li><strong>Qué hay en otra carpeta, sin ir allá</strong></li>
+        <code class="shell">ls ~/Documents</code>
+    </ul>
+</div>

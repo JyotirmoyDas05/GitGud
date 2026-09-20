@@ -1,0 +1,148 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Побудуйте невелике дерево тек з терміналу за допомогою <code>mkdir</code> і <code>touch</code>.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Створюємо речі</h2>
+    <p>Усе досі було лише для читання — дивитися і пересуватися. Дві команди покривають майже все
+        створення:</p>
+
+    <ul>
+        <li><strong><code>mkdir</code></strong> — <em>make directory</em> (створити теку). Створює теку.</li>
+        <li><strong><code>touch</code></strong> — створює порожній файл.</li>
+    </ul>
+
+    <p>Обидві створюють речі <strong>всередині теки, у якій ви зараз стоїте</strong>, якщо ви не
+        дасте їм шлях, що каже інакше. Ось де окупається минуле завдання: якщо не впевнені,
+        куди от-от приземлиться нова тека, спершу виконайте <code>pwd</code>.</p>
+
+    <p>У <code>touch</code> дивна назва, бо створення файлів — його побічна робота: його справжнє призначення —
+        оновити мітку часу файлу, а створення того, якого ще нема, було зручною випадковістю.
+        Усі користуються ним заради випадковості.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Створіть тренувальну теку</h3>
+    <p>Почніть з дому, щоб не було сумнівів, куди це приземлиться:</p>
+
+    <code class="shell">cd ~</code>
+
+    <p>Тепер створіть теку і зайдіть у неї:</p>
+
+    <code class="shell">mkdir gitgud-practice</code>
+    <code class="shell">cd gitgud-practice</code>
+
+    <p>Як і <code>cd</code>, <code>mkdir</code> мовчить, коли спрацьовує. Перевірте через <code>ls</code>, якщо
+        хочете заспокоєння — перші кілька разів варто.</p>
+
+    <p><span class="inline-tip">Назвіть її точно <code>gitgud-practice</code> — перевірка шукає саме цю
+        назву. І зверніть увагу, що в ній нема пробілу. Пробіли в назвах законні, але зі шляхами стає незручно вводити,
+        ось чому світ програмування тяжіє до дефісів.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Створіть файл</h3>
+    <p>Тепер ви маєте бути всередині <code>gitgud-practice</code>. Перевірте, якщо хочете:</p>
+
+    <code class="shell">pwd</code>
+
+    <p>Потім створіть порожній файл:</p>
+
+    <code class="shell">touch hello.txt</code>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">hello.txt</code></p>
+
+    <p>Він існує і він порожній — нуль байтів. <code>touch</code> створює контейнер; класти щось усередину —
+        робота текстового редактора. Відкрийте його в будь-якому редакторі і надрукуйте щось, якщо хочете;
+        тут від цього нічого не залежить.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Створіть теку, потім файл усередині неї</h3>
+    <p>Досі в <code>gitgud-practice</code>:</p>
+
+    <code class="shell">mkdir notes</code>
+
+    <p>А тепер — ось корисне — створіть файл усередині <code>notes</code>, <em>не заходячи
+        туди</em>, давши <code>touch</code> відносний шлях замість голої назви:</p>
+
+    <code class="shell">touch notes/day-one.txt</code>
+
+    <p>Прочитайте той аргумент так, як читаєте шлях: <em>тека <code>notes</code>, а всередині неї файл
+        під назвою <code>day-one.txt</code></em>. Команди приймають шляхи, а не лише назви, скрізь. Вам
+        майже ніколи не доведеться робити <code>cd</code> кудись лише щоб зробити там одну річ.</p>
+
+    <p>Перевірте свою роботу:</p>
+
+    <code class="shell">ls notes</code>
+
+    <p><span class="inline-tip">Введіть <code>ls no</code> і натисніть <strong>Tab</strong>. Доповнення табом
+        працює на теках, які ви щойно створили, як і на будь-яких інших — і воно рятує вас від друкарської помилки, через яку ви
+        інакше хвилину дивилися б на «No such file or directory».</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Кілька тек одразу</h3>
+    <p>Спробуйте створити вкладену теку очевидним способом і подивіться, як вона відмовить:</p>
+
+    <code class="shell">mkdir notes/archive/2026</code>
+
+    <p><code class="comment">mkdir: cannot create directory 'notes/archive/2026': No such file or directory</code></p>
+
+    <p>Справедливо — <code>archive</code> ще не існує, а <code>mkdir</code> створює одну теку,
+        а не цілий ланцюжок. Замість створювати кожен рівень вручну, попросіть її:</p>
+
+    <code class="shell">mkdir -p notes/archive/2026</code>
+
+    <code class="shell">ls notes</code>
+
+    <p><code>-p</code> скорочено від <em>parents</em> (батьківські): створити дорогою всі відсутні теки. Це те саме
+        правило з позаминулого завдання в дії — та сама команда, одна опція, інша поведінка, і
+        <code>mkdir --help</code> розповіла б вам про це.</p>
+
+    <p>Ваше дерево тепер виглядає так:</p>
+
+    <p><code class="comment">gitgud-practice/
+├── hello.txt
+└── notes/
+    ├── day-one.txt
+    └── archive/
+        └── 2026/</code></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Що перевіряється</h3>
+    <p>Дві речі разом. Git Gud читає теку <code>gitgud-practice</code>, щоб підтвердити, що дерево справді
+        там, <em>і</em> перевіряє вашу історію оболонки на <code>mkdir</code> і <code>touch</code>
+        — бо будь-хто може клацнути правою кнопкою і вибрати «Нова тека», а цей модуль не
+        про це.</p>
+
+    <p>Скористайтеся <strong>Select directory</strong> нижче, щоб вибрати вашу теку <code>gitgud-practice</code>, закрийте
+        термінал командою <code>exit</code>, щоб історія збереглася, і натисніть «Перевірити».</p>
+
+    <p>Залиште теку, коли закінчите, або видаліть її — ніщо далі від неї не залежить. Ви скоро створите справжню
+        теку проєкту тими самими двома командами.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>Створюємо речі</h3>
+    <ul class="no-list-style">
+        <li><strong>Створити теку</strong></li>
+        <code class="shell">mkdir &#60;FOLDERNAME&#62;</code>
+        <li><strong>Створити цілий ланцюжок тек</strong></li>
+        <code class="shell">mkdir -p &#60;A&#62;/&#60;B&#62;/&#60;C&#62;</code>
+        <li><strong>Створити порожній файл</strong></li>
+        <code class="shell">touch &#60;FILENAME&#62;</code>
+        <li><strong>Створити один усередині іншої теки</strong></li>
+        <code class="shell">touch &#60;FOLDERNAME&#62;/&#60;FILENAME&#62;</code>
+        <li><strong>Перевірити, що спрацювало</strong></li>
+        <code class="shell">ls &#60;FOLDERNAME&#62;</code>
+    </ul>
+    <p>Ось і весь модуль терміналу. Ви вмієте відкрити термінал, прочитати запрошення, виконати команду з опціями
+        й аргументами, з'ясувати, де ви, піти деінде і створювати речі, коли ви там.
+        Усе, що Git проситиме у вас звідси, — це ті самі рухи іншими словами.</p>
+</div>

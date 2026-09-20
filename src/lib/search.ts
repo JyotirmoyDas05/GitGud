@@ -1,4 +1,4 @@
-import { CHALLENGES } from "~/challenges";
+import { CHALLENGES, challengeTitle } from "~/challenges";
 import { loadChallenge } from "./content";
 
 /**
@@ -58,7 +58,7 @@ function buildIndex(locale: string): SearchSection[] {
       if (!text && !heading) return;
       sections.push({
         challengeId: challenge.id,
-        challengeTitle: challenge.title,
+        challengeTitle: challengeTitle(challenge, locale),
         challengeIndex,
         headingId,
         heading,

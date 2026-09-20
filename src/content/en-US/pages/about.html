@@ -1,5 +1,8 @@
 <p>Git Gud teaches the everyday Git commands developers actually use, along with the
-    GitHub Flow — the way people collaborate on GitHub.</p>
+    GitHub Flow — the way people collaborate on GitHub. It starts earlier than most
+    tutorials do: the first five challenges are about the terminal itself, because
+    "open a terminal and run <code>git init</code>" is not one instruction if you have
+    never opened a terminal.</p>
 
 <p>Some challenges need an internet connection, so you'll want to be online to finish.
     You can always open the app and read the challenges and resources offline.</p>
@@ -14,9 +17,19 @@
 
 <h4>What you need</h4>
 
-<p>Git, and a GitHub account. The first and fourth challenges walk you through both.
+<p>Nothing, to begin with — the terminal module uses what your computer already has.
+    After that, Git and a GitHub account, which two of the challenges walk you through.
     You do <strong>not</strong> need Node.js, Python, or any other runtime — Git Gud
     ships as a single native application.</p>
+
+<h4>About the terminal challenges</h4>
+
+<p>Commands like <code>pwd</code> and <code>ls</code> change nothing on your computer, so
+    there is no file to inspect afterwards to see whether you ran them. Those challenges are
+    checked by reading the history file your own shell keeps — <code>~/.bash_history</code>
+    and its equivalents for Zsh, Fish and PowerShell. Only the most recent few hundred lines
+    are read, it happens entirely on your machine, nothing is sent anywhere, and each check
+    names the file it read.</p>
 
 <h4>How it's built</h4>
 

@@ -3,13 +3,40 @@
 <h2>Bash/Terminal Basics</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
-        <li><strong>Make a new folder (aka make directory)</strong></li>
-        <code class="shell">mkdir &#60;FOLDERNAME&#62;</code>
-        <li><strong>Navigate into an existing folder (aka change directory)</strong></li>
-        <code class="shell">cd &#60;FOLDERNAME&#62;</code>
+        <li><strong>Print the folder you are currently in (print working directory)</strong></li>
+        <code class="shell">pwd</code>
         <li><strong>List the items in a folder</strong></li>
         <code class="shell">ls </code>
+        <li><strong>List everything, hidden items included</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>List with detail &mdash; a leading <code>d</code> means directory</strong></li>
+        <code class="shell">ls -l</code>
+        <li><strong>Navigate into an existing folder (aka change directory)</strong></li>
+        <code class="shell">cd &#60;FOLDERNAME&#62;</code>
+        <li><strong>Go up to the parent folder</strong></li>
+        <code class="shell">cd ..</code>
+        <li><strong>Go to your home directory</strong></li>
+        <code class="shell">cd ~</code>
+        <li><strong>Go back to the previous folder</strong></li>
+        <code class="shell">cd -</code>
+        <li><strong>Make a new folder (aka make directory)</strong></li>
+        <code class="shell">mkdir &#60;FOLDERNAME&#62;</code>
+        <li><strong>Make a whole chain of folders at once</strong></li>
+        <code class="shell">mkdir -p &#60;A&#62;/&#60;B&#62;/&#60;C&#62;</code>
+        <li><strong>Make an empty file</strong></li>
+        <code class="shell">touch &#60;FILENAME&#62;</code>
+        <li><strong>Print something back to you</strong></li>
+        <code class="shell">echo hello</code>
+        <li><strong>Clear the window (nothing is deleted)</strong></li>
+        <code class="shell">clear</code>
+        <li><strong>Close the terminal</strong></li>
+        <code class="shell">exit</code>
+        <li><strong>Ask any command what it can do</strong></li>
+        <code class="shell">&#60;COMMAND&#62; --help</code>
     </ul>
+    <p><strong>Two keys worth more than any command:</strong> <code>Tab</code> completes the
+        file or folder name you have started typing, and the <code>up arrow</code> brings back
+        what you typed before.</p>
 </div>
 
 <h2>Configuring Git</h2>

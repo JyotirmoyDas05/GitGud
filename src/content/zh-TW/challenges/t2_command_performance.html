@@ -1,0 +1,114 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>學會每個指令都由哪三個部分組成，以及如何問指令本身它會做什麼。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>指令、引數、選項</h2>
+    <p>你在提示字元輸入的每一行形狀都一樣。一旦看出來，陌生的指令就不再像魔法咒語，而像句子了。</p>
+
+    <p><code class="comment">command  [options]  [arguments]</code></p>
+
+    <ul>
+        <li><strong>指令</strong>是動詞——你想執行的程式。永遠擺第一個。<code>ls</code>、<code>echo</code>、<code>git</code> 都是。</li>
+        <li><strong>引數</strong>是指令要作用的對象。就是名詞。在 <code>cd Documents</code> 裡，引數是 <code>Documents</code>。</li>
+        <li><strong>選項</strong>（又叫 <strong>旗標</strong> 或 <strong>開關</strong>）改變指令運作的 <em>方式</em>。以破折號開頭：<code>-a</code>、<code>-l</code>、<code>--help</code>。</li>
+    </ul>
+
+    <p>所以 <code>ls -l Documents</code> 讀作：<em>列出來</em>（指令）、<em>用詳細版</em>（選項）、<em>Documents 資料夾</em>（引數）。三個部分，用空白隔開。</p>
+
+    <p>這個間隔比新手想像的重要得多。<code>ls-l</code> 是一個單字，殼層會告訴你沒有這種指令。殼層就是靠空白知道一個部分在哪裡結束、下一個從哪裡開始。</p>
+
+    <h2>短選項和長選項</h2>
+    <p>大多數選項對同一件事有兩種寫法：</p>
+
+    <ul>
+        <li><strong>短</strong>的，一個破折號加一個字母：<code>-a</code>。好打。通常可以合併——<code>ls -la</code> 就是 <code>-l</code> 加 <code>-a</code> 的意思。</li>
+        <li><strong>長</strong>的，兩個破折號加一個單字：<code>--all</code>。比較難打，但半年後讀回來還知道它做了什麼。</li>
+    </ul>
+
+    <p>自己打字的時候用短的，寫下來給別人看的時候用長的——包括未來的你。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>帶引數的指令</h3>
+    <p><code>echo</code> 只做一件事：把你給它的東西顯示回來。</p>
+
+    <code class="shell">echo hello</code>
+
+    <p><code class="comment">hello</code></p>
+
+    <p>單獨的 <code>echo</code> 後面什麼都不加，會顯示一個空行——沒有引數的指令無話可說。給它好幾個單字，它就全部顯示：</p>
+
+    <code class="shell">echo I am talking to my computer</code>
+
+    <p>看起來沒用。其實不是：<code>echo</code> 是你在做危險操作前確認內容的方法，也是指令碼不如預期時你第一個會拿起來的工具。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>帶選項的指令</h3>
+    <p><code>ls</code> 會列出你目前站的資料夾裡有什麼。先不加東西試一次：</p>
+
+    <code class="shell">ls</code>
+
+    <p>再加個選項，看同一個指令如何換一種回答：</p>
+
+    <code class="shell">ls -a</code>
+
+    <p><code>-a</code> 是 <em>all</em> 的縮寫，突然多出好多以點開頭的項目——<code>.bashrc</code>、<code>.gitconfig</code>。開頭的點意思是「隱藏」，隱藏只是說 <code>ls</code> 沒被要求就不顯示。跟權限無關，它們是名字低調的普通檔案。Git 就把整個儲存庫放在其中一個裡面，之後會遇到。</p>
+
+    <p>再一個：</p>
+
+    <code class="shell">ls -l</code>
+
+    <p><code>-l</code> 是 <em>long</em> 的意思——一行一項，附上大小和上次修改時間。同樣的指令、同樣的資料夾，因為你開口要求，詳細程度就不一樣。</p>
+
+    <p>短選項可以合併，所以這行一次做兩件事：</p>
+
+    <code class="shell">ls -la</code>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>直接問指令本身</h3>
+    <p>沒人背得下選項。老手真正做的是問，而幾乎每個指令都會回答同一個問題：</p>
+
+    <code class="shell">ls --help</code>
+
+    <p>會跑出一大片文字。不用全讀——讀前面幾行知道這個指令是做什麼的，再沿著左邊的選項清單找到看起來像你想要的。那個技巧是瀏覽，不是背誦。</p>
+
+    <p>拿一個你這輩子沒用過的指令試試：</p>
+
+    <code class="shell">mkdir --help</code>
+
+    <p>沒人教你，你也知道 <code>mkdir</code> 是做什麼的、大概怎麼用了。讓終端機變得可學、而不是待背清單的，就是這一招——而 <code>mkdir</code> 再過兩個挑戰就會正式登場。</p>
+
+    <p><span class="inline-tip">在 macOS 上，有些指令用 <code>man ls</code> 回答而不是 <code>--help</code>——<code>man</code> 是 <em>manual</em> 的縮寫。按 <code>q</code> 離開。</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>清掉雜亂</h3>
+    <p>輸出這麼多之後視窗一團亂。一個指令搞定：</p>
+
+    <code class="shell">clear</code>
+
+    <p>什麼都沒刪——歷史還在，上箭頭還能用。只是把雜訊捲走，讓你可以思考。</p>
+
+    <p>當你用 <code>echo</code> 講了些話、用 <code>ls</code> 加了選項、對任何東西用了 <code>--help</code>，就用 <code>exit</code> 關掉終端機讓殼層存檔，再按 Verify。</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>每次都一樣的形狀</h3>
+    <ul class="no-list-style">
+        <li><strong>單獨的指令</strong></li>
+        <code class="shell">ls</code>
+        <li><strong>帶選項的指令</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>帶引數的指令</strong></li>
+        <code class="shell">echo hello</code>
+        <li><strong>三種合在一起</strong></li>
+        <code class="shell">ls -l Documents</code>
+        <li><strong>問指令它是做什麼的</strong></li>
+        <code class="shell">ls --help</code>
+    </ul>
+</div>

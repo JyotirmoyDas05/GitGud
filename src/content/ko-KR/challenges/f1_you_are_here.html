@@ -1,0 +1,103 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>터미널이 지금 어디에 서 있는지 확인하고, 주변을 둘러본 뒤 홈 디렉터리를 찾으세요.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>터미널은 항상 어딘가에 있다</h2>
+    <p>다른 모든 것을 이해하게 만드는 한 가지 생각이 있습니다: <strong>터미널은 항상 정확히 하나의 폴더 안에 있습니다.</strong> "그 폴더에서 열려 있다"가 아니라, 파일 탐색기 창이 한 번에 하나의 폴더를 보여주는 것처럼 그 안에 서 있는 것입니다.</p>
+
+    <p>그 폴더를 <strong>현재 디렉터리</strong> 또는 <strong>작업 디렉터리</strong>라고 합니다. 달리 말하지 않는 한 입력하는 모든 명령은 <em>그곳에서</em> 실행됩니다. <code>ls</code>는 그 폴더를 나열합니다. <code>mkdir notes</code>는 그 안에 새 폴더를 만듭니다. 나중에 나올 <code>git init</code>은 <em>그</em> 폴더를 저장소로 바꿉니다 — 그래서 "지금 어떤 폴더에 있지?"는 잡학이 아니라 행동 전에 확인하는 것이 됩니다.</p>
+
+    <p>초보자가 터미널에서 겪는 거의 모든 혼란스러운 순간 — "파일이 바로 거기 보이는데 없다고 한다" — 은 이것 때문입니다. 파일은 있습니다. 서 있는 곳이 다른 것입니다.</p>
+
+    <h2>디렉터리는 폴더와 같다</h2>
+    <p><strong>디렉터리</strong>와 <strong>폴더</strong>는 같은 것입니다. "폴더"는 그래픽 데스크톱에서의 이름이고, "디렉터리"는 더 오래된 이름이며 터미널과 문서와 모든 명령 이름에서 쓰는 쪽입니다 — <code>mkdir</code>은 <em>make directory</em>, <code>cd</code>는 <em>change directory</em>의 뜻입니다. 두 단어를 보거든 같은 것으로 이해하세요.</p>
+
+    <p>컴퓨터가 저장하는 것은 두 종류입니다:</p>
+
+    <ul>
+        <li><strong>파일</strong>은 내용을 담습니다 — 텍스트, 사진, 코드 같은 것입니다.</li>
+        <li><strong>디렉터리</strong>는 다른 파일과 디렉터리를 담습니다. 그것뿐입니다.</li>
+    </ul>
+
+    <p>디렉터리 안에 디렉터리, 그 안에 또 디렉터리로, 하나의 시작점에서 계속 이어집니다. 그 중첩이 <strong>파일시스템</strong>이며 트리 구조입니다.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>있는 곳 출력하기</h3>
+    <p>터미널을 여세요. 모든 터미널 사용자가 신뢰하게 되는 첫 명령입니다:</p>
+
+    <code class="shell">pwd</code>
+
+    <p><strong>print working directory</strong>의 줄임말입니다. 전체 주소로 질문에 답합니다:</p>
+
+    <p><code class="comment">/Users/jyoti</code></p>
+
+    <p>Git Bash의 Windows에서는 <code>/c/Users/jyoti</code>처럼 보입니다 — 같은 장소이며 Git Bash가 <code>C:</code> 드라이브를 Unix식으로 쓰는 것뿐입니다.</p>
+
+    <p>그 주소를 <strong>경로</strong>라고 합니다. 왼쪽에서 오른쪽으로 길 안내로 읽으세요: 맨 위에서 시작해 <code>Users</code>로 들어가고, 다음에 <code>jyoti</code>로 들어갑니다. <code>/</code> 하나마다 한 단계씩 안으로 들어갑니다. 이렇게 맨 위에서 시작하는 경로는 <strong>절대 경로</strong>라고 하며, 어디에 서서 쓰든 같은 뜻이 됩니다.</p>
+
+    <p><code>pwd</code>는 무료이며 즉시 끝나고 아무것도 바꾸지 않습니다. 확신이 없을 때마다 실행하세요. <code>pwd</code>를 실행했다고 얕보는 사람은 없습니다.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>둘러보기</h3>
+    <p>실제로 여기 무엇이 있는지 보세요:</p>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">Desktop  Documents  Downloads  Music  Pictures</code></p>
+
+    <p>낯익지 않나요? 파일 탐색기에서 보는 것과 같은 폴더입니다. "터미널 전용 파일시스템" 같은 것은 없고, 한 대의 컴퓨터를 두 가지 방식으로 보는 것뿐이기 때문입니다. 한 번만 파일 탐색기를 터미널 옆에 나란히 두어 보세요. 전체가 추상적으로 느껴지지 않게 됩니다.</p>
+
+    <p>파일과 디렉터리를 한눈에 구분하려면 자세히 보여 달라고 하세요:</p>
+
+    <code class="shell">ls -l</code>
+
+    <p><code class="comment">drwxr-xr-x  5 jyoti staff  160 Sep 20 09:12 Documents
+-rw-r--r--  1 jyoti staff 1024 Sep 20 09:14 notes.txt</code></p>
+
+    <p>지금은 거의 모두 무시하고 각 줄의 맨 첫 글자만 보세요. <code>d</code>는 <strong>디렉터리</strong>, <code>-</code>은 평범한 <strong>파일</strong>이라는 뜻입니다. 그 한 글자가 답입니다.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>홈과 물결표</h2>
+    <p>터미널을 열 때 시작 위치는 무작위가 아닙니다. <strong>홈 디렉터리</strong>에서 시작합니다 — 여러분 사용자 계정에 속한 폴더로, 바탕 화면과 문서와 다운로드가 들어 있는 곳입니다.</p>
+
+    <ul>
+        <li>macOS: <code>/Users/yourname</code></li>
+        <li>Linux: <code>/home/yourname</code></li>
+        <li>Windows: <code>C:\Users\yourname</code>, Git Bash에서는 <code>/c/Users/yourname</code>으로 표시됩니다</li>
+    </ul>
+
+    <p>자주 입력하므로 줄임말이 있습니다: <strong><code>~</code></strong>, 물결표입니다. 경로를 쓰는 곳이면 어디서든 <code>~</code>는 "내 홈 디렉터리"라는 뜻입니다. 그래서 <code>~/Documents</code>는 문서 폴더이며, 어떤 기계에서도 어떤 사용자가 써도 같은 표기입니다 — 바로 그래서 문서가 물결표투성이인 것입니다.</p>
+
+    <p>프롬프트를 돌아보세요. 그 안의 <code>~</code>는 같은 줄임말입니다: 프롬프트는 집에 있다고 말하고 있습니다. 하위 폴더로 들어가면 <code>~/Documents</code>로 바뀌는 것을 보세요. 프롬프트는 그동안 조용히 <code>pwd</code>에 답하고 있었던 것입니다.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>증명하기</h3>
+    <p>터미널을 열고, 어디로도 가기 전에 <code>pwd</code>를 실행한 뒤 출력된 경로를 읽으세요. 그것이 여러분의 홈 디렉터리입니다.</p>
+
+    <p>다음에 아래의 <strong>Select directory</strong>를 이용해 그 폴더를 그대로 고르세요. Git Gud는 홈 디렉터리가 어디인지 스스로 알아내어 비교합니다 — 체크박스가 아니라 맞고 틀림이 있는 진짜 답입니다.</p>
+
+    <p>거기서 <code>ls</code>도 실행하고, 히스토리 저장을 위해 <code>exit</code>한 뒤 Verify를 누르세요.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>둘러보기</h3>
+    <ul class="no-list-style">
+        <li><strong>지금 어디지?</strong></li>
+        <code class="shell">pwd</code>
+        <li><strong>여기에 무엇이 있지?</strong></li>
+        <code class="shell">ls</code>
+        <li><strong>숨은 것까지 포함해서</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>자세히 — 앞의 <code>d</code>는 디렉터리라는 뜻</strong></li>
+        <code class="shell">ls -l</code>
+        <li><strong>가지 않고 다른 폴더 안 보기</strong></li>
+        <code class="shell">ls ~/Documents</code>
+    </ul>
+</div>

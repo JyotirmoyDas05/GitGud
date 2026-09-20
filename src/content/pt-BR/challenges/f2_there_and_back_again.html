@@ -1,0 +1,160 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Navegue pelo sistema de arquivos com <code>cd</code> — desça para dentro das pastas, volte para o pai e
+        direto para casa de novo.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Mudando de Diretório</h2>
+    <p>Você sabe onde está. Agora precisa estar em outro lugar. Um comando resolve:</p>
+
+    <p><code class="comment">cd &#60;WHERE&#62;</code></p>
+
+    <p><code>cd</code> é <strong>change directory</strong>. É o equivalente no terminal de
+        clicar duas vezes em uma pasta, e é o comando que você vai digitar mais do que qualquer outro pelo resto
+        da sua vida.</p>
+
+    <p>Ele não mostra nada quando funciona. Esse silêncio é normal e é de propósito — no terminal, sem
+        notícias é boa notícia. Comandos falam quando algo dá errado. Sua prova de que funcionou é o
+        prompt, que agora mostra a nova pasta, e o <code>pwd</code>, que vai confirmar.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Desça Para Dentro de Uma Pasta</h3>
+    <p>Comece em casa e veja o que há lá:</p>
+
+    <code class="shell">cd ~</code>
+    <code class="shell">ls</code>
+
+    <p>Escolha qualquer pasta que você viu — <code>Documents</code> e <code>Desktop</code> existem em quase toda
+        máquina — e entre nela:</p>
+
+    <code class="shell">cd Documents</code>
+
+    <p>Olhe o prompt. Ele mudou. Confirme direito:</p>
+
+    <code class="shell">pwd</code>
+
+    <p><code class="comment">/Users/jyoti/Documents</code></p>
+
+    <p>Você acabou de usar um <strong>caminho relativo</strong>. Você digitou <code>Documents</code>, não o endereço inteiro,
+        e funcionou porque o <code>cd</code> procurou aquele nome <em>começando de onde
+        você já estava</em>. Caminhos relativos são curtos, e significam coisas diferentes dependendo de
+        onde você está parado — que é exatamente a graça.</p>
+
+    <p><span class="inline-tip">Digite <code>cd Doc</code> e pressione <strong>Tab</strong>. O shell
+        completa a palavra para você. Isso é o <strong>autocompletar com tab</strong>, funciona em todo caminho que você
+        for digitar, e livra você de erros de digitação além de teclas. Pegue o hábito agora — é
+        a diferença entre quem acha o terminal tedioso e quem não acha.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Volte Para Cima</h3>
+    <p>Todo diretório tem um <strong>pai</strong> — aquele que contém ele. Ele tem um atalho permanente,
+        dois pontos:</p>
+
+    <code class="shell">cd ..</code>
+    <code class="shell">pwd</code>
+
+    <p>Você está de volta onde começou. <code>..</code> sempre significa "um nível para cima, daqui", então funciona
+        em qualquer lugar sem saber nome nenhum.</p>
+
+    <p>Existe um atalho correspondente para o contrário: um ponto só, <code>.</code>, significa "bem aqui".
+        Parece inútil — até você conhecer um comando que precisa que você diga "esta pasta" em voz alta.
+        <code>git add .</code>, que você vai digitar muitas vezes mais adiante, é exatamente isso.</p>
+
+    <p>Pontos se acumulam. Isso sobe dois níveis:</p>
+
+    <code class="shell">cd ../..</code>
+
+    <p>E eles se combinam com nomes. Subir um nível e depois descer para uma pasta irmã, em um único movimento:</p>
+
+    <code class="shell">cd ../Downloads</code>
+
+    <p>Esse é o vocabulário inteiro. Um caminho é só esses pedaços juntos com barras.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Absoluto e Relativo</h2>
+    <p>Dois tipos de caminho, e saber qual você está segurando acaba com a maior parte da confusão com caminhos para sempre.</p>
+
+    <ul>
+        <li>Um <strong>caminho absoluto</strong> começa do topo do sistema de arquivos e é completo sozinho:
+            <code>/Users/jyoti/Documents</code>. Significa a mesma coisa digitado de qualquer lugar. Você consegue
+            reconhecer na hora — começa com <code>/</code> (ou <code>~</code>, que se expande para um,
+            ou uma letra de drive como <code>C:</code> no Windows).</li>
+        <li>Um <strong>caminho relativo</strong> começa de onde você está: <code>Documents</code>,
+            <code>../Downloads</code>, <code>notes/day-one.txt</code>. Mais curto de digitar, mas só está certo
+            a partir do ponto de partida certo.</li>
+    </ul>
+
+    <p>Pense como um endereço de rua versus "a segunda porta à esquerda". Os dois levam você lá. Só um deles
+        continua funcionando quando repetido para alguém parado em outro lugar.</p>
+
+    <p>Use caminhos relativos para qualquer coisa por perto — que é na maior parte do tempo. Use um caminho absoluto quando
+        estiver pulando para algum lugar longe, ou quando estiver anotando o caminho para outra pessoa.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Pule Para Qualquer Lugar</h3>
+    <p>Passeie até alguns níveis para baixo, depois volte para casa em um movimento:</p>
+
+    <code class="shell">cd ~</code>
+
+    <p><code>cd</code> sem nada depois faz a mesma coisa — casa é o destino padrão,
+        porque é para onde você vai querer ir com frequência suficiente para merecer o atalho.</p>
+
+    <p>E um caminho absoluto leva você a qualquer lugar em um passo, não importa a distância:</p>
+
+    <code class="shell">cd ~/Documents</code>
+
+    <p>Isso é absoluto — o <code>~</code> se expande para o endereço completo do seu diretório home antes
+        do <code>cd</code> sequer ver. No macOS ou Linux você também pode mirar bem no topo de todo o
+        sistema de arquivos e dar uma olhada; nada lá vai morder você.</p>
+
+    <code class="shell">cd /</code>
+    <code class="shell">ls</code>
+
+    <p>Um último atalho que vale ter:</p>
+
+    <code class="shell">cd -</code>
+
+    <p>Isso leva você de volta ao diretório anterior, como o botão de voltar do navegador. Dois desses em
+        sequência e você fica alternando entre duas pastas — que é a maior parte do que o trabalho de verdade parece.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>O Que É Verificado</h3>
+    <p>Este desafio procura quatro <em>formatos</em> diferentes de <code>cd</code> no seu histórico do shell —
+        um para cada ideia acima — em vez de quatro destinos específicos, então você pode praticar com
+        as pastas que você realmente tem:</p>
+
+    <ul>
+        <li><code>cd Documents</code> — descer para uma pasta pelo nome (relativo)</li>
+        <li><code>cd ..</code> — subir para o pai</li>
+        <li><code>cd ~</code> — home</li>
+        <li><code>cd ~/Documents</code> ou <code>cd /usr</code> — um caminho absoluto</li>
+    </ul>
+
+    <p>Execute <code>pwd</code> depois de cada um para ver funcionando. Depois <code>exit</code> para salvar seu
+        histórico e pressione Verificar.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>Navegando</h3>
+    <ul class="no-list-style">
+        <li><strong>Para dentro de uma pasta</strong></li>
+        <code class="shell">cd &#60;FOLDERNAME&#62;</code>
+        <li><strong>Para o pai</strong></li>
+        <code class="shell">cd ..</code>
+        <li><strong>Dois para cima, ou um para cima e para o lado</strong></li>
+        <code class="shell">cd ../../</code>
+        <li><strong>Home</strong></li>
+        <code class="shell">cd ~</code>
+        <li><strong>De volta para onde você estava</strong></li>
+        <code class="shell">cd -</code>
+        <li><strong>E sempre, quando estiver em dúvida</strong></li>
+        <code class="shell">pwd</code>
+    </ul>
+</div>

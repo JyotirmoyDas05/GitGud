@@ -1,0 +1,101 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>터미널을 열고 처음 두 명령을 실행한 뒤, 처음 마주하는 한 줄을 읽는 법을 배우세요.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>터미널이란</h2>
+    <p><strong>터미널</strong>은 클릭 대신 컴퓨터에 지시를 입력하는 창입니다. 그게 전부입니다. 이미 하고 있는 모든 일 — 폴더 열기, 새로 만들기, 파일 이름 바꾸기, 복사하기 — 에는 입력으로 하는 동등한 방법이 있고, 입력 방식이 보통 더 빠르고 항상 반복할 수 있습니다.</p>
+
+    <p>거의 같은 것을 가리키는 여러 말을 듣게 될 텐데, 한 번만 정리하고 넘어갈 가치가 있습니다:</p>
+
+    <ul>
+        <li><strong>터미널</strong>은 창입니다. 텍스트를 그리고 키 입력을 받습니다.</li>
+        <li><strong>셸</strong>은 그 안에서 실제로 동작하며 입력 내용을 이해하는 프로그램입니다. 대표적인 것으로 <strong>Bash</strong>, <strong>Zsh</strong>, <strong>PowerShell</strong>이 있습니다.</li>
+        <li><strong>커맨드 라인</strong>과 <strong>CLI</strong>는 이런 작업 방식의 일반적인 이름입니다.</li>
+    </ul>
+
+    <p>실제로는 네 가지를 바꿔 쓰며, 우리도 그렇게 하겠습니다. 누군가 "터미널을 열어"라고 하면 이 창을 말하는 것입니다.</p>
+
+    <p>비어 있고 무엇을 해야 할지 알려주지 않아 위압적으로 보입니다. 위험하지는 않습니다. 이 모듈에서 고장 날 것은 아무것도 없습니다 — 자신의 사용자 이름을 출력하고 연습용 폴더를 만드는 것뿐입니다. 타이핑을 평가하는 사람도 없습니다.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>터미널 열기</h3>
+
+    <p><strong>Windows.</strong> Windows에는 PowerShell이 들어 있지만, 이 모듈의 명령 — 그리고 앞으로 읽게 될 거의 모든 튜토리얼, README, Stack Overflow 답변 — 은 Unix 스타일 셸용으로 쓰여 있습니다. 가장 쉬운 방법은 <strong>Git Bash</strong>로, <a href="https://git-scm.com/download/win">Git for Windows</a>에 무료로 들어 있습니다. 기본 옵션으로 설치한 뒤 시작 메뉴에서 <strong>Git Bash</strong>를 여세요.</p>
+
+    <p><span class="inline-tip">이 설치로 나중에 필요할 Git도 함께 들어갑니다 — 뒤쪽 챌린지에서 제대로 설정됐는지 확인합니다. 일석이조입니다.</span></p>
+
+    <p><strong>macOS.</strong> <code>Cmd</code> + <code>Space</code>를 누르고 <em>Terminal</em>을 입력한 뒤 enter를 누르세요. 응용 프로그램 › 유틸리티에도 있습니다.</p>
+
+    <p><strong>Linux.</strong> 보통 <code>Ctrl</code> + <code>Alt</code> + <code>T</code>이거나, 애플리케이션에서 <em>Terminal</em>을 검색하세요.</p>
+
+    <p>이제 한 줄의 텍스트와 깜빡이는 커서가 있는 거의 빈 창이 보일 것입니다. 그 한 줄이 다음에 이해할 것입니다.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>프롬프트 읽기</h2>
+    <p>대기 중인 줄은 <strong>프롬프트</strong>라고 합니다. 장식이 아니라 상태 표시줄이며, 아무것도 입력하기 전부터 세 가지 유용한 정보를 알려줍니다.</p>
+
+    <p><code class="comment">jyoti@laptop ~/code $</code></p>
+
+    <ul>
+        <li><code>jyoti</code> — 누구로 로그인했는지.</li>
+        <li><code>laptop</code> — 어떤 기계와 이야기하고 있는지. 다른 컴퓨터에 접속하게 되면 생각보다 중요해집니다.</li>
+        <li><code>~/code</code> — <strong>지금 있는 곳</strong>. 터미널은 항상 어딘가 폴더 안에 서 있으며, 그곳이 바로 여기입니다. 다다음 챌린지는 온통 이 부분에 대한 것입니다.</li>
+        <li><code>$</code> — "당신 차례"라는 뜻입니다. 그 뒤가 입력하는 부분입니다.</li>
+    </ul>
+
+    <p>여러분의 것은 다르게 보일 것입니다. macOS의 Zsh는 <code>%</code>로 끝나는 경우가 많고( <code>$</code>가 아니라), 두 줄짜리 프롬프트, 알록달록한 것, 현재 Git 브랜치를 보여주는 것도 있습니다. 배치는 바뀌지만 생각은 같습니다.</p>
+
+    <p>문서가 명령 앞에 <code>$</code>를 붙여 쓰는 것도 이 때문입니다 — "프롬프트에 이렇게 입력하세요"라는 약기입니다. <code>$</code> 자체를 입력하지는 않습니다. Git Gud의 코드 상자에도 표시되지만 복사 버튼에서는 빠집니다.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>인사해 보기</h3>
+    <p>다음을 입력하고 enter를 누르세요:</p>
+
+    <code class="shell">whoami</code>
+
+    <p>사용자 이름이 출력됩니다. 그게 전부입니다. 이 명령의 모든 것입니다.</p>
+
+    <p><code class="comment">jyoti</code></p>
+
+    <p>하나 더 해 보세요:</p>
+
+    <code class="shell">date</code>
+
+    <p><code class="comment">Sat Sep 20 09:24:11 IST 2026</code></p>
+
+    <p>이제 터미널을 사용했습니다. 방금 만난 패턴 — 단어를 입력하고 enter를 누르고 돌아온 것을 읽는다 — 가 대화의 전부입니다. 나머지는 더 재미있는 단어가 늘어나는 것뿐입니다.</p>
+
+    <p><span class="inline-tip"><strong>위쪽 화살표</strong>를 누르세요. 셸은 입력 내용을 기억하고 있다가 돌려줍니다. 몇 번 눌러 보세요. 이 페이지에서 가장 시간을 아껴주는 기술입니다.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>터미널 닫기</h3>
+    <p>창의 닫기 버튼을 눌러도 닫힙니다. 하지만 정식 방법이 있으며, 그것도 다른 명령과 같은 명령입니다:</p>
+
+    <code class="shell">exit</code>
+
+    <p>창이 닫힙니다. 아까와 같은 방법으로 다시 여세요 — 터미널은 가볍고 일회성이라, 하루에 수십 번 아무 생각 없이 열고 닫게 됩니다.</p>
+
+    <p><code>exit</code>를 쓰는 이유 중 하나: 입력 기억은 파일에 저장되며, Bash와 Zsh는 셸이 제대로 닫힐 때만 기록합니다. 이 챌린지의 확인 방법과 이어집니다.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Git Gud의 확인 방법</h3>
+    <p><code>whoami</code> 같은 명령은 컴퓨터를 바꾸지 않으므로 나중에 볼 폴더나 파일이 남지 않습니다. 대신 Git Gud는 셸 자체가 보관하는 <strong>히스토리 파일</strong> — Bash라면 <code>~/.bash_history</code>, Zsh, Fish, PowerShell이라면 그에 해당하는 것 — 을 읽어 이 챌린지에서 요청한 명령을 찾습니다.</p>
+
+    <p>마지막 수백 줄만 여러분 기계에서만 읽으며 어디로도 보내지 않습니다. 각 확인에서는 읽은 정확한 파일 이름을 보여줍니다.</p>
+
+    <p>순서: <code>whoami</code>와 <code>date</code>를 실행하고, 히스토리 저장을 위해 <code>exit</code>로 터미널을 닫고, 새 것을 열어 여기 돌아와 Verify를 누르세요.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>명령이 보이지 않는다면</h3>
+    <p>Bash와 Zsh는 입력 중이 아니라 셸이 <em>종료</em>될 때 히스토리를 저장합니다. 작업했는데 확인에서 찾지 못한다면 거의 확실히 터미널이 아직 열려 있습니다. <code>exit</code>을 입력하고 다시 Verify를 누르세요.</p>
+    <p>Windows에서는 <strong>cmd.exe</strong>가 히스토리를 전혀 남기지 않습니다. Git Bash나 PowerShell을 사용하세요.</p>
+</div>

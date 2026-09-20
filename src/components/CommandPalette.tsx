@@ -5,6 +5,7 @@ import { CornerDownLeft, Search } from "lucide-react";
 import { search, type SearchHit } from "~/lib/search";
 import { navigate } from "~/lib/router";
 import { revealSearchHit } from "~/lib/searchHighlight";
+import { strings } from "~/strings";
 import { cn } from "~/lib/utils";
 
 /**
@@ -22,6 +23,7 @@ export function CommandPalette({ locale }: { locale: string }) {
   const listRef = useRef<HTMLDivElement>(null);
 
   const hits = useMemo(() => (open ? search(locale, query) : []), [open, locale, query]);
+  const t = strings(locale);
 
   useEffect(() => setActive(0), [query]);
 
@@ -82,7 +84,7 @@ export function CommandPalette({ locale }: { locale: string }) {
         )}
       >
         <Search className="size-3.5 shrink-0" />
-        <span className="flex-1 text-left">Search</span>
+        <span className="flex-1 text-left">{t.searchLabel}</span>
         <kbd className="rounded border bg-muted px-1 font-mono text-[10px] text-muted-foreground">
           Ctrl K
         </kbd>
@@ -113,7 +115,7 @@ export function CommandPalette({ locale }: { locale: string }) {
               "data-[ending-style]:duration-80",
             )}
           >
-            <Dialog.Title className="sr-only">Search challenges</Dialog.Title>
+            <Dialog.Title className="sr-only">{t.searchTitle}</Dialog.Title>
 
             <div className="flex items-center gap-2 border-b px-3">
               <Search className="size-4 shrink-0 text-muted-foreground" />
@@ -122,7 +124,7 @@ export function CommandPalette({ locale }: { locale: string }) {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 onKeyDown={onInputKey}
-                placeholder="Search challenges…"
+                placeholder={t.searchPlaceholder}
                 className="h-12 flex-1 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
               />
               {query && (
@@ -135,13 +137,13 @@ export function CommandPalette({ locale }: { locale: string }) {
             <div ref={listRef} className="max-h-[52vh] overflow-y-auto p-1.5">
               {query.trim().length < 2 && (
                 <p className="px-2.5 py-6 text-center text-muted-foreground text-sm">
-                  Type at least two characters.
+                  {t.searchNeedTwo}
                 </p>
               )}
 
               {query.trim().length >= 2 && hits.length === 0 && (
                 <p className="px-2.5 py-6 text-center text-muted-foreground text-sm">
-                  Nothing matches “{query.trim()}”.
+                  {t.searchNothingMatches.replace("{query}", query.trim())}
                 </p>
               )}
 
@@ -174,10 +176,10 @@ export function CommandPalette({ locale }: { locale: string }) {
 
             <div className="flex items-center gap-3 border-t px-3 py-1.5 text-muted-foreground text-[11px]">
               <span className="flex items-center gap-1">
-                <CornerDownLeft className="size-3" /> open
+                <CornerDownLeft className="size-3" /> {t.searchOpen}
               </span>
-              <span>↑↓ navigate</span>
-              <span>esc close</span>
+              <span>↑↓ {t.searchNavigate}</span>
+              <span>esc {t.searchClose}</span>
             </div>
           </Dialog.Popup>
         </Dialog.Portal>

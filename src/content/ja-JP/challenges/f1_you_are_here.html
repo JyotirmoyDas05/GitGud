@@ -1,0 +1,103 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>ターミナルが今どこに立っているかを確認し、周りを見渡して、ホームディレクトリを特定しましょう。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>ターミナルは常にどこかにいる</h2>
+    <p>他のすべてが腑に落ちる1つの考え方があります: <strong>ターミナルは常にちょうど1つのフォルダの中にいます。</strong>「そのフォルダで開いている」のではなく、ファイルエクスプローラのウィンドウが一度に1つのフォルダを表示しているのと同じように、その中に立っています。</p>
+
+    <p>そのフォルダを <strong>カレントディレクトリ</strong>、または<strong>作業ディレクトリ</strong>と呼びます。別に指定しない限り、入力するすべてのコマンドは<em>そこで</em>実行されます。<code>ls</code> はそのフォルダを一覧表示します。 <code>mkdir notes</code> はその中に新しいフォルダを作ります。後に出てくる <code>git init</code> は<em>その</em>フォルダをリポジトリに変えます——だから「今どのフォルダにいるか」は雑学ではなく、行動前に確認するものになります。</p>
+
+    <p>初心者がターミナルでほぼ必ず混乱する瞬間——「ファイルはそこに見えるのに存在しないと言われる」——はこれが原因です。ファイルは存在します。立っている場所が違うのです。</p>
+
+    <h2>ディレクトリはフォルダのこと</h2>
+    <p><strong>ディレクトリ</strong>と<strong>フォルダ</strong>は同じものです。「フォルダ」はグラフィカルなデスクトップでの呼び名で、「ディレクトリ」は古い名前であり、ターミナルやドキュメント、すべてのコマンド名で使われる方です—— <code>mkdir</code> は <em>make directory</em>、<code>cd</code> は <em>change directory</em> の意味です。両方の言葉を目にしたら、同じものだと思ってください。</p>
+
+    <p>コンピュータが保存するものは2種類です:</p>
+
+    <ul>
+        <li><strong>ファイル</strong>は中身を持ちます——テキスト、写真、コードなどです。</li>
+        <li><strong>ディレクトリ</strong>は他のファイルやディレクトリを保持します。それだけです。</li>
+    </ul>
+
+    <p>ディレクトリの中にディレクトリ、その中にさらにディレクトリと、1つの起点からずっと続きます。その入れ子が <strong>ファイルシステム</strong> であり、木構造になっています。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>今いる場所を表示する</h3>
+    <p>ターミナルを開いてください。すべてのターミナルユーザーが信頼するようになる最初のコマンドです:</p>
+
+    <code class="shell">pwd</code>
+
+    <p><strong>print working directory</strong> の略です。完全な住所で質問に答えます:</p>
+
+    <p><code class="comment">/Users/jyoti</code></p>
+
+    <p>Git BashのWindowsでは <code>/c/Users/jyoti</code> のように見えます——同じ場所で、Git Bashが <code>C:</code> ドライブをUnix風に書いているだけです。</p>
+
+    <p>その住所を <strong>パス</strong> と呼びます。左から右へ道順として読みます: 一番上から始めて <code>Users</code> に入り、次に <code>jyoti</code> に入ります。 <code>/</code> が1つあるたびに1段奥へ進みます。このように一番上から始まるパスは<strong>絶対パス</strong>といい、どこに立って使う場合でも同じ意味になります。</p>
+
+    <p><code>pwd</code> は無料で一瞬、何も変更しません。迷ったらいつでも実行してください。 <code>pwd</code> を実行したからといって誰も馬鹿にしません。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>周りを見る</h3>
+    <p>実際にここにあるものを見てみましょう:</p>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">Desktop  Documents  Downloads  Music  Pictures</code></p>
+
+    <p>見覚えがありませんか?ファイルエクスプローラで見るのと同じフォルダです。なぜなら「ターミナル専用のファイルシステム」はなく、1台のコンピュータを2通りの方法で見ているだけだからです。一度だけファイルエクスプローラをターミナルの横に並べてみてください。全体が抽象的に感じられなくなります。</p>
+
+    <p>ファイルとディレクトリを一目で見分けるには、詳細表示を求めます:</p>
+
+    <code class="shell">ls -l</code>
+
+    <p><code class="comment">drwxr-xr-x  5 jyoti staff  160 Sep 20 09:12 Documents
+-rw-r--r--  1 jyoti staff 1024 Sep 20 09:14 notes.txt</code></p>
+
+    <p>今はほぼすべて無視して、各行の最初の1文字だけを見てください。 <code>d</code> は<strong>ディレクトリ</strong>、 <code>-</code> は普通の<strong>ファイル</strong>という意味です。その1文字が答えです。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>ホームとチルダ</h2>
+    <p>ターミナルを開いたとき、開始位置はランダムではありません。 <strong>ホームディレクトリ</strong>から始まります——皆さんのユーザーアカウントに属するフォルダで、デスクトップやドキュメント、ダウンロードが入っている場所です。</p>
+
+    <ul>
+        <li>macOS: <code>/Users/yourname</code></li>
+        <li>Linux: <code>/home/yourname</code></li>
+        <li>Windows: <code>C:\Users\yourname</code>、Git Bashでは <code>/c/Users/yourname</code> と表示されます</li>
+    </ul>
+
+    <p>常に入力するので略記があります: <strong><code>~</code></strong>、チルダです。パスを書く場所ならどこでも、 <code>~</code> は「自分のホームディレクトリ」という意味です。つまり <code>~/Documents</code> はドキュメントフォルダであり、どのマシンでもどのユーザーでも同じ書き方です——だからこそドキュメントはチルダだらけなのです。</p>
+
+    <p>プロンプトを振り返ってみてください。その中の <code>~</code> は同じ略記です: プロンプトはホームにいることを伝えています。サブフォルダに入ると <code>~/Documents</code> に変わるはずです。プロンプトはずっと静かに <code>pwd</code> に答えていたのです。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>証明する</h3>
+    <p>ターミナルを開き、どこにも移動する前に <code>pwd</code> を実行して、表示されたパスを読んでください。それが皆さんのホームディレクトリです。</p>
+
+    <p>次に下の<strong>Select directory</strong>を使って、そのフォルダをそのまま選んでください。Git Gudはホームディレクトリの場所を独自に算出して比較します——チェックボックスではなく、正解と不正解のある本物の回答です。</p>
+
+    <p>ついでに <code>ls</code> も実行し、履歴保存のために <code>exit</code> してVerifyを押してください。</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>周りを見る</h3>
+    <ul class="no-list-style">
+        <li><strong>今どこにいる?</strong></li>
+        <code class="shell">pwd</code>
+        <li><strong>ここに何がある?</strong></li>
+        <code class="shell">ls</code>
+        <li><strong>隠しファイルも含めて</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>詳細付き——先頭の <code>d</code> はディレクトリの意味</strong></li>
+        <code class="shell">ls -l</code>
+        <li><strong>移動せずに他のフォルダの中身を見る</strong></li>
+        <code class="shell">ls ~/Documents</code>
+    </ul>
+</div>

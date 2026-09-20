@@ -95,10 +95,15 @@ pub fn init<R: Runtime>(app: &AppHandle<R>) -> Result<(), Box<dyn std::error::Er
 mod tests {
     use super::*;
 
-    /// The 11 challenges in order, mirroring `src/challenges.ts`. Only the
-    /// drift guard below needs this, so it lives in the test module rather
-    /// than sitting in the binary as dead code.
-    const CHALLENGES: [&str; 11] = [
+    /// The challenges in order, mirroring `src/challenges.ts`. Only the drift
+    /// guard below needs this, so it lives in the test module rather than
+    /// sitting in the binary as dead code.
+    const CHALLENGES: [&str; 16] = [
+        "meet_the_terminal",
+        "command_performance",
+        "you_are_here",
+        "there_and_back_again",
+        "make_it_so",
         "get_git",
         "repository",
         "commit_to_it",
@@ -123,7 +128,7 @@ mod tests {
                 "challenge '{id}' is missing from src/challenges.ts"
             );
         }
-        assert_eq!(CHALLENGES.len(), 11);
+        assert_eq!(CHALLENGES.len(), 16);
     }
 
     #[test]

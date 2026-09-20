@@ -1,0 +1,123 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p><code>mkdir</code>과 <code>touch</code>로 터미널에서 작은 폴더 트리를 만드세요.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>만들기</h2>
+    <p>지금까지는 읽기 전용이었습니다 — 보고 옮겼을 뿐입니다. 만들기는 두 명령으로 거의 다 됩니다:</p>
+
+    <ul>
+        <li><strong><code>mkdir</code></strong> — <em>make directory</em>의 뜻. 폴더를 만듭니다.</li>
+        <li><strong><code>touch</code></strong> — 빈 파일을 만듭니다.</li>
+    </ul>
+
+    <p>둘 다, 다른 길을 말하는 경로를 주지 않는 한 <strong>지금 서 있는 디렉터리 안에</strong> 만듭니다. 여기서 지난 챌린지가 빛을 발합니다: 새 폴더가 어디에 생길지 불안하면 먼저 <code>pwd</code>를 실행하세요.</p>
+
+    <p><code>touch</code>라는 이상한 이름은 파일 만들기가 본업이 아니기 때문입니다 — 본래 목적은 파일의 시간 정보를 고치는 것이며, 아직 없는 것을 만드는 것은 덤으로 생긴 일입니다. 모두가 그 덤 때문에 씁니다.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>연습용 폴더 만들기</h3>
+    <p>만드는 장소에 의문이 없도록 집에서 시작합니다:</p>
+
+    <code class="shell">cd ~</code>
+
+    <p>폴더를 만들고 안으로 들어가세요:</p>
+
+    <code class="shell">mkdir gitgud-practice</code>
+    <code class="shell">cd gitgud-practice</code>
+
+    <p><code>cd</code>와 마찬가지로 <code>mkdir</code>은 제대로 돼도 아무 말이 없습니다. 안심하고 싶으면 <code>ls</code>로 확인하세요 — 처음 몇 번은 그래야 합니다.</p>
+
+    <p><span class="inline-tip">이름은 반드시 <code>gitgud-practice</code>로 하세요 — 확인은 그 이름을 찾습니다. 공백이 없다는 점에도 주목하세요. 이름의 공백은 허용되지만 입력하기 어려워지므로 프로그래밍 세계에서는 하이픈을 즐겨 씁니다.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>파일 만들기</h3>
+    <p>지금 있는 곳은 <code>gitgud-practice</code> 안이어야 합니다. 좋다면 확인하세요:</p>
+
+    <code class="shell">pwd</code>
+
+    <p>다음에 빈 파일을 만드세요:</p>
+
+    <code class="shell">touch hello.txt</code>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">hello.txt</code></p>
+
+    <p>존재하며 속은 비어 있습니다 — 0바이트입니다. <code>touch</code>는 그릇을 만듭니다. 안에 뭔가 넣는 것은 텍스트 편집기의 일입니다. 좋다면 좋아하는 편집기로 열어 뭔가 입력하세요. 여기서는 아무것에도 의존하지 않습니다.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>폴더를 만들고 그 안에 파일 만들기</h3>
+    <p>아직 <code>gitgud-practice</code> 안에 있습니다:</p>
+
+    <code class="shell">mkdir notes</code>
+
+    <p>여기가 쓸모 있는 대목입니다 — <code>notes</code> 안에 <em>안으로 들어가지 않고</em> 파일을 만듭니다. 그냥 이름이 아니라 상대 경로를 <code>touch</code>에 넘기세요:</p>
+
+    <code class="shell">touch notes/day-one.txt</code>
+
+    <p>그 인자는 경로로 읽으세요: <em>폴더 <code>notes</code> 안의 <code>day-one.txt</code>라는 파일</em>. 명령은 어디서든 이름뿐 아니라 경로를 받습니다. 한 가지 일을 위해 굳이 <code>cd</code>할 필요는 거의 없습니다.</p>
+
+    <p>작업을 확인하세요:</p>
+
+    <code class="shell">ls notes</code>
+
+    <p><span class="inline-tip"><code>ls no</code>까지 입력하고 <strong>Tab</strong>을 누르세요. 탭 완성은 방금 만든 폴더에도 다른 것과 똑같이 통합니다 — 덕분에 오타를 막을 수 있습니다. 오타가 없으면 "No such file or directory"를 보며 1분 고민하지 않아도 됩니다.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>여러 폴더 한 번에</h3>
+    <p>중첩 폴더를 당연한 방법으로 만들려다 거부당하는 모습을 보세요:</p>
+
+    <code class="shell">mkdir notes/archive/2026</code>
+
+    <p><code class="comment">mkdir: cannot create directory 'notes/archive/2026': No such file or directory</code></p>
+
+    <p>당연합니다 — <code>archive</code>는 아직 없고, <code>mkdir</code>은 줄줄이가 아니라 하나의 디렉터리를 만듭니다. 각 단계를 손으로 만드는 대신 이렇게 부탁하세요:</p>
+
+    <code class="shell">mkdir -p notes/archive/2026</code>
+
+    <code class="shell">ls notes</code>
+
+    <p><code>-p</code>는 <em>parents</em>의 줄임말입니다: 중간에 빠진 폴더도 만듭니다. 이것은 두 챌린지 전의 규칙이 동작하는 모습입니다 — 같은 명령에 하나의 옵션으로 동작이 바뀌며, <code>mkdir --help</code>가 알려주었을 것입니다.</p>
+
+    <p>트리는 지금 이렇게 돼 있습니다:</p>
+
+    <p><code class="comment">gitgud-practice/
+├── hello.txt
+└── notes/
+    ├── day-one.txt
+    └── archive/
+        └── 2026/</code></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>확인 내용</h3>
+    <p>두 가지를 합친 내용입니다. Git Gud는 <code>gitgud-practice</code> 폴더를 읽어 트리가 정말 있는지 확인하고, <em>그리고</em> 셸 히스토리에서 <code>mkdir</code>과 <code>touch</code>를 확인합니다 — 오른쪽 클릭 새로 만들기로도 만들 수 있으며, 이 모듈의 취지가 아니기 때문입니다.</p>
+
+    <p>아래 <strong>Select directory</strong>로 자신의 <code>gitgud-practice</code> 폴더를 고르고, 히스토리 저장을 위해 <code>exit</code>로 터미널을 닫고 Verify를 누르세요.</p>
+
+    <p>끝나면 폴더는 남겨도 지워도 됩니다 — 뒤에는 아무것에도 의존하지 않습니다. 같은 두 명령으로 곧 진짜 프로젝트 폴더를 만들게 됩니다.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>만들기</h3>
+    <ul class="no-list-style">
+        <li><strong>폴더 만들기</strong></li>
+        <code class="shell">mkdir &#60;FOLDERNAME&#62;</code>
+        <li><strong>폴더 사슬 한 번에 만들기</strong></li>
+        <code class="shell">mkdir -p &#60;A&#62;/&#60;B&#62;/&#60;C&#62;</code>
+        <li><strong>빈 파일 만들기</strong></li>
+        <code class="shell">touch &#60;FILENAME&#62;</code>
+        <li><strong>다른 폴더 안에 만들기</strong></li>
+        <code class="shell">touch &#60;FOLDERNAME&#62;/&#60;FILENAME&#62;</code>
+        <li><strong>제대로 됐는지 확인하기</strong></li>
+        <code class="shell">ls &#60;FOLDERNAME&#62;</code>
+    </ul>
+    <p>터미널 모듈은 이상입니다. 터미널을 열고, 프롬프트를 읽고, 옵션과 인자를 붙여 명령을 실행하고, 지금 어디인지 알아내고, 다른 곳으로 가고, 도착해서 만들 수 있습니다. 앞으로 Git이 요구하는 것은 말만 다를 뿐 같은 움직임입니다.</p>
+</div>

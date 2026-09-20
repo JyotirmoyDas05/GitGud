@@ -1,0 +1,148 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Monte uma pequena árvore de pastas pelo terminal com <code>mkdir</code> e <code>touch</code>.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Criando Coisas</h2>
+    <p>Tudo até aqui foi só leitura — olhar e se mover. Dois comandos cobrem quase todo o
+        criar:</p>
+
+    <ul>
+        <li><strong><code>mkdir</code></strong> — <em>make directory</em>. Cria uma pasta.</li>
+        <li><strong><code>touch</code></strong> — cria um arquivo vazio.</li>
+    </ul>
+
+    <p>Os dois criam coisas <strong>dentro do diretório onde você está parado agora</strong>, a menos que você
+        dê para eles um caminho dizendo o contrário. É aqui que o desafio anterior se paga: se você não tem
+        certeza de onde uma pasta nova vai parar, execute <code>pwd</code> primeiro.</p>
+
+    <p><code>touch</code> tem um nome estranho porque criar arquivos é seu bico — seu propósito de verdade é
+        atualizar a data de um arquivo, e criar um que ainda não existe foi um acidente conveniente.
+        Todo mundo usa pelo acidente.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Crie a Pasta de Prática</h3>
+    <p>Comece em casa, para não haver dúvida de onde isso vai parar:</p>
+
+    <code class="shell">cd ~</code>
+
+    <p>Agora crie uma pasta e entre nela:</p>
+
+    <code class="shell">mkdir gitgud-practice</code>
+    <code class="shell">cd gitgud-practice</code>
+
+    <p>Como o <code>cd</code>, o <code>mkdir</code> não diz nada quando funciona. Confira com <code>ls</code> se
+        quiser a confirmação — você deve, nas primeiras vezes.</p>
+
+    <p><span class="inline-tip">Dê exatamente o nome <code>gitgud-practice</code> — a verificação procura esse
+        nome. E repare que não há espaço nele. Espaços em nomes são permitidos, mas deixam os caminhos chatos de digitar,
+        e é por isso que o mundo da programação usa tanto hífens.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Crie um Arquivo</h3>
+    <p>Você agora deve estar dentro de <code>gitgud-practice</code>. Confirme se quiser:</p>
+
+    <code class="shell">pwd</code>
+
+    <p>Depois crie um arquivo vazio:</p>
+
+    <code class="shell">touch hello.txt</code>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">hello.txt</code></p>
+
+    <p>Ele existe e está vazio — zero bytes. O <code>touch</code> faz o recipiente; colocar algo dentro
+        é trabalho de um editor de texto. Abra no editor que quiser e digite algo se quiser;
+        nada aqui depende disso.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Crie uma Pasta, Depois um Arquivo Dentro Dela</h3>
+    <p>Ainda em <code>gitgud-practice</code>:</p>
+
+    <code class="shell">mkdir notes</code>
+
+    <p>Agora — aqui está a parte útil — crie um arquivo dentro de <code>notes</code> <em>sem entrar
+        lá</em>, dando para o <code>touch</code> um caminho relativo em vez de um nome puro:</p>
+
+    <code class="shell">touch notes/day-one.txt</code>
+
+    <p>Leia aquele argumento do jeito que você lê um caminho: <em>a pasta <code>notes</code>, e dentro dela, um
+        arquivo chamado <code>day-one.txt</code></em>. Comandos aceitam caminhos, não só nomes, em todo lugar. Você
+        quase nunca precisa dar <code>cd</code> para algum lugar só para fazer uma coisa nele.</p>
+
+    <p>Confira seu trabalho:</p>
+
+    <code class="shell">ls notes</code>
+
+    <p><span class="inline-tip">Digite <code>ls no</code> e pressione <strong>Tab</strong>. O autocompletar com tab
+        funciona nas pastas que você acabou de criar, como em qualquer outra — e livra você do erro de digitação que
+        senão deixaria você encarando um "No such file or directory" por um minuto.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Várias Pastas de Uma Vez</h3>
+    <p>Tente criar uma pasta aninhada do jeito óbvio e veja ela recusar:</p>
+
+    <code class="shell">mkdir notes/archive/2026</code>
+
+    <p><code class="comment">mkdir: cannot create directory 'notes/archive/2026': No such file or directory</code></p>
+
+    <p>Justo — <code>archive</code> ainda não existe, e o <code>mkdir</code> cria um diretório,
+        não uma corrente deles. Em vez de criar cada nível à mão, peça para ele:</p>
+
+    <code class="shell">mkdir -p notes/archive/2026</code>
+
+    <code class="shell">ls notes</code>
+
+    <p><code>-p</code> é a forma curta de <em>parents</em>: cria as pastas que faltarem no caminho. Essa é aquela
+        regra de dois desafios atrás em ação — mesmo comando, uma opção, comportamento diferente, e
+        o <code>mkdir --help</code> teria contado isso para você.</p>
+
+    <p>Sua árvore agora está assim:</p>
+
+    <p><code class="comment">gitgud-practice/
+├── hello.txt
+└── notes/
+    ├── day-one.txt
+    └── archive/
+        └── 2026/</code></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>O Que É Verificado</h3>
+    <p>Duas coisas, juntas. O Git Gud lê a pasta <code>gitgud-practice</code> para confirmar que a árvore está
+        realmente lá, <em>e</em> confere seu histórico do shell por <code>mkdir</code> e <code>touch</code>
+        — porque qualquer um pode clicar com o botão direito e escolher Nova Pasta, e não é disso que este módulo
+        trata.</p>
+
+    <p>Use <strong>Select directory</strong> abaixo para escolher sua pasta <code>gitgud-practice</code>, feche
+        o terminal com <code>exit</code> para que o histórico seja salvo, e pressione Verificar.</p>
+
+    <p>Guarde a pasta quando terminar, ou apague — nada mais adiante depende dela. Você vai criar uma pasta de projeto de verdade
+        logo, logo, com os mesmos dois comandos.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>Criando Coisas</h3>
+    <ul class="no-list-style">
+        <li><strong>Criar uma pasta</strong></li>
+        <code class="shell">mkdir &#60;FOLDERNAME&#62;</code>
+        <li><strong>Criar uma corrente inteira de pastas</strong></li>
+        <code class="shell">mkdir -p &#60;A&#62;/&#60;B&#62;/&#60;C&#62;</code>
+        <li><strong>Criar um arquivo vazio</strong></li>
+        <code class="shell">touch &#60;FILENAME&#62;</code>
+        <li><strong>Criar um dentro de outra pasta</strong></li>
+        <code class="shell">touch &#60;FOLDERNAME&#62;/&#60;FILENAME&#62;</code>
+        <li><strong>Conferir se funcionou</strong></li>
+        <code class="shell">ls &#60;FOLDERNAME&#62;</code>
+    </ul>
+    <p>Esse é o módulo inteiro de terminal. Você sabe abrir um terminal, ler um prompt, executar um comando com opções
+        e argumentos, descobrir onde está, ir para outro lugar e criar coisas quando chegar lá.
+        Tudo que o Git pedir de você daqui em diante são esses mesmos movimentos com palavras diferentes.</p>
+</div>

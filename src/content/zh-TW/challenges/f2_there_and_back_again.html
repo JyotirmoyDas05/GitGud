@@ -1,0 +1,130 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>用 <code>cd</code> 在檔案系統裡移動——走進資料夾、回到上一層，再直直回家。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>切換目錄</h2>
+    <p>你知道自己在哪裡了。現在要去別的地方。一個指令搞定：</p>
+
+    <p><code class="comment">cd &#60;WHERE&#62;</code></p>
+
+    <p><code>cd</code> 就是 <strong>change directory</strong>。它等於在終端機裡雙擊資料夾，也是你往後人生打最多次的指令。</p>
+
+    <p>成功的時候它什麼都不顯示。那種安靜是正常的、故意的——在終端機裡，沒消息就是好消息。出錯時指令才會出聲。它成功了的證據是提示字元，現在顯示新資料夾了，以及 <code>pwd</code> 會替你確認。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>走進資料夾</h3>
+    <p>從家開始，先看看有什麼：</p>
+
+    <code class="shell">cd ~</code>
+    <code class="shell">ls</code>
+
+    <p>挑一個你看到的資料夾——<code>Documents</code> 和 <code>Desktop</code> 幾乎每台機器都有——走進去：</p>
+
+    <code class="shell">cd Documents</code>
+
+    <p>看提示字元。變了。好好確認：</p>
+
+    <code class="shell">pwd</code>
+
+    <p><code class="comment">/Users/jyoti/Documents</code></p>
+
+    <p>你剛剛用了<strong>相對路徑</strong>。你只打了 <code>Documents</code> 而不是完整地址，卻成功了，因為 <code>cd</code> 是 <em>從你已經站的地方出發</em> 去找那個名字的。相對路徑很短，意思隨站立位置而變——重點就在這裡。</p>
+
+    <p><span class="inline-tip">輸入 <code>cd Doc</code> 再按 <strong>Tab</strong>。殼層會幫你把字補完。這就是<strong>Tab 補全</strong>，以後你打的每條路徑都通用，既省按鍵也防打錯。現在就養成習慣——覺得終端機無聊的人和不覺得的人，差別就在這裡。</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>回到上一層</h3>
+    <p>每個目錄都有一個<strong>父層</strong>——裝著它的那一個。它有個永久的縮寫，兩個點：</p>
+
+    <code class="shell">cd ..</code>
+    <code class="shell">pwd</code>
+
+    <p>你回到出發點了。<code>..</code> 永遠是「從這裡往上一層」的意思，所以不用知道名字，到哪裡都通用。</p>
+
+    <p>還有個成對的縮寫：一個點 <code>.</code>，意思是「就是這裡」。看似沒用——直到你遇到一個要你親口說「這個資料夾」的指令。你之後會打很多次的 <code>git add .</code> 正是那樣。</p>
+
+    <p>點可以疊加。這行往上兩層：</p>
+
+    <code class="shell">cd ../..</code>
+
+    <p>也可以跟名字組合。往上一層再走進隔壁資料夾，一步完成：</p>
+
+    <code class="shell">cd ../Downloads</code>
+
+    <p>詞彙就這些。路徑只是把這些零件用斜線接起來。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>絕對和相對</h2>
+    <p>兩種路徑，分清手上拿的是哪一種，大多數路徑困惑就一勞永逸了。</p>
+
+    <ul>
+        <li><strong>絕對路徑</strong>從檔案系統最頂端開始，自己就是完整的：<code>/Users/jyoti/Documents</code>。從哪裡打意思都一樣。認法一秒——以 <code>/</code> 開頭（或 <code>~</code>，會展開成絕對路徑，Windows 上則是 <code>C:</code> 這類磁碟機代號）。</li>
+        <li><strong>相對路徑</strong>從你站的地方開始：<code>Documents</code>、<code>../Downloads</code>、<code>notes/day-one.txt</code>。比較好打，但只有從正確的起點出發才對。</li>
+    </ul>
+
+    <p>想成住址跟「左手邊第二間」的差別。兩個都到得了。只有一個講給站在別處的人聽還管用。</p>
+
+    <p>附近的東西——大多數時候都是——用相對路徑。要跳很遠，或要把路徑寫給別人，就拿出絕對路徑。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>跳到任何地方</h3>
+    <p>先晃到深幾層的地方，再一步回家：</p>
+
+    <code class="shell">cd ~</code>
+
+    <p>後面什麼都不加的 <code>cd</code> 效果一樣——家是預設目的地，因為你會常想回去，常到值得一個捷徑。</p>
+
+    <p>絕對路徑則不管多遠，一步就到任何地方：</p>
+
+    <code class="shell">cd ~/Documents</code>
+
+    <p>這是絕對路徑——<code>~</code> 會在 <code>cd</code> 看到之前，先展開成你家目錄的完整地址。在 macOS 或 Linux 上你也可以直接瞄準整個檔案系統的最頂端去逛逛；那裡的東西不會咬你。</p>
+
+    <code class="shell">cd /</code>
+    <code class="shell">ls</code>
+
+    <p>最後一個值得收下的捷徑：</p>
+
+    <code class="shell">cd -</code>
+
+    <p>那會帶你回上一個目錄，像瀏覽器的上一頁。連打兩次就在兩個資料夾之間來回——實際工作多半就是這樣。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>檢查什麼</h3>
+    <p>這個挑戰在你的殼層歷史裡找四種不同 <em>形狀</em> 的 <code>cd</code>——上面每個概念各一，而不是四個特定地點，所以用你實際有的資料夾練習就行：</p>
+
+    <ul>
+        <li><code>cd Documents</code> — 用名字走進資料夾（相對）</li>
+        <li><code>cd ..</code> — 回到父層</li>
+        <li><code>cd ~</code> — 家</li>
+        <li><code>cd ~/Documents</code> 或 <code>cd /usr</code> — 絕對路徑</li>
+    </ul>
+
+    <p>每次之後都執行 <code>pwd</code> 看它運作。再用 <code>exit</code> 存檔並按 Verify。</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>到處走</h3>
+    <ul class="no-list-style">
+        <li><strong>走進資料夾</strong></li>
+        <code class="shell">cd &#60;FOLDERNAME&#62;</code>
+        <li><strong>回到父層</strong></li>
+        <code class="shell">cd ..</code>
+        <li><strong>上兩層，或上去再跨過去</strong></li>
+        <code class="shell">cd ../../</code>
+        <li><strong>家</strong></li>
+        <code class="shell">cd ~</code>
+        <li><strong>回剛才的地方</strong></li>
+        <code class="shell">cd -</code>
+        <li><strong>不確定的時候永遠</strong></li>
+        <code class="shell">pwd</code>
+    </ul>
+</div>

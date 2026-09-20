@@ -9,6 +9,7 @@ import {
   patchUrl,
   type Contributor,
 } from "~/lib/github";
+import { strings } from "~/strings";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
 
@@ -19,7 +20,8 @@ import { cn } from "~/lib/utils";
  * public on Pages, but the payoff of eleven challenges should not be a link —
  * and the quilt is the reason the last four challenges exist.
  */
-export function Finale() {
+export function Finale({ locale }: { locale: string }) {
+  const t = strings(locale);
   const [state, setState] = useState<
     | { kind: "loading" }
     | { kind: "error"; message: string }
@@ -58,17 +60,14 @@ export function Finale() {
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-10">
-      <h1 className="font-semibold text-3xl tracking-tight">Congrats, you did it!</h1>
+      <h1 className="font-semibold text-3xl tracking-tight">{t.finaleTitle}</h1>
       <p className="mt-2 text-muted-foreground text-sm leading-relaxed">
-        You pull request with the best of them. You now know alternate meanings for the words{" "}
-        <strong className="text-foreground">fork</strong> and{" "}
-        <strong className="text-foreground">branch</strong>, and you have collaborated with
-        someone — or a robot — elsewhere.
+        {t.finaleIntro}
       </p>
 
       {state.kind === "loading" && (
         <p className="mt-8 animate-status-pulse text-muted-foreground text-sm">
-          Fetching the quilt…
+          {t.finaleFetching}
         </p>
       )}
 
@@ -76,7 +75,7 @@ export function Finale() {
         <div className="mt-8 rounded-lg border bg-error-surface p-4">
           <p className="text-error-foreground text-sm">{state.message}</p>
           <p className="mt-1 text-muted-foreground text-sm">
-            The quilt lives online, so this needs a connection.
+            {t.finaleNeedsConn}
           </p>
           <Button
             onClick={load}
@@ -84,7 +83,7 @@ export function Finale() {
             className="mt-3"
           >
             <RefreshCw className="size-3.5" />
-            Try again
+            {t.finaleRetry}
           </Button>
         </div>
       )}
@@ -101,10 +100,9 @@ export function Finale() {
                 className="size-24 shrink-0 rounded-md border"
               />
               <div>
-                <h2 className="font-medium text-sm">Your patch</h2>
+                <h2 className="font-medium text-sm">{t.finaleYourPatch}</h2>
                 <p className="mt-1 text-muted-foreground text-sm">
-                  Generated just for <strong className="text-foreground">@{mine.username}</strong>{" "}
-                  and stitched into the quilt below. No two are the same.
+                  {renderPatchDesc(t.finalePatchDesc, mine.username)}
                 </p>
               </div>
             </section>
@@ -112,10 +110,10 @@ export function Finale() {
 
           <section className="mt-8">
             <div className="flex items-baseline justify-between">
-              <h2 className="font-medium text-sm">The quilt</h2>
+              <h2 className="font-medium text-sm">{t.finaleQuilt}</h2>
               <span className="text-muted-foreground text-xs tabular-nums">
                 {state.total.toLocaleString()}{" "}
-                {state.total === 1 ? "person has" : "people have"} finished
+                {state.total === 1 ? t.finalePersonOne : t.finalePeopleMany}
               </span>
             </div>
 
@@ -145,24 +143,23 @@ export function Finale() {
               </div>
             ) : (
               <p className="mt-3 rounded-lg border border-dashed p-4 text-center text-muted-foreground text-sm">
-                No patches on the quilt yet. Yours could be the first.
+                {t.finaleEmpty}
               </p>
             )}
           </section>
 
           <section className="mt-8">
-            <h2 className="font-medium text-sm">What next?</h2>
+            <h2 className="font-medium text-sm">{t.finaleNext}</h2>
             <ul className="mt-2 space-y-2 text-muted-foreground text-sm">
               <li>
-                Make a repository named <code className="font-mono text-xs">yourusername.github.io</code>,
-                fill it with web files, and GitHub will host it free at that address.
+                {t.finaleNext1}
               </li>
               <li>
-                Open an issue in one of your repositories and break the work into a task list.
+                {t.finaleNext2}
               </li>
-              <li>Find projects to contribute to in GitHub Explore.</li>
+              <li>{t.finaleNext3}</li>
               <li>
-                Go back through any challenge in the sidebar — everything stays available.
+                {t.finaleNext4}
               </li>
             </ul>
           </section>
@@ -173,11 +170,27 @@ export function Finale() {
             size="lg"
             className="mt-8"
           >
-            See the quilt online
+            {t.finaleSeeOnline}
             <ExternalLink className="size-3.5" />
           </Button>
         </>
       )}
     </div>
+  );
+}
+
+/**
+ * Renders `finalePatchDesc` with the `{username}` placeholder replaced by the
+ * learner's handle in bold. The template keeps word order per locale; the
+ * split is on the placeholder, never on prose.
+ */
+function renderPatchDesc(template: string, username: string) {
+  const [before, after] = template.split("{username}");
+  return (
+    <>
+      {before}
+      <strong className="text-foreground">@{username}</strong>
+      {after ?? ""}
+    </>
   );
 }

@@ -123,62 +123,122 @@
   background: transparent;
   border-style: dashed;
   padding: 0.5rem 0.75rem;
+  /* Same as `.shell` above, and for a sharper reason: sample output is often
+     several lines — an `ls -l` listing, a directory tree — and without this
+     they collapse onto one run, which is exactly the shape the reader is
+     supposed to be looking at. */
+  white-space: pre-wrap;
 }
 
-/* --- The callout boxes -------------------------------------------------- */
+/* --- Sections and callouts ------------------------------------------------
+ *
+ * The content ships three presentational classes (`border-box`, `solid-box`,
+ * `blue-border`) alongside three meaningful ones (`chal-goal`, `chal-step`,
+ * `chal-background`, `chal-tip`, `chal-no-pass`). The first version of this
+ * file styled the presentational ones, which meant a border and a rounded card
+ * around *every* passage — 22 steps, 14 background notes, all boxed, so a page
+ * read as a stack of identical containers and the boxing said nothing.
+ *
+ * T3 Code's own markdown is the reference here, and the instructive thing is
+ * how little it does: no cards, no tinted panels, no accent bars. Headings,
+ * spacing and one 2px neutral rule on `blockquote` carry the whole hierarchy.
+ *
+ * So only the meaningful classes get styling now, and a box is reserved for
+ * content that genuinely leaves the main flow. The presentational classes are
+ * deliberately not styled at all.
+ */
 
-.prose .border-box,
-.prose .solid-box,
-.prose .blue-border-box {
-  border: 1px solid var(--border);
+/* The goal statement, once per challenge. It keeps a surface *because* it is
+   the only one left on the page — that is what makes it read as the objective
+   rather than as more chrome. */
+.prose .chal-goal {
+  border: 1px solid color-mix(in srgb, var(--primary) 22%, transparent);
   border-radius: var(--radius);
+  background: color-mix(in srgb, var(--primary) 5%, transparent);
   padding: 0.875rem 1rem;
   margin: 1rem 0;
-}
-
-/* The goal statement at the top of every challenge. */
-.prose .chal-goal {
-  border-color: color-mix(in srgb, var(--primary) 32%, transparent);
-  background: color-mix(in srgb, var(--primary) 5%, transparent);
   font-size: 1rem;
 }
 
-.prose .chal-goal p {
-  margin: 0;
-}
+.prose .chal-goal > :first-child { margin-top: 0; }
+.prose .chal-goal > :last-child { margin-bottom: 0; }
 
-/* A step the learner performs. */
+/* A step is the main flow, not an aside, so it gets no container and no accent
+   bar — just breathing room and its own heading. This is the single biggest
+   change: 22 boxes per challenge become plain prose. */
 .prose .chal-step {
-  border-left: 3px solid var(--primary);
+  margin: 1.5rem 0;
 }
 
-/* Background explanation — context, not instruction. */
+/* Context rather than instruction. Set in the muted foreground so it recedes
+   without needing a panel to sit in. */
 .prose .chal-background,
 .prose .light-blue {
-  background: var(--muted);
+  margin: 1.25rem 0;
+  color: var(--muted-foreground);
 }
 
-/* Asides and troubleshooting. */
+.prose .chal-background strong,
+.prose .light-blue strong {
+  color: var(--foreground);
+}
+
+/* Genuine asides: tips, and the note shown when a check cannot pass. These do
+   leave the flow, so these do get a surface. */
 .prose .chal-tip,
-.prose .inline-tip,
-.prose .grey-border {
+.prose .chal-no-pass {
+  border: 1px solid;
+  border-radius: var(--radius);
+  padding: 0.875rem 1rem;
+  margin: 1.25rem 0;
+}
+
+.prose .chal-tip {
   background: var(--warning-surface);
-  border-color: color-mix(in srgb, var(--warning) 32%, transparent);
+  border-color: color-mix(in srgb, var(--warning) 28%, transparent);
 }
 
 .prose .chal-no-pass {
   background: var(--error-surface);
-  border-color: color-mix(in srgb, var(--error) 32%, transparent);
+  border-color: color-mix(in srgb, var(--error) 28%, transparent);
 }
 
-.prose .border-box > :first-child,
-.prose .solid-box > :first-child {
+.prose .chal-tip > :first-child,
+.prose .chal-no-pass > :first-child {
   margin-top: 0;
 }
 
-.prose .border-box > :last-child,
-.prose .solid-box > :last-child {
+.prose .chal-tip > :last-child,
+.prose .chal-no-pass > :last-child {
   margin-bottom: 0;
+}
+
+/* An inline tip is a `<span>`, and it was in that card group above.
+ *
+ * An inline box cannot hold a border: the browser draws one fragment per line
+ * the text wraps onto, so a two-line tip rendered as two ragged half-boxes
+ * with the border missing down the middle. `display: block` is half the fix;
+ * the other half is that this was never a card in the first place. It is one
+ * sentence sitting beside a step, not an aside that leaves the flow the way
+ * `.chal-tip` does, so it gets a rule instead of a surface. */
+.prose .inline-tip {
+  display: block;
+  margin: 0.5rem 0;
+  padding-left: 0.875rem;
+  border-left: 2px solid color-mix(in srgb, var(--warning) 50%, transparent);
+  color: var(--muted-foreground);
+}
+
+.prose .inline-tip strong,
+.prose .inline-tip em {
+  color: var(--foreground);
+}
+
+/* The headings inside a step used to sit against a border; without one they
+   need a little more air above to separate one step from the last. */
+.prose .chal-step > h2,
+.prose .chal-step > h3 {
+  margin-top: 0;
 }
 
 /* Superscript translations injected for non-English locales (the <n>, <v> and

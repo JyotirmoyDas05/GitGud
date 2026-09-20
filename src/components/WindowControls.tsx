@@ -90,7 +90,10 @@ export function WindowControls() {
           onClick={onClick}
           className={cn(
             "inline-flex w-[46px] cursor-default items-center justify-center",
-            "text-muted-foreground transition-colors duration-100",
+            // Stronger than the usual muted chrome: on the home route these
+            // sit directly on the sky rather than on glass, and zinc-500 on a
+            // bright blue is barely there.
+            "text-foreground/80 transition-colors duration-100",
             danger
               ? "hover:bg-[#c42b1c] hover:text-white"
               : "hover:bg-accent hover:text-foreground",

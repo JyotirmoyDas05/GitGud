@@ -1,0 +1,137 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Abra um terminal, execute seus dois primeiros comandos e aprenda a ler a linha com que ele recebe você.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>O que é um Terminal</h2>
+    <p>Um <strong>terminal</strong> é uma janela onde você digita instruções para o seu computador em vez de
+        clicar nelas. Essa é toda a ideia. Tudo o que você já faz — abrir uma pasta, criar uma nova,
+        renomear um arquivo, copiar algo — tem um equivalente digitado, e a versão digitada costuma ser mais rápida
+        e sempre pode ser repetida.</p>
+
+    <p>Você vai ouvir várias palavras para mais ou menos a mesma coisa, e vale a pena desembaraçar isso uma vez:</p>
+
+    <ul>
+        <li>O <strong>terminal</strong> é a janela. Ele mostra texto e recebe o que você digita.</li>
+        <li>O <strong>shell</strong> é o programa rodando dentro dele que realmente entende o que você
+            digita. Os mais comuns são <strong>Bash</strong>, <strong>Zsh</strong> e <strong>PowerShell</strong>.</li>
+        <li><strong>Linha de comando</strong> e <strong>CLI</strong> são nomes gerais para esse jeito de trabalhar.</li>
+    </ul>
+
+    <p>Na prática, as pessoas usam os quatro de forma intercambiável, e nós também vamos usar. Se alguém disser para você "abrir um
+        terminal", é dessa janela que ela está falando.</p>
+
+    <p>Ele parece intimidador porque está vazio e nada diz o que fazer. Mas não é perigoso.
+        Nada neste módulo pode quebrar nada — você vai mostrar seu próprio nome de usuário e criar uma
+        pasta de prática. Ninguém está julgando sua digitação.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Abra Seu Terminal</h3>
+
+    <p><strong>Windows.</strong> O Windows vem com PowerShell, mas os comandos deste módulo — e
+        quase todo tutorial, README e resposta do Stack Overflow que você ainda vai ler — são escritos para um
+        shell estilo Unix. O jeito mais fácil de ter um é o <strong>Git Bash</strong>, que vem de graça com
+        <a href="https://git-scm.com/download/win">Git for Windows</a>. Instale com as opções
+        padrão e depois abra o <strong>Git Bash</strong> pelo menu Iniciar.</p>
+
+    <p><span class="inline-tip">Essa instalação também coloca o Git no seu computador, do qual você vai precisar mais tarde
+        mesmo assim — um desafio mais adiante confirma que ele está configurado direitinho. Dois coelhos.</span></p>
+
+    <p><strong>macOS.</strong> Pressione <code>Cmd</code> + <code>Space</code>, digite <em>Terminal</em>, pressione
+        enter. Ele também fica em Aplicativos › Utilitários.</p>
+
+    <p><strong>Linux.</strong> Normalmente <code>Ctrl</code> + <code>Alt</code> + <code>T</code>, ou procure
+        por <em>Terminal</em> nos seus aplicativos.</p>
+
+    <p>Você agora deve estar vendo uma janela quase vazia com uma linha de texto e um cursor piscando.
+        Essa linha é a próxima coisa a entender.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Lendo o Prompt</h2>
+    <p>A linha que está esperando por você se chama <strong>prompt</strong>. Não é decoração — é uma barra de status,
+        e ela está dizendo três coisas úteis antes mesmo de você digitar qualquer coisa.</p>
+
+    <p><code class="comment">jyoti@laptop ~/code $</code></p>
+
+    <ul>
+        <li><code>jyoti</code> — com qual usuário você está conectado.</li>
+        <li><code>laptop</code> — com qual máquina você está falando. Isso importa mais do que você imagina
+            quando você começar a se conectar a outros computadores.</li>
+        <li><code>~/code</code> — <strong>onde você está</strong>. O terminal está sempre parado em alguma
+            pasta, e é esta. O próximo desafio depois deste é inteiramente sobre essa parte.</li>
+        <li><code>$</code> — "sua vez". Tudo depois dele é o que você digita.</li>
+    </ul>
+
+    <p>O seu vai parecer diferente. O Zsh no macOS muitas vezes termina com <code>%</code> em vez de <code>$</code>,
+        alguns prompts têm duas linhas, alguns são coloridos, alguns mostram a branch atual do Git. As partes mudam
+        de lugar; a ideia não.</p>
+
+    <p>É também por isso que as documentações escrevem comandos com um <code>$</code> na frente — é uma forma curta de dizer
+        "digite isso no seu prompt". Você nunca digita o <code>$</code> em si. As caixas de código no Git Gud
+        também mostram ele, e o botão de copiar deixa ele de fora.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Diga Olá</h3>
+    <p>Digite isso e pressione enter:</p>
+
+    <code class="shell">whoami</code>
+
+    <p>Ele mostra seu nome de usuário. É isso. Esse é o comando inteiro.</p>
+
+    <p><code class="comment">jyoti</code></p>
+
+    <p>Agora tente outro:</p>
+
+    <code class="shell">date</code>
+
+    <p><code class="comment">Sat Sep 20 09:24:11 IST 2026</code></p>
+
+    <p>Você agora já usou um terminal. O padrão que você acabou de conhecer — digitar uma palavra, pressionar enter, ler o que volta
+        — é a interação inteira. Todo o resto são palavras mais interessantes.</p>
+
+    <p><span class="inline-tip">Pressione a <strong>seta para cima</strong>. Seu shell lembra o que você digitou
+        e vai devolver para você. Pressione algumas vezes. Esse é o maior economizador de tempo desta
+        página.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Fechando o Terminal</h3>
+    <p>Clicar no botão de fechar da janela funciona. Mas existe um jeito certo, e é um comando como qualquer
+        outro:</p>
+
+    <code class="shell">exit</code>
+
+    <p>A janela fecha. Reabra do mesmo jeito que antes — um terminal é uma coisa barata e descartável,
+        e você vai abrir e fechar dezenas por dia sem nem pensar nisso.</p>
+
+    <p>Um motivo para preferir o <code>exit</code>: aquela memória do que você digitou fica guardada em um arquivo, e o Bash e o
+        Zsh só gravam esse arquivo quando o shell fecha direitinho. O que nos leva a como este desafio é
+        verificado.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Como o Git Gud Verifica Isso</h3>
+    <p>Comandos como <code>whoami</code> não mudam nada no seu computador, então não há pasta ou
+        arquivo para o aplicativo olhar depois. Em vez disso, o Git Gud lê o <strong>arquivo de histórico que o seu próprio
+        shell guarda</strong> — <code>~/.bash_history</code> para o Bash, e o equivalente para Zsh, Fish e
+        PowerShell — e procura os comandos que este desafio pediu.</p>
+
+    <p>Ele lê as últimas centenas de linhas, só na sua máquina, e nada é enviado para lugar nenhum. Cada verificação
+        abaixo diz exatamente qual arquivo ela leu.</p>
+
+    <p>Então: execute <code>whoami</code> e <code>date</code>, depois <code>exit</code> para fechar o terminal para que
+        seu shell salve o histórico, abra um novo, volte aqui e pressione Verificar.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>Se a Verificação Não Enxergar Seus Comandos</h3>
+    <p>O Bash e o Zsh salvam o histórico quando o shell <em>sai</em>, não enquanto você digita. Se você fez o trabalho
+        mas a verificação não encontra, seu terminal quase certamente ainda está aberto. Digite <code>exit</code>
+        e pressione Verificar de novo.</p>
+    <p>No Windows, o <strong>cmd.exe</strong> não guarda histórico nenhum. Use o Git Bash ou o PowerShell.</p>
+</div>

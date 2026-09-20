@@ -1,0 +1,137 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Descubra onde seu terminal está parado, veja o que há ao seu redor e identifique seu diretório home.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>O Terminal Está Sempre em Algum Lugar</h2>
+    <p>Aqui está a ideia que faz todo o resto clicar: <strong>seu terminal está sempre dentro de
+        exatamente uma pasta.</strong> Não "aberto nela" — parado nela, do mesmo jeito que uma janela do explorador de arquivos está
+        mostrando uma pasta de cada vez.</p>
+
+    <p>Essa pasta se chama <strong>diretório atual</strong>, ou <strong>diretório de
+        trabalho</strong>. Todo comando que você digita acontece <em>ali</em>, a menos que você diga o contrário.
+        <code>ls</code> lista aquela pasta. <code>mkdir notes</code> cria a nova pasta dentro dela. Mais adiante,
+        <code>git init</code> vai transformar <em>aquela</em> pasta em um repositório — e é por isso que "em qual
+        pasta eu estou?" deixa de ser uma pergunta boba e vira aquilo que você confere antes de agir.</p>
+
+    <p>Quase todo momento confuso que um iniciante tem com o terminal — "diz que o arquivo não existe
+        mas eu estou vendo ele bem aqui" — é isso. O arquivo existe. Você é que está parado em outro lugar.</p>
+
+    <h2>Diretório Quer Dizer Pasta</h2>
+    <p><strong>Diretório</strong> e <strong>pasta</strong> são a mesma coisa. "Pasta" é como a
+        área de trabalho gráfica chamou; "diretório" é o nome mais antigo, e é o que o terminal, a
+        documentação e todo nome de comando usam — <code>mkdir</code> é <em>make directory</em>,
+        <code>cd</code> é <em>change directory</em>. Espere as duas palavras, e entenda a mesma coisa por elas.</p>
+
+    <p>Seu computador guarda dois tipos de coisa:</p>
+
+    <ul>
+        <li><strong>Arquivos</strong> guardam conteúdo — texto, uma foto, um código.</li>
+        <li><strong>Diretórios</strong> guardam outros arquivos e diretórios. Só isso que eles fazem.</li>
+    </ul>
+
+    <p>Diretórios dentro de diretórios dentro de diretórios, descendo a partir de um ponto inicial. Esse
+        aninhamento é o <strong>sistema de arquivos</strong>, e é uma árvore.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Mostre Onde Você Está</h3>
+    <p>Abra seu terminal. O primeiro comando em que todo usuário de terminal aprende a confiar:</p>
+
+    <code class="shell">pwd</code>
+
+    <p>Forma curta de <strong>print working directory</strong>. Ele responde à pergunta com um endereço completo:</p>
+
+    <p><code class="comment">/Users/jyoti</code></p>
+
+    <p>No Windows com Git Bash você vai ver algo como <code>/c/Users/jyoti</code> — o mesmo lugar, o Git
+        Bash só escreve o drive <code>C:</code> no estilo Unix.</p>
+
+    <p>Esse endereço se chama <strong>caminho</strong>. Leia da esquerda para a direita como um conjunto de direções: comece
+        bem no topo, entre em <code>Users</code>, depois em <code>jyoti</code>. Cada <code>/</code> é
+        um passo para dentro. Um caminho que começa bem no topo assim é um <strong>caminho
+        absoluto</strong> — ele significa a mesma coisa não importa onde você esteja parado quando usar
+        ele.</p>
+
+    <p><code>pwd</code> é grátis, instantâneo e não muda nada. Execute sempre que estiver em dúvida. Ninguém vai
+        pensar menos de você por executar <code>pwd</code>.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Olhe ao Redor</h3>
+    <p>Agora veja o que realmente há aqui:</p>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">Desktop  Documents  Downloads  Music  Pictures</code></p>
+
+    <p>Reconhece essas? São as mesmas pastas que você vê no seu explorador de arquivos, porque não existe um
+        "sistema de arquivos do terminal" separado — é um computador só e dois jeitos de olhar para ele. Abra seu explorador de arquivos
+        ao lado do terminal e coloque um do lado do outro uma vez. Isso deixa tudo menos
+        abstrato.</p>
+
+    <p>Para diferenciar arquivos e diretórios de relance, peça detalhes:</p>
+
+    <code class="shell">ls -l</code>
+
+    <p><code class="comment">drwxr-xr-x  5 jyoti staff  160 Sep 20 09:12 Documents
+-rw-r--r--  1 jyoti staff 1024 Sep 20 09:14 notes.txt</code></p>
+
+    <p>Ignore quase tudo isso por enquanto e olhe o primeiríssimo caractere de cada linha. Um
+        <code>d</code> significa <strong>diretório</strong>. Um <code>-</code> significa um
+        <strong>arquivo</strong> comum. Essa única letra é a resposta.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Home, e o Til</h2>
+    <p>Quando você abre um terminal, ele não começa em um lugar aleatório. Ele começa no seu <strong>diretório
+        home</strong> — a pasta que pertence à sua conta de usuário, aquela que guarda sua Área de Trabalho,
+        Documentos e Downloads.</p>
+
+    <ul>
+        <li>macOS: <code>/Users/yourname</code></li>
+        <li>Linux: <code>/home/yourname</code></li>
+        <li>Windows: <code>C:\Users\yourname</code>, que o Git Bash mostra como <code>/c/Users/yourname</code></li>
+    </ul>
+
+    <p>Você vai digitar isso o tempo todo, então existe um atalho: <strong><code>~</code></strong>, o til.
+        Em qualquer lugar onde um caminho é esperado, <code>~</code> significa "meu diretório home". Então <code>~/Documents</code>
+        é sua pasta Documents, escrita do mesmo jeito em toda máquina e por todo usuário — que é
+        exatamente por que a documentação é cheia de tis.</p>
+
+    <p>Olhe de volta para seu prompt. Aquele <code>~</code> ali é o mesmo atalho: o prompt está
+        dizendo que você está em casa. Entre em uma subpasta e veja ele mudar para
+        <code>~/Documents</code>. Seu prompt esteve respondendo <code>pwd</code> discretamente esse tempo
+        todo.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Prove</h3>
+    <p>Abra um terminal, execute <code>pwd</code> antes de ir a qualquer lugar e leia o caminho que ele mostra. Esse
+        é seu diretório home.</p>
+
+    <p>Depois use <strong>Select directory</strong> abaixo e escolha exatamente aquela pasta. O Git Gud descobre
+        onde fica seu diretório home sozinho e compara os dois — então essa é uma resposta de verdade com um
+        certo e um errado, não uma caixinha para marcar.</p>
+
+    <p>Execute <code>ls</code> enquanto estiver lá também, depois <code>exit</code> para que seu shell salve o histórico,
+        e pressione Verificar.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>Olhando ao Redor</h3>
+    <ul class="no-list-style">
+        <li><strong>Onde estou?</strong></li>
+        <code class="shell">pwd</code>
+        <li><strong>O que há aqui?</strong></li>
+        <code class="shell">ls</code>
+        <li><strong>Incluindo coisas ocultas</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>Com detalhes — um <code>d</code> no começo significa diretório</strong></li>
+        <code class="shell">ls -l</code>
+        <li><strong>O que há em outra pasta, sem ir até lá</strong></li>
+        <code class="shell">ls ~/Documents</code>
+    </ul>
+</div>

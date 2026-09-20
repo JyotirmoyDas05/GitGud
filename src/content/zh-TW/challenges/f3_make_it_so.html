@@ -1,0 +1,123 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>用 <code>mkdir</code> 和 <code>touch</code> 從終端機蓋一棵小小的資料夾樹。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>創造東西</h2>
+    <p>到目前為止都是唯讀——看看、走走。創造的部分兩個指令幾乎全包了：</p>
+
+    <ul>
+        <li><strong><code>mkdir</code></strong> — <em>make directory</em> 的意思。建立資料夾。</li>
+        <li><strong><code>touch</code></strong> — 建立空檔案。</li>
+    </ul>
+
+    <p>兩個都是在<strong>你目前站的目錄裡面</strong>創造，除非你給的路徑另有說明。這就是上個挑戰回本的地方：不確定新資料夾會落在哪裡，先執行 <code>pwd</code>。</p>
+
+    <p><code>touch</code> 名字很怪，因為建檔案只是它的副業——它的本業是更新檔案的時間戳記，順手建出還不存在的檔案只是附帶的意外。大家都是為了這個意外在用它。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>建立練習資料夾</h3>
+    <p>從家開始，就不會對落點有疑問：</p>
+
+    <code class="shell">cd ~</code>
+
+    <p>建立資料夾並走進去：</p>
+
+    <code class="shell">mkdir gitgud-practice</code>
+    <code class="shell">cd gitgud-practice</code>
+
+    <p>跟 <code>cd</code> 一樣，<code>mkdir</code> 成功時什麼都不說。想要安心就用 <code>ls</code> 確認——前幾次應該這樣。</p>
+
+    <p><span class="inline-tip">名字一定要叫 <code>gitgud-practice</code>——檢查找的就是這個名字。也注意裡面沒有空白。名字有空白是合法的，但路徑會很難打，所以程式設計的世界愛用連字號。</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>建立檔案</h3>
+    <p>你現在應該在 <code>gitgud-practice</code> 裡面。想確認就確認：</p>
+
+    <code class="shell">pwd</code>
+
+    <p>再建立一個空檔案：</p>
+
+    <code class="shell">touch hello.txt</code>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">hello.txt</code></p>
+
+    <p>它存在，而且是空的——零位元組。<code>touch</code> 造的是容器；裝東西進去是文字編輯器的工作。想打點什麼就用順手的編輯器打開來打；這裡不依賴它。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>建資料夾，再在裡面建檔案</h3>
+    <p>還在 <code>gitgud-practice</code> 裡：</p>
+
+    <code class="shell">mkdir notes</code>
+
+    <p>接下來是有用的部分——在 <code>notes</code> 裡面 <em>不走進去</em>，直接建檔案，給 <code>touch</code> 一條相對路徑而不是光禿禿的名字：</p>
+
+    <code class="shell">touch notes/day-one.txt</code>
+
+    <p>把那個引數當路徑來讀：<em>資料夾 <code>notes</code> 裡面，一個叫 <code>day-one.txt</code> 的檔案</em>。指令到處都吃路徑，不只吃名字。你幾乎永遠不必為了對某處做一件事就 <code>cd</code> 過去。</p>
+
+    <p>檢查你的成果：</p>
+
+    <code class="shell">ls notes</code>
+
+    <p><span class="inline-tip">輸入 <code>ls no</code> 再按 <strong>Tab</strong>。Tab 補全對剛建好的資料夾一樣管用——還能救你免於打錯字，不然你會盯著 "No such file or directory" 發呆一分鐘。</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>一次建好幾層</h3>
+    <p>試著用直覺的方法建巢狀資料夾，看它拒絕你：</p>
+
+    <code class="shell">mkdir notes/archive/2026</code>
+
+    <p><code class="comment">mkdir: cannot create directory 'notes/archive/2026': No such file or directory</code></p>
+
+    <p>很合理——<code>archive</code> 還不存在，而 <code>mkdir</code> 一次只建一個目錄，不是建一整串。與其一層一層手動建，叫它一次建完：</p>
+
+    <code class="shell">mkdir -p notes/archive/2026</code>
+
+    <code class="shell">ls notes</code>
+
+    <p><code>-p</code> 是 <em>parents</em> 的縮寫：順手把路上缺的資料夾都建起來。這就是兩關前的規則在發威——同樣的指令、一個選項、行為不同，而 <code>mkdir --help</code> 本來就會告訴你。</p>
+
+    <p>你的樹現在長這樣：</p>
+
+    <p><code class="comment">gitgud-practice/
+├── hello.txt
+└── notes/
+    ├── day-one.txt
+    └── archive/
+        └── 2026/</code></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>檢查什麼</h3>
+    <p>兩件事一起查。Git Gud 讀 <code>gitgud-practice</code> 資料夾確認樹真的在，<em>並且</em>檢查你的殼層歷史裡有 <code>mkdir</code> 和 <code>touch</code>——因為右鍵新增資料夾誰都會，那不是這個模組要教的。</p>
+
+    <p>用下面的 <strong>Select directory</strong> 選你的 <code>gitgud-practice</code> 資料夾，用 <code>exit</code> 關掉終端機存檔，按 Verify。</p>
+
+    <p>做完資料夾要留要刪隨你——後面都不依賴它。你很快會用同樣的兩個指令建真正的專案資料夾。</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>創造東西</h3>
+    <ul class="no-list-style">
+        <li><strong>建資料夾</strong></li>
+        <code class="shell">mkdir &#60;FOLDERNAME&#62;</code>
+        <li><strong>建一整串資料夾</strong></li>
+        <code class="shell">mkdir -p &#60;A&#62;/&#60;B&#62;/&#60;C&#62;</code>
+        <li><strong>建空檔案</strong></li>
+        <code class="shell">touch &#60;FILENAME&#62;</code>
+        <li><strong>建在另一個資料夾裡面</strong></li>
+        <code class="shell">touch &#60;FOLDERNAME&#62;/&#60;FILENAME&#62;</code>
+        <li><strong>確認成功了</strong></li>
+        <code class="shell">ls &#60;FOLDERNAME&#62;</code>
+    </ul>
+    <p>終端機模組到此結束。你會開終端機、讀提示字元、用選項和引數執行指令、查出自己在哪、去別的地方、到了再創造東西。往後 Git 要求的，都是同樣的動作換不同的詞。</p>
+</div>

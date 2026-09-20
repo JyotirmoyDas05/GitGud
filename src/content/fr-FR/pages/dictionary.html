@@ -1,18 +1,45 @@
 <p>Voici les commandes de terminal et Git utilisées dans les défis de Git Gud.</p>
 
-<h2>Bash/Terminal Basics</h2>
+<h2>Bases de Bash/Terminal</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
-        <li><strong>Créer un nouveau répertoire</strong></li>
-        <code class="shell">mkdir &#60;FOLDERNAME&#62;</code>
-        <li><strong>Naviguer à l'interieur d'un répertoire</strong></li>
-        <code class="shell">cd &#60;FOLDERNAME&#62;</code>
-        <li><strong>Lister le contenue d'un répertoire</strong></li>
+        <li><strong>Afficher le dossier dans lequel vous vous trouvez (afficher le répertoire courant)</strong></li>
+        <code class="shell">pwd</code>
+        <li><strong>Lister les éléments d'un dossier</strong></li>
         <code class="shell">ls </code>
+        <li><strong>Tout lister, y compris les éléments cachés</strong></li>
+        <code class="shell">ls -a</code>
+        <li><strong>Lister en détail &mdash; un <code>d</code> initial signifie répertoire</strong></li>
+        <code class="shell">ls -l</code>
+        <li><strong>Naviguer dans un dossier existant (changer de répertoire)</strong></li>
+        <code class="shell">cd &#60;FOLDERNAME&#62;</code>
+        <li><strong>Remonter au dossier parent</strong></li>
+        <code class="shell">cd ..</code>
+        <li><strong>Aller à votre répertoire personnel</strong></li>
+        <code class="shell">cd ~</code>
+        <li><strong>Revenir au dossier précédent</strong></li>
+        <code class="shell">cd -</code>
+        <li><strong>Créer un nouveau dossier (créer un répertoire)</strong></li>
+        <code class="shell">mkdir &#60;FOLDERNAME&#62;</code>
+        <li><strong>Créer toute une chaîne de dossiers d'un coup</strong></li>
+        <code class="shell">mkdir -p &#60;A&#62;/&#60;B&#62;/&#60;C&#62;</code>
+        <li><strong>Créer un fichier vide</strong></li>
+        <code class="shell">touch &#60;FILENAME&#62;</code>
+        <li><strong>Afficher quelque chose en retour</strong></li>
+        <code class="shell">echo hello</code>
+        <li><strong>Effacer la fenêtre (rien n'est supprimé)</strong></li>
+        <code class="shell">clear</code>
+        <li><strong>Fermer le terminal</strong></li>
+        <code class="shell">exit</code>
+        <li><strong>Demander à n'importe quelle commande ce qu'elle peut faire</strong></li>
+        <code class="shell">&#60;COMMAND&#62; --help</code>
     </ul>
+    <p><strong>Deux touches valent plus que n'importe quelle commande :</strong> <code>Tab</code> complète le
+        nom de fichier ou de dossier que vous avez commencé à taper, et la touche <code>up arrow</code> rappelle
+        ce que vous avez tapé précédemment.</p>
 </div>
 
-<h2>Configuring Git</h2>
+<h2>Configuration de Git</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
         <li><strong>Vérifier la version de Git</strong></li>
@@ -26,7 +53,7 @@
     </ul>
 </div>
 
-<h2>Git Basics</h2>
+<h2>Bases de Git</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
         <li><strong>Activer Git pour un dossier</strong></li>
@@ -46,7 +73,7 @@
         <code class="shell">git clone &#60;URL&#62;</code>
     </ul>
 </div>
-<h2>Git Branches</h2>
+<h2>Branches Git</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
         <li><strong>Créer une nouvelle branche</strong></li>
@@ -62,7 +89,7 @@
     </ul>
 </div>
 
-<h2>Git Remotes</h2>
+<h2>Remotes Git</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
         <li><strong>Ajouter un remote</strong></li>
@@ -74,7 +101,7 @@
     </ul>
 </div>
 
-<h2>Pulling in Git</h2>
+<h2>Récupérer (pull) avec Git</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
         <li><strong>Pull (tirer) les derniers changements</strong></li>
@@ -86,7 +113,7 @@
     </ul>
 </div>
 
-<h2>Push &#38; Merge in Git</h2>
+<h2>Push &#38; Merge avec Git</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
         <li><strong>Push (pousser) les changements soumis</strong></li>
@@ -96,7 +123,7 @@
     </ul>
 </div>
 
-<h2>Deleting Remotes and Branches in Git</h2>
+<h2>Supprimer des remotes et des branches avec Git</h2>
 <div class="blue-border-box">
     <ul class="no-list-style">
         <li><strong>Suprimer une branche locale</strong></li>

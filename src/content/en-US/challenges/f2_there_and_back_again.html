@@ -1,0 +1,160 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Move around the filesystem with <code>cd</code> — down into folders, back up to the parent, and
+        straight home again.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Changing Directory</h2>
+    <p>You know where you are. Now you need to be somewhere else. One command does it:</p>
+
+    <p><code class="comment">cd &#60;WHERE&#62;</code></p>
+
+    <p><code>cd</code> is <strong>change directory</strong>. It's the terminal's equivalent of
+        double-clicking a folder, and it's the command you'll type more than any other for the rest of
+        your life.</p>
+
+    <p>It prints nothing when it works. That silence is normal and it's deliberate — in the terminal, no
+        news is good news. Commands speak up when something goes wrong. Your proof it worked is the
+        prompt, which now shows the new folder, and <code>pwd</code>, which will confirm it.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Go Down Into a Folder</h3>
+    <p>Start at home and look at what's there:</p>
+
+    <code class="shell">cd ~</code>
+    <code class="shell">ls</code>
+
+    <p>Pick any folder you saw — <code>Documents</code> and <code>Desktop</code> exist on nearly every
+        machine — and go into it:</p>
+
+    <code class="shell">cd Documents</code>
+
+    <p>Check the prompt. It changed. Confirm it properly:</p>
+
+    <code class="shell">pwd</code>
+
+    <p><code class="comment">/Users/jyoti/Documents</code></p>
+
+    <p>You just used a <strong>relative path</strong>. You typed <code>Documents</code>, not the whole
+        address, and it worked because <code>cd</code> looked for that name <em>starting from wherever
+        you already were</em>. Relative paths are short, and they mean different things depending on
+        where you're standing — which is the point.</p>
+
+    <p><span class="inline-tip">Type <code>cd Doc</code> and press <strong>Tab</strong>. The shell
+        finishes the word for you. This is <strong>tab completion</strong>, it works on every path you
+        will ever type, and it saves you from typos as well as keystrokes. Get in the habit now — it's
+        the difference between people who find the terminal tedious and people who don't.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Go Back Up</h3>
+    <p>Every directory has a <strong>parent</strong> — the one that contains it. It has a permanent
+        shorthand, two dots:</p>
+
+    <code class="shell">cd ..</code>
+    <code class="shell">pwd</code>
+
+    <p>You're back where you started. <code>..</code> always means "one level up, from here", so it works
+        anywhere without knowing any names.</p>
+
+    <p>There's a matching shorthand for the opposite: a single dot, <code>.</code>, means "right here".
+        It looks useless — until you meet a command that needs you to say "this folder" out loud.
+        <code>git add .</code>, which you'll type many times later, is exactly that.</p>
+
+    <p>Dots stack. This goes up two levels:</p>
+
+    <code class="shell">cd ../..</code>
+
+    <p>And they combine with names. Up one level, then down into a sibling folder, in a single move:</p>
+
+    <code class="shell">cd ../Downloads</code>
+
+    <p>That's the whole vocabulary. A path is just these pieces joined with slashes.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Absolute and Relative</h2>
+    <p>Two kinds of path, and knowing which one you're holding removes most path confusion for good.</p>
+
+    <ul>
+        <li>An <strong>absolute path</strong> starts from the top of the filesystem and is complete on its
+            own: <code>/Users/jyoti/Documents</code>. It means the same thing typed from anywhere. You can
+            spot one instantly — it begins with <code>/</code> (or <code>~</code>, which expands into one,
+            or a drive letter like <code>C:</code> on Windows).</li>
+        <li>A <strong>relative path</strong> starts from wherever you are: <code>Documents</code>,
+            <code>../Downloads</code>, <code>notes/day-one.txt</code>. Shorter to type, but only correct
+            from the right starting point.</li>
+    </ul>
+
+    <p>Think of it as a street address versus "second door on the left". Both get you there. Only one of
+        them survives being repeated to someone standing somewhere else.</p>
+
+    <p>Use relative paths for anything nearby — that's most of the time. Reach for an absolute path when
+        you're jumping somewhere far away, or when you're writing the path down for someone else.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Jump Anywhere</h3>
+    <p>Wander somewhere a few levels deep, then go home in one move:</p>
+
+    <code class="shell">cd ~</code>
+
+    <p><code>cd</code> with nothing after it does the same thing — home is the default destination,
+        because that's where you'll want to be often enough that it earned the shortcut.</p>
+
+    <p>And an absolute path takes you anywhere in one step, no matter how far:</p>
+
+    <code class="shell">cd ~/Documents</code>
+
+    <p>That's absolute — <code>~</code> expands to the full address of your home directory before
+        <code>cd</code> ever sees it. On macOS or Linux you can also aim at the very top of the whole
+        filesystem and have a look around; nothing there will bite you.</p>
+
+    <code class="shell">cd /</code>
+    <code class="shell">ls</code>
+
+    <p>One last shortcut worth having:</p>
+
+    <code class="shell">cd -</code>
+
+    <p>That takes you back to the previous directory, like the back button in a browser. Two of those in a
+        row and you're toggling between two folders — which is most of what real work looks like.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>What Gets Checked</h3>
+    <p>This challenge looks for four different <em>shapes</em> of <code>cd</code> in your shell history —
+        one for each idea above — rather than four particular destinations, so you can practise with
+        whatever folders you actually have:</p>
+
+    <ul>
+        <li><code>cd Documents</code> — down into a folder by name (relative)</li>
+        <li><code>cd ..</code> — up to the parent</li>
+        <li><code>cd ~</code> — home</li>
+        <li><code>cd ~/Documents</code> or <code>cd /usr</code> — an absolute path</li>
+    </ul>
+
+    <p>Run <code>pwd</code> after each one so you can see it working. Then <code>exit</code> to save your
+        history and press Verify.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>Getting Around</h3>
+    <ul class="no-list-style">
+        <li><strong>Into a folder</strong></li>
+        <code class="shell">cd &#60;FOLDERNAME&#62;</code>
+        <li><strong>Up to the parent</strong></li>
+        <code class="shell">cd ..</code>
+        <li><strong>Up two, or up one and across</strong></li>
+        <code class="shell">cd ../../</code>
+        <li><strong>Home</strong></li>
+        <code class="shell">cd ~</code>
+        <li><strong>Back to where you just were</strong></li>
+        <code class="shell">cd -</code>
+        <li><strong>And always, when unsure</strong></li>
+        <code class="shell">pwd</code>
+    </ul>
+</div>

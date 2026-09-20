@@ -1,0 +1,101 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>打開終端機，執行你的前兩個指令，並學會讀懂迎接你的那一行。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>什麼是終端機</h2>
+    <p><strong>終端機</strong>是一個讓你用輸入指令來指揮電腦的視窗，而不是用點擊。這就是全部的概念。你已經會做的每件事——開啟資料夾、新增資料夾、重新命名檔案、複製東西——都有對應的輸入版本，而輸入版通常更快，也一定可以重複執行。</p>
+
+    <p>你會聽到幾個意思差不多的詞，值得一次搞清楚：</p>
+
+    <ul>
+        <li><strong>終端機</strong>是視窗本身。它顯示文字並接收你的按鍵。</li>
+        <li><strong>殼層</strong>是在裡面真正運作、理解你輸入內容的程式。常見的有 <strong>Bash</strong>、<strong>Zsh</strong> 和 <strong>PowerShell</strong>。</li>
+        <li><strong>命令列</strong>和 <strong>CLI</strong> 是這種工作方式的通用名稱。</li>
+    </ul>
+
+    <p>實際上大家會把四個詞混著用，我們也會這樣。如果有人叫你「打開終端機」，指的就是這個視窗。</p>
+
+    <p>它看起來嚇人是因為空空的，而且沒告訴你要做什麼。但它並不危險。這個模組裡沒有任何東西會壞掉——你只是顯示自己的使用者名稱、建立一個練習用資料夾。沒有人會評斷你的輸入。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>打開你的終端機</h3>
+
+    <p><strong>Windows。</strong> Windows 內建 PowerShell，但這個模組的指令——以及你以後讀到的幾乎每一篇教學、README 和 Stack Overflow 回答——都是為 Unix 風格殼層寫的。最簡單的方法是 <strong>Git Bash</strong>，隨 <a href="https://git-scm.com/download/win">Git for Windows</a> 免費附帶。用預設選項安裝，再從開始選單開啟 <strong>Git Bash</strong>。</p>
+
+    <p><span class="inline-tip">這個安裝也會把你稍後需要的 Git 裝進電腦——後面的挑戰會確認它有正確設定好。一舉兩得。</span></p>
+
+    <p><strong>macOS。</strong> 按下 <code>Cmd</code> + <code>Space</code>，輸入 <em>Terminal</em>，按 enter。它也在應用程式 › 工具程式裡。</p>
+
+    <p><strong>Linux。</strong> 通常是 <code>Ctrl</code> + <code>Alt</code> + <code>T</code>，或在應用程式中搜尋 <em>Terminal</em>。</p>
+
+    <p>你現在應該會看到一個幾乎空白的視窗，只有一行文字和閃爍的游標。那一行就是接下來要理解的東西。</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>讀懂提示字元</h2>
+    <p>等著你的那一行叫做<strong>提示字元</strong>。它不是裝飾——它是狀態列，在你還沒輸入任何東西之前，就先告訴你三件有用的事。</p>
+
+    <p><code class="comment">jyoti@laptop ~/code $</code></p>
+
+    <ul>
+        <li><code>jyoti</code> — 你是用什麼身分登入的。</li>
+        <li><code>laptop</code> — 你在跟哪一台機器說話。等你開始連到別台電腦，就會發現這比想像中重要。</li>
+        <li><code>~/code</code> — <strong>你在哪裡</strong>。終端機永遠站在某個資料夾裡，就是這裡。下下個挑戰整篇都在講這部分。</li>
+        <li><code>$</code> —「換你了」的意思。它後面才是你要輸入的東西。</li>
+    </ul>
+
+    <p>你的長得會不一樣。macOS 上的 Zsh 常常以 <code>%</code> 結尾而不是 <code>$</code>，有些提示字元是兩行，有些是彩色的，有些會顯示目前的 Git 分支。位置會變，概念不變。</p>
+
+    <p>這也是為什麼文件會在指令前面寫一個 <code>$</code>——那是「在你的提示字元輸入這個」的簡寫。你永遠不用輸入 <code>$</code> 本身。Git Gud 的程式碼方塊裡也有它，但複製按鈕會自動略過。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>打聲招呼</h3>
+    <p>輸入下面這行並按下 enter：</p>
+
+    <code class="shell">whoami</code>
+
+    <p>它會顯示你的使用者名稱。就這樣。這就是這個指令的全部。</p>
+
+    <p><code class="comment">jyoti</code></p>
+
+    <p>再試一個：</p>
+
+    <code class="shell">date</code>
+
+    <p><code class="comment">Sat Sep 20 09:24:11 IST 2026</code></p>
+
+    <p>你已經用過終端機了。你剛剛遇到的模式——輸入一個單字、按下 enter、讀回傳的東西——就是互動的全部。剩下的只是更有趣的單字。</p>
+
+    <p><span class="inline-tip">按下<strong>上箭頭</strong>。你的殼層記得你輸入過什麼，會把它還給你。多按幾次。這是這一頁最省時間的一招。</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>關閉終端機</h3>
+    <p>點視窗的關閉鈕也可以。但有個正式的方法，而且它跟其他指令一樣，也是一個指令：</p>
+
+    <code class="shell">exit</code>
+
+    <p>視窗關掉了。用剛才一樣的方法重開——終端機是便宜又用完即丟的東西，你一天會不經意地開關好幾十次。</p>
+
+    <p>偏好 <code>exit</code> 的一個理由：你輸入過什麼的記憶存在檔案裡，而 Bash 和 Zsh 只在殼層正常關閉時才寫出去。這就接到這個挑戰的檢查方式了。</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Git Gud 如何檢查</h3>
+    <p><code>whoami</code> 這類指令不會改變電腦上的任何東西，所以事後沒有資料夾或檔案可以看。Git Gud 改讀<strong>你自己殼層保留的歷史檔</strong>——Bash 是 <code>~/.bash_history</code>，Zsh、Fish 和 PowerShell 則是對應的檔案——來找這個挑戰要求的指令。</p>
+
+    <p>它只讀最後幾百行，只在你的電腦上讀，什麼都不會傳出去。下面的每一項檢查都會寫明它讀了哪個確切檔案。</p>
+
+    <p>所以：執行 <code>whoami</code> 和 <code>date</code>，再用 <code>exit</code> 關掉終端機讓殼層存檔，開一個新的，回來這裡按 Verify。</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>如果檢查看不到你的指令</h3>
+    <p>Bash 和 Zsh 是在殼層 <em>結束</em> 時才存歷史，而不是邊打邊存。如果你做了但檢查找不到，幾乎一定是終端機還開著。輸入 <code>exit</code> 再按一次 Verify。</p>
+    <p>在 Windows 上，<strong>cmd.exe</strong> 完全不留歷史。請用 Git Bash 或 PowerShell。</p>
+</div>

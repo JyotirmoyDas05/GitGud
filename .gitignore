@@ -26,3 +26,8 @@ PLAN.md
 
 # Local debug captures
 .screenshots/
+
+# Updater signing keys. The private key must never enter the repository:
+# anyone holding it can sign a build that every installed copy will accept.
+*.key
+.gitgud-release-keys/

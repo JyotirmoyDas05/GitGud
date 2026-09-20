@@ -1,20 +1,29 @@
 name: Release
 
-# Builds the Tauri app for Linux, macOS and Windows and attaches the
-# installers to a GitHub Release.
+# Builds the Tauri app for Linux, macOS and Windows, signs the update bundles,
+# and attaches everything to a GitHub Release together with the `latest.json`
+# manifest the in-app updater reads.
 #
 # How to cut a release:
-#   1. Add a CHANGELOG.md entry under ## [<x.y.z>].
-#   2. Make sure package.json, src-tauri/tauri.conf.json and
+#   1. Make sure package.json, src-tauri/tauri.conf.json and
 #      src-tauri/Cargo.toml all carry the same version
-#      (or run scripts/cut-release.ps1 -Version <x.y.z>).
-#   3. Push the tag:  git push origin v<x.y.z>
-#   4. This workflow builds all platforms, creates a DRAFT release and
-#      replaces the notes with your CHANGELOG.md entry.
-#      Review the draft and publish it manually.
+#      (or run scripts/cut-release.ps1 -Version <x.y.z>, which also does this).
+#   2. Push the tag:  git push origin v<x.y.z>
+#   3. This workflow builds all platforms and creates a DRAFT release. Its
+#      notes are generated straight from `git log` since the previous tag —
+#      see `scripts/generate-changelog.mjs` and CONTRIBUTING.md — so there is
+#      nothing to write by hand here. Review the draft and publish it.
+#
+#      Nothing updates until you publish: the updater reads
+#      `releases/latest/download/latest.json`, and GitHub does not serve
+#      assets of a draft release.
 #
 # You can also run it manually (Actions tab -> Release -> Run workflow)
 # for a build-only check: no GitHub Release is created off-tag.
+#
+# Required secret: TAURI_SIGNING_PRIVATE_KEY (see docs/UPDATES.md).
+# Without it the build still succeeds but ships no signatures, and every
+# client rejects the update — which is the point of the signature.
 
 permissions:
   contents: write
@@ -32,27 +41,64 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # `assetName` fixes what Tauri's bundler names the files. Two things
+          # are wrong with its defaults here:
+          #
+          #  - The AppImage comes out as `..._amd64.AppImage`. `amd64` is
+          #    Debian's spelling; every AppImage in the wild (and every tool
+          #    that parses one) uses `x86_64`, so somebody scanning the
+          #    release for their architecture finds nothing and reports that
+          #    we do not ship one. tauri-action's own source maps it with the
+          #    comment "TODO: This is probably a Tauri bug", and the official
+          #    `AppImageConfig` exposes no naming control, so renaming on
+          #    upload is the only lever. `latest.json` resolves assets by this
+          #    patterned name, so the updater follows the rename.
+          #  - `productName` is "Git Gud", so the space becomes a dot and
+          #    every asset reads `Git.Gud_...`, which looks like a stray
+          #    second extension.
+          #
+          # `[ext]` carries its own leading dot and understands compound
+          # extensions (`.AppImage.sig` wins over `.AppImage`), so there is no
+          # dot before it here and the signature files stay intact.
+          #
+          # Each architecture builds on its own hardware rather than
+          # cross-compiling, which is how T3 Code does it too. Tauri links
+          # against the system WebKitGTK on Linux, so a cross build would mean
+          # a full arm64 sysroot on an x64 runner for no benefit now that
+          # GitHub's arm runners are free for public repositories.
           - name: linux
             os: ubuntu-22.04
             args: ''
-            bundles: |
-              src-tauri/target/release/bundle/deb/*.deb
-              src-tauri/target/release/bundle/appimage/*.AppImage
+            assetName: 'Git-Gud_[version]_x86_64[ext]'
+          - name: linux-arm64
+            os: ubuntu-22.04-arm
+            args: ''
+            assetName: 'Git-Gud_[version]_aarch64[ext]'
           - name: macos
             os: macos-latest
             args: '--target universal-apple-darwin'
-            bundles: |
-              src-tauri/target/universal-apple-darwin/release/bundle/dmg/*.dmg
+            assetName: 'Git-Gud_[version]_universal[ext]'
           - name: windows
             os: windows-latest
             args: ''
-            bundles: |
-              src-tauri/target/release/bundle/nsis/*-setup.exe
-              src-tauri/target/release/bundle/msi/*.msi
+            assetName: 'Git-Gud_[version]_x64[setup][ext]'
+          - name: windows-arm64
+            os: windows-11-arm
+            args: ''
+            assetName: 'Git-Gud_[version]_arm64[setup][ext]'
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Full history and every tag, not just the one that triggered this
+          # run. `actions/checkout`'s default shallow clone (depth 1, and only
+          # the triggering tag) is exactly the two things
+          # `generate-changelog.mjs` needs to walk the log and find the
+          # previous release — without this it would find no earlier tag on
+          # every single run and every release would "change" the entire
+          # project history.
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -70,8 +116,10 @@ jobs:
         if: matrix.name == 'macos'
         run: rustup target add aarch64-apple-darwin x86_64-apple-darwin
 
+      # Both Linux jobs, not just x86_64 — `startsWith` rather than `==`, or
+      # the arm64 runner builds without WebKitGTK and fails at link time.
       - name: Install Linux dependencies
-        if: matrix.name == 'linux'
+        if: startsWith(matrix.name, 'linux')
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -88,60 +136,73 @@ jobs:
         with:
           workspaces: src-tauri
 
-      - name: Build Tauri app
+      # The release body has to be settled *before* the bundles are built,
+      # because `latest.json` copies it into its `notes` field and that is what
+      # the in-app updater shows. Editing the release body afterwards would
+      # leave the manifest quoting the old text.
+      #
+      # This project commits straight to `main` in large, infrequent batches
+      # rather than one-PR-per-change, so GitHub's auto-generated notes alone
+      # would read as one giant commit subject line rather than a changelog —
+      # unlike a PR-per-change project (T3 Code, for instance), where the
+      # auto-generated notes ARE the changelog and nobody writes one by hand.
+      # `scripts/generate-changelog.mjs` fills that gap by reading the same
+      # git history, grouped from each commit's Conventional Commits type and
+      # (when present) its own `### Added` / `### Fixed` body — the commit
+      # message *is* the changelog entry, written once, when the work is
+      # fresh, not a separate file someone has to remember to edit before
+      # tagging. It runs identically here and in `cut-release.ps1`, so the
+      # result does not depend on which of the two actually cut this release,
+      # or whether a script was involved at all: a bare `git tag` + `git push`
+      # from anyone, AI-assisted or not, gets the same real notes, because
+      # this step derives them straight from history rather than reading
+      # something that had to be prepared in advance.
+      #
+      # `generateReleaseNotes` below still runs underneath it: GitHub prepends
+      # this text ahead of its own real auto-generated commit list — a free
+      # audit trail for anyone who wants the raw diff, at no cost when nobody
+      # does.
+      - name: Generate release notes from git history
+        id: notes
+        shell: bash
+        run: |
+          node scripts/generate-changelog.mjs --to "$GITHUB_REF_NAME" > release-notes.md
+          {
+            echo 'body<<GITGUD_NOTES_EOF'
+            cat release-notes.md
+            echo 'GITGUD_NOTES_EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Build and publish
         uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Signs the update bundles. `check()` refuses anything whose
+          # signature does not match the `pubkey` baked into tauri.conf.json,
+          # so an unsigned or foreign-signed build can never install itself.
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
         with:
           args: ${{ matrix.args }}
-
-      - name: Upload bundles
-        uses: actions/upload-artifact@v4
-        with:
-          name: bundles-${{ matrix.name }}
-          path: ${{ matrix.bundles }}
-          if-no-files-found: error
-
-  release:
-    name: Publish GitHub Release
-    needs: build
-    # Only attach to a real release when a version tag was pushed.
-    # Manual (workflow_dispatch) runs stop after the build above.
-    if: startsWith(github.ref, 'refs/tags/v')
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download all platform bundles
-        uses: actions/download-artifact@v4
-        with:
-          path: release-assets
-          merge-multiple: true
-
-      - name: List assets
-        run: ls -R release-assets
-
-      - name: Create draft release
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: ${{ github.ref_name }}
-          name: Git Gud ${{ github.ref_name }}
-          draft: true
-          generate_release_notes: true
-          files: release-assets/**/*
-
-      # Replaces the auto-generated notes with the matching CHANGELOG.md
-      # section (## [<version>]) when one exists. Runs after the release
-      # is created, so the changelog is applied on top of every release.
-      - name: Update release notes from CHANGELOG
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          version="${GITHUB_REF_NAME#v}"
-          awk -v ver="$version" '
-            $0 ~ "^## \\[" ver "\\]" { capture = 1; next }
-            capture && /^## / { exit }
-            capture { print }
-          ' CHANGELOG.md > release-notes.md
-          if [ -s release-notes.md ]; then
-            gh release edit "$GITHUB_REF_NAME" --notes-file release-notes.md
-            echo "Release notes updated from CHANGELOG.md."
-          else
-            echo "No CHANGELOG.md entry for $version; keeping generated notes."
-          fi
+          # Off-tag runs are a build check only: no tag means tauri-action
+          # builds the bundles and creates no release.
+          tagName: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || '' }}
+          releaseName: Git Gud ${{ github.ref_name }}
+          releaseBody: ${{ steps.notes.outputs.body }}
+          # Per tauri-action's own docs: a non-empty `releaseBody` is
+          # prepended to these rather than replaced by them, so the generated
+          # notes above stay the first thing anyone reads.
+          generateReleaseNotes: true
+          releaseDraft: true
+          prerelease: false
+          assetNamePattern: ${{ matrix.assetName }}
+          # Writes `latest.json` next to the installers. This is the file the
+          # app polls; without it the updater has nothing to read.
+          includeUpdaterJson: true
+          # Belt and braces. `bundle.targets` no longer builds an .msi, so
+          # there is nothing to disambiguate — but this input decides which
+          # Windows installer `latest.json` points at when both exist, and it
+          # defaults to the **msi**. If anyone re-adds "msi" to the targets
+          # without this, Windows clients would silently start updating
+          # through a different installer than the one they installed from.
+          updaterJsonPreferNsis: true

@@ -1,0 +1,147 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p>Crea un pequeño árbol de carpetas desde la terminal con <code>mkdir</code> y <code>touch</code>.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>Crear cosas</h2>
+    <p>Todo hasta ahora ha sido de solo lectura — mirar y moverse. Dos comandos cubren casi todo lo de
+        crear:</p>
+
+    <ul>
+        <li><strong><code>mkdir</code></strong> — <em>make directory</em>. Crea una carpeta.</li>
+        <li><strong><code>touch</code></strong> — crea un archivo vacío.</li>
+    </ul>
+
+    <p>Ambos crean cosas <strong>dentro del directorio donde estás ubicado</strong>, a menos que les
+        des una ruta que diga lo contrario. Aquí es donde el reto anterior da sus frutos: si no tienes
+        claro dónde va a aparecer una carpeta nueva, ejecuta <code>pwd</code> primero.</p>
+
+    <p><code>touch</code> tiene un nombre raro porque crear archivos es su trabajo secundario — su propósito real es
+        actualizar la fecha de un archivo, y crear uno que aún no existe fue un accidente conveniente.
+        Todo el mundo lo usa por el accidente.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Crea la carpeta de práctica</h3>
+    <p>Empieza desde casa, para que no haya dudas de dónde aparece esto:</p>
+
+    <code class="shell">cd ~</code>
+
+    <p>Ahora crea una carpeta y entra en ella:</p>
+
+    <code class="shell">mkdir gitgud-practice</code>
+    <code class="shell">cd gitgud-practice</code>
+
+    <p>Como <code>cd</code>, <code>mkdir</code> no dice nada cuando funciona. Compruébalo con <code>ls</code> si
+        quieres tranquilizarte — deberías hacerlo, las primeras veces.</p>
+
+    <p><span class="inline-tip">Nómbrala exactamente <code>gitgud-practice</code> — la comprobación busca ese
+        nombre. Y fíjate en que no tiene ningún espacio. Los espacios en los nombres son legales pero hacen que las rutas sean incómodas de escribir,
+        por eso el mundo de la programación usa guiones.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Crea un archivo</h3>
+    <p>Ahora deberías estar dentro de <code>gitgud-practice</code>. Confírmalo si quieres:</p>
+
+    <code class="shell">pwd</code>
+
+    <p>Luego crea un archivo vacío:</p>
+
+    <code class="shell">touch hello.txt</code>
+
+    <code class="shell">ls</code>
+
+    <p><code class="comment">hello.txt</code></p>
+
+    <p>Existe y está vacío — cero bytes. <code>touch</code> crea el recipiente; poner algo dentro
+        es trabajo de un editor de texto. Ábrelo en el editor que quieras y escribe algo si quieres;
+        nada aquí depende de ello.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Crea una carpeta, y luego un archivo dentro</h3>
+    <p>Todavía en <code>gitgud-practice</code>:</p>
+
+    <code class="shell">mkdir notes</code>
+
+    <p>Ahora — aquí está la parte útil — crea un archivo dentro de <code>notes</code> <em>sin entrar
+        allá</em>, dándole a <code>touch</code> una ruta relativa en lugar de un nombre solo:</p>
+
+    <code class="shell">touch notes/day-one.txt</code>
+
+    <p>Lee ese argumento como lees una ruta: <em>la carpeta <code>notes</code>, y dentro, un
+        archivo llamado <code>day-one.txt</code></em>. Los comandos aceptan rutas, no solo nombres, en todas partes. Casi
+        nunca tienes que ir con <code>cd</code> a un lado solo para hacerle una cosa.</p>
+
+    <p>Revisa tu trabajo:</p>
+
+    <code class="shell">ls notes</code>
+
+    <p><span class="inline-tip">Escribe <code>ls no</code> y presiona <strong>Tab</strong>. El autocompletado con Tab
+        funciona con las carpetas que acabas de crear, igual que con cualquier otra — y te ahorra el error que
+        si no te tendría mirando «No such file or directory» un rato.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Varias carpetas a la vez</h3>
+    <p>Intenta crear una carpeta anidada de la forma obvia y mira cómo se niega:</p>
+
+    <code class="shell">mkdir notes/archive/2026</code>
+
+    <p><code class="comment">mkdir: cannot create directory 'notes/archive/2026': No such file or directory</code></p>
+
+    <p>Lógico — <code>archive</code> aún no existe, y <code>mkdir</code> crea un directorio,
+        no una cadena de ellos. En lugar de crear cada nivel a mano, pídeselo:</p>
+
+    <code class="shell">mkdir -p notes/archive/2026</code>
+
+    <code class="shell">ls notes</code>
+
+    <p><code>-p</code> es la forma corta de <em>parents</em>: crea las carpetas que falten por el camino. Esta es esa
+        regla de hace dos retos en acción — mismo comando, una opción, distinto comportamiento, y
+        <code>mkdir --help</code> te lo habría contado.</p>
+
+    <p>Tu árbol ahora se ve así:</p>
+
+    <p><code class="comment">gitgud-practice/
+├── hello.txt
+└── notes/
+    ├── day-one.txt
+    └── archive/
+        └── 2026/</code></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>Qué se revisa</h3>
+    <p>Dos cosas, juntas. Git Gud lee la carpeta <code>gitgud-practice</code> para confirmar que el árbol está
+        realmente ahí, <em>y</em> revisa tu historial del shell buscando <code>mkdir</code> y <code>touch</code>
+        — porque cualquiera puede hacer clic derecho y elegir Nueva carpeta, y no es de eso de lo que trata este módulo.</p>
+
+    <p>Usa <strong>Select directory</strong> aquí abajo para elegir tu carpeta <code>gitgud-practice</code>, cierra
+        la terminal con <code>exit</code> para que se guarde tu historial, y presiona Verificar.</p>
+
+    <p>Quédate con la carpeta cuando termines, o bórrala — nada posterior depende de ella. Crearás una carpeta de proyecto
+        real muy pronto, con los mismos dos comandos.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>Crear cosas</h3>
+    <ul class="no-list-style">
+        <li><strong>Crear una carpeta</strong></li>
+        <code class="shell">mkdir &#60;FOLDERNAME&#62;</code>
+        <li><strong>Crear una cadena entera de carpetas</strong></li>
+        <code class="shell">mkdir -p &#60;A&#62;/&#60;B&#62;/&#60;C&#62;</code>
+        <li><strong>Crear un archivo vacío</strong></li>
+        <code class="shell">touch &#60;FILENAME&#62;</code>
+        <li><strong>Crear uno dentro de otra carpeta</strong></li>
+        <code class="shell">touch &#60;FOLDERNAME&#62;/&#60;FILENAME&#62;</code>
+        <li><strong>Revisar que funcionó</strong></li>
+        <code class="shell">ls &#60;FOLDERNAME&#62;</code>
+    </ul>
+    <p>Ese es todo el módulo de terminal. Ya puedes abrir una terminal, leer un prompt, ejecutar un comando con opciones
+        y argumentos, averiguar dónde estás, ir a otro lado, y crear cosas una vez allá.
+        Todo lo que Git te pida desde aquí son esos mismos movimientos con distintas palabras.</p>
+</div>

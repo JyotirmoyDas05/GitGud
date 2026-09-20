@@ -1,0 +1,130 @@
+<div id="challenge-desc" class="chal-goal blue-border border-box">
+    <p><code>cd</code>로 파일시스템을 옮겨 다니세요 — 폴더 안으로, 부모로, 그리고 다시 집으로 곧장.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>디렉터리 바꾸기</h2>
+    <p>지금 어디인지 압니다. 이제 다른 곳으로 가야 합니다. 하나의 명령으로 됩니다:</p>
+
+    <p><code class="comment">cd &#60;WHERE&#62;</code></p>
+
+    <p><code>cd</code>는 <strong>change directory</strong>의 뜻입니다. 폴더를 더블클릭하는 일의 터미널 버전이며, 앞으로 평생 가장 많이 입력할 명령입니다.</p>
+
+    <p>제대로 돼도 아무것도 출력하지 않습니다. 그 침묵은 정상이며 의도된 것입니다 — 터미널에서는 소식이 없는 게 좋은 소식입니다. 뭔가 잘못됐을 때 명령이 말합니다. 제대로 됐다는 증거는 새 폴더를 보여주는 프롬프트와, 그것을 확인해 주는 <code>pwd</code>입니다.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>폴더 안으로 들어가기</h3>
+    <p>집에서 시작해 무엇이 있는지 보세요:</p>
+
+    <code class="shell">cd ~</code>
+    <code class="shell">ls</code>
+
+    <p>보인 폴더 중 하나를 고르세요 — <code>Documents</code>와 <code>Desktop</code>은 거의 모든 기계에 있습니다 — 그리고 안으로 들어가세요:</p>
+
+    <code class="shell">cd Documents</code>
+
+    <p>프롬프트를 보세요. 바뀌었습니다. 제대로 확인하세요:</p>
+
+    <code class="shell">pwd</code>
+
+    <p><code class="comment">/Users/jyoti/Documents</code></p>
+
+    <p><strong>상대 경로</strong>를 쓴 것입니다. 전체 주소를 쓰지 않고 <code>Documents</code>라고만 썼는데도 된 것은, <code>cd</code>가 <em>지금 있는 곳을 출발점으로</em> 그 이름을 찾았기 때문입니다. 상대 경로는 짧고, 서 있는 곳에 따라 다른 뜻이 됩니다 — 그게 핵심입니다.</p>
+
+    <p><span class="inline-tip"><code>cd Doc</code>까지 입력하고 <strong>Tab</strong>을 누르세요. 셸이 단어를 완성해 줍니다. 이것이 <strong>탭 완성</strong>이며 앞으로 입력할 모든 경로에 통하고, 타수뿐 아니라 오타도 막아줍니다. 지금 습관을 들이세요 — 터미널을 지루하게 느끼는 사람과 그렇지 않은 사람의 차이는 여기입니다.</span></p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>위로 돌아가기</h3>
+    <p>모든 디렉터리에는 <strong>부모</strong> — 그것을 포함하는 쪽 — 가 있습니다. 변치 않는 줄임말이 있으며, 점 두 개입니다:</p>
+
+    <code class="shell">cd ..</code>
+    <code class="shell">pwd</code>
+
+    <p>시작 지점으로 돌아왔습니다. <code>..</code>는 항상 "여기서 한 단계 위"라는 뜻이라 이름을 몰라도 어디서든 통합니다.</p>
+
+    <p>짝이 되는 줄임말도 있습니다: 점 하나 <code>.</code>은 "바로 여기"라는 뜻입니다. 쓸모없어 보입니다 — "이 폴더"라고 입 밖으로 말해야 하는 명령을 만날 때까지는요. 나중에 여러 번 입력할 <code>git add .</code>이 바로 그것입니다.</p>
+
+    <p>점은 겹칩니다. 이것은 두 단계 위로 갑니다:</p>
+
+    <code class="shell">cd ../..</code>
+
+    <p>이름과도 합쳐집니다. 한 단계 올라갔다가 이웃 폴더로 내려가는 움직임을 한 번에:</p>
+
+    <code class="shell">cd ../Downloads</code>
+
+    <p>어휘는 이게 전부입니다. 경로란 이런 조각들을 슬래시로 이은 것에 지나지 않습니다.</p>
+</div>
+
+<div class="chal-background light-blue solid-box">
+    <h2>절대 경로와 상대 경로</h2>
+    <p>두 종류의 경로가 있으며, 지금 들고 있는 것이 어느 쪽인지 알면 대부분의 경로 혼란이 말끔히 풀립니다.</p>
+
+    <ul>
+        <li><strong>절대 경로</strong>는 파일시스템 꼭대기에서 시작하며 그 자체로 완전합니다: <code>/Users/jyoti/Documents</code>. 어디서 입력해도 같은 뜻입니다. 구별은 한눈에 됩니다 — <code>/</code>로 시작합니다(또는 <code>~</code>. 펼치면 절대 경로가 됩니다. Windows에서는 <code>C:</code> 같은 드라이브 문자입니다).</li>
+        <li><strong>상대 경로</strong>는 지금 있는 곳에서 시작합니다: <code>Documents</code>, <code>../Downloads</code>, <code>notes/day-one.txt</code> 같은 것입니다. 입력은 짧지만 올바른 출발점에서만 맞습니다.</li>
+    </ul>
+
+    <p>주소와 "왼쪽 두 번째 문"의 차이라고 생각하세요. 둘 다 도착은 합니다. 다른 곳에 서 있는 사람에게 전해도 통하는 것은 한쪽뿐입니다.</p>
+
+    <p>가까운 것 — 대부분은 이쪽입니다 — 에는 상대 경로를 쓰세요. 멀리 한 번에 뛸 때나 누군가를 위해 경로를 적어둘 때는 절대 경로를 꺼내세요.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>어디든 뛰어가기</h3>
+    <p>몇 단계 깊은 곳까지 어슬렁거렸다가 한 번에 집으로 돌아오세요:</p>
+
+    <code class="shell">cd ~</code>
+
+    <p>뒤에 아무것도 없는 <code>cd</code>도 같은 일입니다 — 집이 기본 목적지입니다. 자주 가고 싶어할 만큼이라 줄임말을 얻었습니다.</p>
+
+    <p>절대 경로라면 거리에 상관없이 한 단계로 어디든 갑니다:</p>
+
+    <code class="shell">cd ~/Documents</code>
+
+    <p>이것은 절대 경로입니다 — <code>~</code>는 <code>cd</code>가 보기 전에 홈 디렉터리의 전체 주소로 펼쳐집니다. macOS나 Linux에서는 파일시스템 전체의 꼭대기를 노려 둘러봐도 됩니다. 거기 있는 것이 물지는 않습니다.</p>
+
+    <code class="shell">cd /</code>
+    <code class="shell">ls</code>
+
+    <p>마지막으로 가져둘 만한 줄임말입니다:</p>
+
+    <code class="shell">cd -</code>
+
+    <p>바로 전 디렉터리로 돌아갑니다. 브라우저의 뒤로 가기 같은 것입니다. 이것을 두 번 이으면 두 폴더를 오갑니다 — 실제 일의 대부분은 그 반복입니다.</p>
+</div>
+
+<div class="chal-step blue-border border-box">
+    <h3>확인 내용</h3>
+    <p>이 챌린지에서는 셸 히스토리에서 네 가지 <em>모양</em>의 <code>cd</code>를 찾습니다 — 위의 생각에 하나씩 대응하며 목적지 자체는 묻지 않습니다. 실제로 있는 폴더로 연습할 수 있습니다:</p>
+
+    <ul>
+        <li><code>cd Documents</code> — 이름으로 폴더 안으로(상대)</li>
+        <li><code>cd ..</code> — 부모로 위로</li>
+        <li><code>cd ~</code> — 집</li>
+        <li><code>cd ~/Documents</code> 또는 <code>cd /usr</code> — 절대 경로</li>
+    </ul>
+
+    <p>각각 뒤에 <code>pwd</code>를 실행해 동작을 확인하세요. 다음에 히스토리 저장을 위해 <code>exit</code>하고 Verify를 누릅니다.</p>
+</div>
+
+<!--VERIFY-->
+
+<div class="chal-tip grey-border border-box">
+    <h3>옮겨 다니기</h3>
+    <ul class="no-list-style">
+        <li><strong>폴더 안으로</strong></li>
+        <code class="shell">cd &#60;FOLDERNAME&#62;</code>
+        <li><strong>부모로 위로</strong></li>
+        <code class="shell">cd ..</code>
+        <li><strong>두 단계 위로, 또는 위로 가서 옆으로</strong></li>
+        <code class="shell">cd ../../</code>
+        <li><strong>집</strong></li>
+        <code class="shell">cd ~</code>
+        <li><strong>방금 있던 곳으로 돌아가기</strong></li>
+        <code class="shell">cd -</code>
+        <li><strong>헤맬 때는 언제나</strong></li>
+        <code class="shell">pwd</code>
+    </ul>
+</div>
