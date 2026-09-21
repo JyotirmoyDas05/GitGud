@@ -27,6 +27,7 @@
 // ever actually lost; a plain commit still shows up there, just unsorted.
 
 import { execFileSync } from "node:child_process";
+import { pathToFileURL } from "node:url";
 
 // Real ASCII control characters built for exactly this (US/RS), rather than
 // NUL: Node refuses to pass a literal NUL byte as a child-process argument at
@@ -116,22 +117,36 @@ function readCommits(range) {
 }
 
 /** Bullet lines directly in `text` (no heading scoping). */
-function bulletsIn(text) {
+export function bulletsIn(text) {
   const bullets = [];
+  // Whether the line just processed was part of a bullet, so a blank line can
+  // end a continuation run without starting a new one. The comment below used
+  // to describe exactly this and the code never actually did it: a stray
+  // paragraph anywhere after a bullet — even separated by a blank line — was
+  // silently glued onto the end of that bullet instead of being dropped.
+  let continuing = false;
+
   for (const line of text.split("\n")) {
     const bullet = line.match(BULLET_RE);
     if (bullet) {
       bullets.push(bullet[1].trim());
+      continuing = true;
       continue;
     }
+
+    const trimmed = line.trim();
+    if (trimmed.length === 0) {
+      continuing = false;
+      continue;
+    }
+
     // A wrapped continuation line of the bullet above it — this repo's own
     // commit bodies hard-wrap prose at ~72 columns rather than writing one
     // giant line per bullet, and the first version of this function threw
     // every line after the first away, silently truncating every bullet with
     // more than one line to its opening clause. A blank line ends a bullet
     // without starting a new one; it is not itself a continuation.
-    const trimmed = line.trim();
-    if (trimmed.length > 0 && bullets.length > 0) {
+    if (continuing && bullets.length > 0) {
       bullets[bullets.length - 1] += ` ${trimmed}`;
     }
   }
@@ -200,4 +215,10 @@ function main() {
   process.stdout.write(render(groups));
 }
 
-main();
+// Guarded so this file can be imported for its pure functions (see
+// generate-changelog.test.mjs) without shelling out to git or writing to
+// stdout as a side effect of the import. `pathToFileURL`, not string-pasting
+// "file://" onto `process.argv[1]`: Windows paths use backslashes and skip
+// the leading slash before the drive letter, so a naive comparison never
+// matches there and main() would silently never run when invoked directly.
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) main();
