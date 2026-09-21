@@ -4,10 +4,22 @@ import { Check, Circle, FolderOpen, Loader2, RotateCcw, X } from "lucide-react";
 
 import type { Challenge } from "~/challenges";
 import { useProgress } from "~/lib/progress";
-import { passed, verifierFor, type CheckResult } from "~/lib/verify";
+import { passed, toneOf, verifierFor, type CheckResult, type ResultTone } from "~/lib/verify";
 import { strings, type UiStrings } from "~/strings";
 import { Button } from "~/components/ui/button";
 import { cn } from "~/lib/utils";
+
+/**
+ * How each result state is coloured. Optional checks stay quieter than
+ * required ones either way — they are encouragement, not a gate — but a
+ * satisfied one has to look satisfied.
+ */
+const TONE: Record<ResultTone, string> = {
+  done: "text-success-foreground",
+  failed: "bg-error-surface text-error-foreground",
+  "optional-done": "text-success-foreground/85",
+  "optional-todo": "text-muted-foreground",
+};
 
 /**
  * The directory prompt in the learner's language. The English fallback lives
@@ -152,17 +164,16 @@ export function VerifyBlock({ challenge, locale }: { challenge: Challenge; local
               key={`${result.message}-${i}`}
               className={cn(
                 "flex items-start gap-2 rounded-md px-2 py-1.5 text-sm",
-                result.optional
-                  ? "text-muted-foreground"
-                  : result.passed
-                    ? "text-success-foreground"
-                    : "bg-error-surface text-error-foreground",
+                TONE[toneOf(result)],
               )}
             >
-              {result.optional ? (
-                <Circle className="mt-0.5 size-4 shrink-0" />
-              ) : result.passed ? (
+              {/* An optional check that was satisfied gets a tick like any
+                  other. Drawing it as a hollow circle made a check that had
+                  passed look like one that had never been read. */}
+              {result.passed ? (
                 <Check className="mt-0.5 size-4 shrink-0" />
+              ) : result.optional ? (
+                <Circle className="mt-0.5 size-4 shrink-0" />
               ) : (
                 <X className="mt-0.5 size-4 shrink-0" />
               )}

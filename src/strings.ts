@@ -89,6 +89,11 @@ export interface UiStrings {
   // --- Misc chrome ---------------------------------------------------------------
   langLabel: string;
   noCheck: string;
+  /**
+   * Said of a check that is encouraged but does not gate the challenge. It
+   * used to read "optional, not checked", which was wrong twice over: the
+   * check *is* run, and once it passes the line carries a tick.
+   */
   optionalSuffix: string;
   gitMissing: string;
   saveUnreadable: string;
@@ -175,7 +180,7 @@ const EN: UiStrings = {
   searchClose: "close",
   langLabel: "Language",
   noCheck: "This challenge has no automatic check.",
-  optionalSuffix: "— optional, not checked",
+  optionalSuffix: "— optional",
   gitMissing:
     "Git was not found on your PATH. Challenge 1 walks you through installing it — the other challenges cannot be verified until it is.",
   saveUnreadable:
@@ -260,7 +265,7 @@ const TRANSLATIONS: Record<string, Partial<UiStrings>> = {
     searchClose: "cerrar",
     langLabel: "Idioma",
     noCheck: "Este reto no tiene comprobación automática.",
-    optionalSuffix: "— opcional, sin comprobar",
+    optionalSuffix: "— opcional",
     gitMissing:
       "No se encontró Git en tu PATH. El reto 1 te guía para instalarlo — los demás retos no se pueden comprobar hasta entonces.",
     saveUnreadable:
@@ -341,7 +346,7 @@ const TRANSLATIONS: Record<string, Partial<UiStrings>> = {
     searchClose: "cerrar",
     langLabel: "Idioma",
     noCheck: "Este reto no tiene comprobación automática.",
-    optionalSuffix: "— opcional, sin comprobar",
+    optionalSuffix: "— opcional",
     gitMissing:
       "No se encontró Git en tu PATH. El reto 1 te guía para instalarlo — los demás retos no se pueden comprobar hasta entonces.",
     saveUnreadable:
@@ -422,7 +427,7 @@ const TRANSLATIONS: Record<string, Partial<UiStrings>> = {
     searchClose: "fermer",
     langLabel: "Langue",
     noCheck: "Ce défi n'a pas de vérification automatique.",
-    optionalSuffix: "— facultatif, non vérifié",
+    optionalSuffix: "— facultatif",
     gitMissing:
       "Git est introuvable dans votre PATH. Le défi 1 vous guide pour l'installer — les autres défis ne peuvent pas être vérifiés tant qu'il n'est pas installé.",
     saveUnreadable:
@@ -503,7 +508,7 @@ const TRANSLATIONS: Record<string, Partial<UiStrings>> = {
     searchClose: "закрити",
     langLabel: "Мова",
     noCheck: "Це завдання не має автоматичної перевірки.",
-    optionalSuffix: "— необов’язково, не перевіряється",
+    optionalSuffix: "— необов’язково",
     gitMissing:
       "Git не знайдено у вашому PATH. Завдання 1 проведе вас через встановлення — інші завдання не можна перевірити, доки його не встановлено.",
     saveUnreadable:
@@ -578,7 +583,7 @@ const TRANSLATIONS: Record<string, Partial<UiStrings>> = {
     searchClose: "閉じる",
     langLabel: "言語",
     noCheck: "このチャレンジには自動チェックがありません。",
-    optionalSuffix: "— 任意、チェックなし",
+    optionalSuffix: "— 任意",
     gitMissing:
       "PATHにGitが見つかりませんでした。チャレンジ1でインストール方法を案内しています — Gitがインストールされるまで、他のチャレンジは確認できません。",
     saveUnreadable:
@@ -653,7 +658,7 @@ const TRANSLATIONS: Record<string, Partial<UiStrings>> = {
     searchClose: "닫기",
     langLabel: "언어",
     noCheck: "이 챌린지에는 자동 검사가 없습니다.",
-    optionalSuffix: "— 선택 사항, 검사 없음",
+    optionalSuffix: "— 선택 사항",
     gitMissing:
       "PATH에서 Git을 찾을 수 없습니다. 챌린지 1에서 설치 방법을 안내해 드립니다 — 설치하기 전까지는 다른 챌린지를 확인할 수 없습니다.",
     saveUnreadable:
@@ -729,7 +734,7 @@ const TRANSLATIONS: Record<string, Partial<UiStrings>> = {
     searchClose: "fechar",
     langLabel: "Idioma",
     noCheck: "Este desafio não tem verificação automática.",
-    optionalSuffix: "— opcional, sem verificação",
+    optionalSuffix: "— opcional",
     gitMissing:
       "O Git não foi encontrado no seu PATH. O desafio 1 mostra como instalá-lo — os outros desafios não podem ser verificados até lá.",
     saveUnreadable:
@@ -802,7 +807,7 @@ const TRANSLATIONS: Record<string, Partial<UiStrings>> = {
     searchClose: "關閉",
     langLabel: "語言",
     noCheck: "這個挑戰沒有自動檢查。",
-    optionalSuffix: "— 選填,不檢查",
+    optionalSuffix: "— 選填",
     gitMissing:
       "在你的 PATH 中找不到 Git。挑戰 1 會帶你安裝 — 在安裝完成之前,無法驗證其他挑戰。",
     saveUnreadable: "無法讀取你儲存的進度,所以這次工作階段不會儲存到磁碟。",

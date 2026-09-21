@@ -33,6 +33,22 @@ export function passed(results: CheckResult[]): boolean {
   return required.length > 0 && required.every((r) => r.passed);
 }
 
+/**
+ * How one result should read in the list.
+ *
+ * Exists because the UI had only three states for four cases and collapsed the
+ * two optional ones together: a satisfied optional check drew the same hollow
+ * circle as an unsatisfied one. `clear` and `exit` were being detected
+ * correctly and reported as "passed: true", and the learner had no way to see
+ * it — the check looked ignored.
+ */
+export type ResultTone = "done" | "failed" | "optional-done" | "optional-todo";
+
+export function toneOf(result: CheckResult): ResultTone {
+  if (!result.optional) return result.passed ? "done" : "failed";
+  return result.passed ? "optional-done" : "optional-todo";
+}
+
 export const pass = (message: string): CheckResult => ({ message, passed: true });
 export const fail = (message: string): CheckResult => ({ message, passed: false });
 export const note = (message: string, ok: boolean): CheckResult => ({
