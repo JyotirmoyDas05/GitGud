@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { Dialog } from "@base-ui/react/dialog";
 import { CornerDownLeft, Search } from "lucide-react";
 
-import { search, type SearchHit } from "~/lib/search";
+import { search, type SearchHit, type SnippetRange } from "~/lib/search";
 import { navigate } from "~/lib/router";
 import { revealSearchHit } from "~/lib/searchHighlight";
 import { strings } from "~/strings";
@@ -168,7 +168,7 @@ export function CommandPalette({ locale }: { locale: string }) {
                     </span>
                   </div>
                   <p className="mt-0.5 line-clamp-2 text-muted-foreground text-xs leading-relaxed">
-                    <Highlight text={hit.snippet} at={hit.matchAt} length={hit.matchLength} />
+                    <Highlight text={hit.snippet} ranges={hit.ranges} />
                   </p>
                 </button>
               ))}
@@ -188,16 +188,30 @@ export function CommandPalette({ locale }: { locale: string }) {
   );
 }
 
-/** Marks the matched span without running a regex over untrusted input. */
-function Highlight({ text, at, length }: { text: string; at: number; length: number }) {
-  if (at < 0 || length <= 0) return <>{text}</>;
-  return (
-    <>
-      {text.slice(0, at)}
-      <mark className="rounded-[3px] bg-primary/20 text-foreground">
-        {text.slice(at, at + length)}
-      </mark>
-      {text.slice(at + length)}
-    </>
-  );
+/**
+ * Marks every matched word, not just the first.
+ *
+ * Ranges arrive sorted and non-overlapping, so this walks them in order and
+ * emits the text between each. Searching "version control" used to mark
+ * "version" and leave "control" plain, which made a two-word query look like
+ * it had only half worked.
+ */
+function Highlight({ ranges, text }: { ranges: SnippetRange[]; text: string }) {
+  if (ranges.length === 0) return <>{text}</>;
+
+  const parts: ReactNode[] = [];
+  let at = 0;
+
+  ranges.forEach((range, i) => {
+    if (range.at > at) parts.push(text.slice(at, range.at));
+    parts.push(
+      <mark key={`${range.at}-${i}`} className="rounded-[3px] bg-primary/20 text-foreground">
+        {text.slice(range.at, range.at + range.length)}
+      </mark>,
+    );
+    at = range.at + range.length;
+  });
+
+  if (at < text.length) parts.push(text.slice(at));
+  return <>{parts}</>;
 }
