@@ -31,6 +31,8 @@
     "targets": [
       "nsis",
       "appimage",
+      "deb",
+      "rpm",
       "dmg",
       "app"
     ],
@@ -41,6 +43,20 @@
       "icons/icon.icns",
       "icons/icon.ico"
     ],
+    "linux": {
+      "deb": {
+        "depends": [
+          "libwebkit2gtk-4.1-0",
+          "libgtk-3-0"
+        ]
+      },
+      "rpm": {
+        "depends": [
+          "webkit2gtk4.1",
+          "gtk3"
+        ]
+      }
+    },
     "createUpdaterArtifacts": true
   },
   "plugins": {

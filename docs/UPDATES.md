@@ -137,14 +137,16 @@ workflow run. If `signature` is empty, `TAURI_SIGNING_PRIVATE_KEY` was not set.
 
 ## What ships, and why
 
-`bundle.targets` in `src-tauri/tauri.conf.json` is pinned to exactly four:
+`bundle.targets` in `src-tauri/tauri.conf.json`:
 
 | Platform | Bundle | Asset |
 |---|---|---|
 | Windows x64 | NSIS | `Git-Gud_<version>_x64-setup.exe` |
 | Windows arm64 | NSIS | `Git-Gud_<version>_arm64-setup.exe` |
-| Linux x86_64 | AppImage | `Git-Gud_<version>_x86_64.AppImage` |
-| Linux aarch64 | AppImage | `Git-Gud_<version>_aarch64.AppImage` |
+| Linux x86_64 | **RPM (preferred)** | `Git-Gud_<version>_x86_64.rpm` |
+| Linux x86_64 | **DEB (preferred)** | `Git-Gud_<version>_x86_64.deb` |
+| Linux x86_64 | AppImage (fallback) | `Git-Gud_<version>_x86_64.AppImage` |
+| Linux aarch64 | RPM / DEB / AppImage | `Git-Gud_<version>_aarch64.{rpm,deb,AppImage}` |
 | macOS | DMG (universal), for install | `Git-Gud_<version>_universal.dmg` |
 | macOS | `.app.tar.gz`, for the updater only | not a user-facing download |
 
@@ -172,12 +174,79 @@ Pinning it is not tidiness:
   learner who installed the `-setup.exe` would have been handed an msi to
   update with. `PLAN.md` had already concluded the msi "adds nothing the NSIS
   does not, except for managed/enterprise deployment".
-- **`.deb`/`.rpm` were never the plan.** `PLAN.md`: "AppImage is the single-file
-  answer ... `.deb`/`.rpm` are per-distro packaging that only pays off if
-  someone is running an apt or dnf repository." The old workflow uploaded a
-  hand-written list of globs that happened to exclude the rpm; now that
-  `tauri-action` uploads everything it builds, an untested rpm would have
-  started appearing on its own.
+### `.deb`/`.rpm` came back in v0.2.2, and why that reversed
+
+Until v0.2.1 this section argued the opposite: *"`.deb`/`.rpm` were never the
+plan — AppImage is the single-file answer."* That was a packaging-convenience
+argument, and it was wrong, because the AppImage does not reliably **run**.
+
+A learner on Fedora 44 (Mesa 26.1.8, WebKitGTK 2.52.5 — a healthy, current
+system) got a blank window from both v0.2.0 and v0.2.1. The AppImage was
+extracted and inspected; the findings:
+
+- It bundles its own `libwebkit2gtk-4.1.so.0` (90 MB), `libgtk-3.so.0`,
+  `libepoxy.so.0` and the wayland/xcb libraries, all built on Ubuntu 22.04.
+- The abort string `Could not create default EGL display: %s. Aborting...`
+  is **inside that bundled WebKit**, not the host's. The host's own matched
+  WebKitGTK 2.52.5 is never loaded.
+- `linuxdeploy-plugin-gtk`'s AppRun hook also forces `GDK_BACKEND=x11` and
+  overrides `GTK_PATH`, so the bundle controls the whole GTK environment.
+
+So the bundled Ubuntu 22.04 graphics stack has to initialise EGL against
+Fedora's Mesa 26, and cannot. This is why no environment variable fixed it:
+`WEBKIT_DISABLE_DMABUF_RENDERER=1`, `GDK_BACKEND=x11` and
+`LIBGL_ALWAYS_SOFTWARE=1` were all tried and all failed at the same point,
+because the failure is in the bundled WebKit's own start-up, not in a
+renderer that can be switched off. **v0.2.1 shipped a fix that could not
+work** — it set `WEBKIT_DISABLE_DMABUF_RENDERER` from inside `run()`, which
+is the same variable, only earlier.
+
+A `.rpm`/`.deb` links against the WebKitGTK the distribution installed and
+tested, which removes the entire class of failure. That is worth per-distro
+packaging, which pure convenience was not. The AppImage stays as the fallback
+for distributions neither package fits.
+
+### Package-managed installs update like everything else
+
+Tauri's Linux updater can only rewrite an AppImage in place, which it finds
+through `$APPIMAGE`. A `.deb`/`.rpm` has no such file, so the plugin cannot
+apply an update to one. Left there, Linux would have been the single platform
+where updating meant going and running `dnf` by hand.
+
+`src-tauri/src/linux_update.rs` closes that gap. The learner-facing flow is
+identical on every platform — the same button, the same progress ring, the
+same "restart to install" dialog, the same relaunch. Only the two steps
+underneath differ:
+
+| | Tauri-managed (Windows, macOS, AppImage) | Package-managed (`.deb`/`.rpm`) |
+|---|---|---|
+| Check | `latest.json` via the updater plugin | same |
+| Download | plugin, with progress events | `curl`/`wget` to a temp file, progress polled from the partial file |
+| Verify | plugin checks minisign | `linux_update.rs` checks minisign, **same key** |
+| Install | plugin swaps the bundle | `pkexec dnf/apt-get install` (falls back to `sudo -n`) |
+| Restart | `relaunch()` | same |
+
+`install_kind` decides which path applies by asking `rpm -qf` / `dpkg -S`
+whether a package actually owns the running executable, rather than guessing
+from its path — a binary hand-copied to `/usr/bin` reports `other` and is
+offered no install it cannot perform.
+
+Three things are load-bearing:
+
+- **The package is verified before install.** It is handed to a package
+  manager running as root, so HTTPS alone is not the bar. The public key is
+  read from this app's own config inside Rust, never passed in by the caller —
+  a caller-supplied key would verify nothing.
+- **`tauri-action` does not sign `.deb`/`.rpm`** (it signs only
+  "updater-enabled" targets). The *Sign and publish the Linux packages* step
+  in `release.yml` signs them with the same key and uploads `<asset>.sig`
+  beside each one. Without that step the packaged update path fails closed —
+  it refuses to install rather than installing something unverified.
+- **The package URL is built, not read from `latest.json`.** That manifest
+  only ever names the AppImage for `linux-x86_64`, because that is the only
+  Linux artifact the plugin understands. The package URL therefore comes from
+  the same naming contract `install.sh` and `assetNamePattern` share — which
+  is why that contract is listed below as something three places depend on.
 
 Asset names come from `assetNamePattern` in the workflow rather than from the
 bundler — see the comment on the build matrix for why the AppImage in
@@ -189,7 +258,8 @@ has to be made in all of them or the others break silently:
 | File | Builds the name for |
 |---|---|
 | `.github/workflows/release.yml` | every asset, via `assetNamePattern` |
-| `site/install.sh` | `..._x86_64.AppImage`, `..._aarch64.AppImage`, `..._universal.app.tar.gz` |
+| `site/install.sh` | `..._<arch>.rpm`, `..._<arch>.deb`, `..._<arch>.AppImage`, `..._universal.app.tar.gz` |
+| `src/lib/updater.ts` | `..._<arch>.rpm`, `..._<arch>.deb` and their `.sig`, for in-app updates |
 | `site/install.ps1` | `..._x64-setup.exe`, `..._arm64-setup.exe` |
 
 The install scripts fail loudly when an asset 404s, so a mismatch is not

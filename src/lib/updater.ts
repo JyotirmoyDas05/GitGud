@@ -1,5 +1,7 @@
 import { useSyncExternalStore } from "react";
 import { getVersion } from "@tauri-apps/api/app";
+import { invoke } from "@tauri-apps/api/core";
+import { listen } from "@tauri-apps/api/event";
 import { relaunch } from "@tauri-apps/plugin-process";
 import { check, type Update } from "@tauri-apps/plugin-updater";
 
@@ -43,7 +45,20 @@ export interface UpdateState {
   checkedAt: number | null;
   message: string | null;
   errorContext: ErrorContext | null;
+  /** How this copy was installed — see `src-tauri/src/linux_update.rs`. */
+  installKind: InstallKind;
 }
+
+/**
+ * `bundled` means Tauri's own updater applies (Windows, macOS); `appimage`
+ * likewise. `rpm`/`deb` are applied by `linux_update.rs` instead, through the
+ * distribution's package manager. `other` is an install neither can touch —
+ * a binary someone copied into place by hand.
+ */
+export type InstallKind = "bundled" | "appimage" | "rpm" | "deb" | "other";
+
+/** True when this install updates through a package manager, not Tauri. */
+export const isPackaged = (kind: InstallKind) => kind === "rpm" || kind === "deb";
 
 /** What pressing the button does right now. */
 export type UpdateAction = "check" | "download" | "install" | "none";
@@ -57,6 +72,7 @@ const EMPTY: UpdateState = {
   checkedAt: null,
   message: null,
   errorContext: null,
+  installKind: "bundled",
 };
 
 // --- derived, and therefore testable without a store -----------------------
@@ -70,6 +86,12 @@ const EMPTY: UpdateState = {
  * on disk — the bytes are still there.
  */
 export function updateAction(state: UpdateState): UpdateAction {
+  // An install nothing can replace — a loose binary someone copied into
+  // place. It can still be told a new version exists; it cannot be updated.
+  if (state.installKind === "other" && (state.status === "available" || state.status === "downloaded")) {
+    return "none";
+  }
+
   switch (state.status) {
     case "available":
       return "download";
@@ -94,6 +116,10 @@ export function isUpdateBusy(state: UpdateState): boolean {
 }
 
 export function updateLabel(state: UpdateState): string {
+  if (state.installKind === "other" && state.availableVersion && state.status === "available") {
+    return `Version ${state.availableVersion} is available. This copy was not installed by a package, so update it the way you put it here.`;
+  }
+
   switch (state.status) {
     case "unsupported":
       return "Updates are not available in this build.";
@@ -184,6 +210,15 @@ export async function initUpdates(): Promise<void> {
     set({ status: "idle" });
   }
 
+  // How an update gets applied is a property of how this copy was installed,
+  // so it is read once rather than per check.
+  try {
+    set({ installKind: await invoke<InstallKind>("install_kind") });
+  } catch {
+    // Older shell, or the command is missing: assume Tauri's own updater,
+    // which is what every build before .deb/.rpm shipped already did.
+  }
+
   await checkForUpdate({ silent: true });
 }
 
@@ -239,6 +274,11 @@ export async function downloadUpdate(): Promise<void> {
 
   set({ status: "downloading", downloadPercent: 0, message: null, errorContext: null });
 
+  if (isPackaged(cache.installKind)) {
+    await downloadPackage();
+    return;
+  }
+
   let total = 0;
   let received = 0;
 
@@ -280,13 +320,80 @@ export async function downloadUpdate(): Promise<void> {
  * one action in the app that closes the window out from under them.
  */
 export async function installUpdate(): Promise<void> {
-  if (!pending) return;
+  if (!pending && !packagePath) return;
 
   try {
-    await pending.install();
+    if (isPackaged(cache.installKind)) {
+      if (!packagePath) throw new Error("the downloaded package is no longer available");
+      await invoke("install_package", { path: packagePath, kind: cache.installKind });
+    } else {
+      await pending!.install();
+    }
     await relaunch();
   } catch (e) {
     set({ status: "error", message: asMessage(e), errorContext: "install" });
+  }
+}
+
+// --- the .deb/.rpm path ----------------------------------------------------
+
+/**
+ * Where the verified package landed, between the download press and the
+ * install press. Mirrors what `pending` is for a Tauri-managed update.
+ */
+let packagePath: string | null = null;
+
+/**
+ * The release asset for this machine's package format.
+ *
+ * `latest.json` only ever names the AppImage for Linux, because that is the
+ * only Linux artifact Tauri's updater can apply — so the package URL is built
+ * from the same naming contract `install.sh` and `assetNamePattern` already
+ * share. docs/UPDATES.md lists every place that contract is written down.
+ */
+function packageUrl(version: string, kind: InstallKind, arch: string): string {
+  return `https://github.com/JyotirmoyDas05/GitGud/releases/download/v${version}/Git-Gud_${version}_${arch}.${kind}`;
+}
+
+async function downloadPackage(): Promise<void> {
+  const version = cache.availableVersion;
+  if (!version) return;
+
+  const stop = await listen<{ received: number; total: number }>(
+    "linux-update://progress",
+    ({ payload }) => {
+      // No Content-Length means nothing honest to divide by, so the ring
+      // spins instead of showing an invented percentage — same rule as the
+      // Tauri-managed path above.
+      set({
+        downloadPercent: payload.total > 0 ? (payload.received / payload.total) * 100 : null,
+      });
+    },
+  );
+
+  try {
+    const arch = (await invoke<string>("update_arch").catch(() => "x86_64")) || "x86_64";
+    const url = packageUrl(version, cache.installKind, arch);
+
+    // The signature sits beside the package in the same release, exactly as
+    // it does for every other bundle. Rust verifies it before installing;
+    // fetching it here keeps the HTTP in one place.
+    const response = await fetch(`${url}.sig`);
+    if (!response.ok) throw new Error(`no signature published for ${url.split("/").pop()}`);
+    const signature = (await response.text()).trim();
+
+    packagePath = await invoke<string>("download_package", { url, signature });
+    set({ status: "downloaded", downloadPercent: 100 });
+  } catch (e) {
+    packagePath = null;
+    set({
+      status: "error",
+      message: asMessage(e),
+      errorContext: "download",
+      downloadPercent: null,
+    });
+  } finally {
+    stop();
   }
 }
 

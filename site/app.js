@@ -136,12 +136,18 @@
     var labels = {
       win: "Download for Windows",
       mac: "Download for macOS",
-      linux: "Download for Linux"
+      linux: "Choose your Linux package"
     };
+    /* Linux is deliberately absent: the right download depends on the
+     * distribution (.rpm, .deb, or the AppImage as a last resort) and a
+     * browser cannot tell us which one this is. Deep-linking the AppImage —
+     * which is what this used to do — handed Fedora visitors the one build
+     * that cannot start on their machine. With no entry here the button
+     * keeps its href of download.html, where the packages are listed and
+     * explained. */
     var suffixes = {
       win: ["_x64-setup.exe"],
-      mac: ["_universal.dmg"],
-      linux: ["_x86_64.AppImage", "_amd64.AppImage"]
+      mac: ["_universal.dmg"]
     };
     var pairs = [
       ["download-btn", "download-label"],
@@ -156,6 +162,7 @@
       .then(function (release) {
         var url = null;
         var list = suffixes[os];
+        if (!list) return; // Linux: stay pointed at the download page.
         for (var i = 0; i < list.length && !url; i++) {
           var match = (release.assets || []).find(function (a) {
             return a.name && a.name.endsWith(list[i]);

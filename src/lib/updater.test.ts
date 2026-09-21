@@ -27,6 +27,7 @@ function state(over: Partial<UpdateState> = {}): UpdateState {
     checkedAt: null,
     message: null,
     errorContext: null,
+    installKind: "bundled",
     ...over,
   };
 }
@@ -84,6 +85,23 @@ describe("updateAction", () => {
 
   it("does nothing outside a packaged app", () => {
     expect(updateAction(state({ status: "unsupported" }))).toBe("none");
+  });
+
+  it("offers nothing to press on a hand-placed copy nothing can replace", () => {
+    const managed = { installKind: "other", availableVersion: "0.3.0" } as const;
+    expect(updateAction(state({ ...managed, status: "available" }))).toBe("none");
+    expect(updateAction(state({ ...managed, status: "downloaded" }))).toBe("none");
+    // Checking is still fine — it changes nothing on disk.
+    expect(updateAction(state({ installKind: "other", status: "idle" }))).toBe("check");
+  });
+
+  it("drives .deb/.rpm through the same two presses as every other platform", () => {
+    // The whole point of linux_update.rs: a packaged install must not become
+    // a second-class update experience. Same actions, different plumbing.
+    for (const kind of ["rpm", "deb"] as const) {
+      expect(updateAction(state({ installKind: kind, status: "available" }))).toBe("download");
+      expect(updateAction(state({ installKind: kind, status: "downloaded" }))).toBe("install");
+    }
   });
 });
 

@@ -1,8 +1,9 @@
-import { useCallback, useState } from "react";
+import { type ComponentPropsWithoutRef, useCallback, useState } from "react";
 import { Popover } from "@base-ui/react/popover";
-import { confirm } from "@tauri-apps/plugin-dialog";
 import { ArrowDownToLine, Check, RefreshCw, RotateCw, TriangleAlert } from "lucide-react";
+import ReactMarkdown, { type Components } from "react-markdown";
 
+import { requestConfirmDialog } from "~/lib/confirmDialog";
 import {
   checkForUpdate,
   downloadUpdate,
@@ -45,8 +46,9 @@ export function UpdateButton() {
         await downloadUpdate();
       } else if (action === "install") {
         // The one action in the app that takes the window away, so it asks
-        // first and says what it will cost.
-        if (await confirm(installConfirmation(state), { title: "Restart to update?" })) {
+        // first and says what it will cost. A themed dialog, not the OS's
+        // own message box — see lib/confirmDialog.ts.
+        if (await requestConfirmDialog(installConfirmation(state))) {
           await installUpdate();
         }
       } else if (action === "check") {
@@ -104,10 +106,11 @@ export function UpdateButton() {
             {state.notes && (state.status === "available" || state.status === "downloaded") && (
               // Straight from the GitHub Release body, which this project
               // already generates from CHANGELOG.md — so what a learner reads
-              // here is the same text as the release page.
-              <p className="mt-2 max-h-40 overflow-y-auto whitespace-pre-line text-muted-foreground text-xs leading-relaxed">
-                {state.notes.trim()}
-              </p>
+              // here is the same text as the release page, rendered rather
+              // than shown as raw `###`/`` ` `` markup.
+              <div className="mt-2 max-h-40 space-y-1.5 overflow-y-auto text-muted-foreground text-xs leading-relaxed [&_p+ul]:-mt-1">
+                <ReactMarkdown components={CHANGELOG_COMPONENTS}>{state.notes.trim()}</ReactMarkdown>
+              </div>
             )}
 
             {state.status === "error" && state.message && (
@@ -118,6 +121,47 @@ export function UpdateButton() {
       </Popover.Portal>
     </Popover.Root>
   );
+}
+
+/**
+ * After T3 Code's `ChatMarkdown`/`PullRequestMarkdown` (MIT): a real
+ * CommonMark engine (`react-markdown`) rather than a bespoke parser, so
+ * escaping, nesting and edge cases are the library's problem, not a
+ * hand-rolled regex's. `ChatMarkdown` itself is 3000+ lines wired to Effect,
+ * TanStack Router and `@t3tools/*` workspace packages — PLAN.md §8 already
+ * rules out copying files like that — so this takes the one piece that
+ * generalises: `react-markdown` plus a small `components` override, sized to
+ * what `generate-changelog.mjs` actually emits (headings, bullets, inline
+ * code, links, emphasis — no tables or images, so no `remark-gfm`).
+ *
+ * Every block collapses to the popover's own type scale rather than real
+ * heading sizes — a `### Added` in a 288px-wide popup has no room to look
+ * like a section, only to read as a slightly heavier line above its list.
+ */
+const CHANGELOG_COMPONENTS: Components = {
+  h1: HeadingLine,
+  h2: HeadingLine,
+  h3: HeadingLine,
+  h4: HeadingLine,
+  h5: HeadingLine,
+  h6: HeadingLine,
+  ul: (props) => <ul className="list-disc space-y-1 pl-4" {...props} />,
+  ol: (props) => <ol className="list-decimal space-y-1 pl-4" {...props} />,
+  code: (props) => (
+    <code className="rounded bg-foreground/10 px-1 py-0.5 font-mono text-[0.9em]" {...props} />
+  ),
+  a: (props) => (
+    <a
+      {...props}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="underline underline-offset-2 hover:text-foreground"
+    />
+  ),
+};
+
+function HeadingLine(props: ComponentPropsWithoutRef<"h1">) {
+  return <p className="font-medium text-foreground first:mt-0" {...props} />;
 }
 
 const RING_RADIUS = 11;

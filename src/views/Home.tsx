@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Check, RotateCcw } from "lucide-react";
-import { confirm } from "@tauri-apps/plugin-dialog";
 
 import { CHALLENGES, challengeTitle, grouped, moduleTitle } from "~/challenges";
+import { requestConfirmDialog } from "~/lib/confirmDialog";
 import { nextIncomplete, useProgress } from "~/lib/progress";
 import { pixelTransition } from "~/lib/pixelTransition";
 import { href, navigate } from "~/lib/router";
@@ -17,7 +17,10 @@ export function Home({ locale }: { locale: string }) {
   const [launching, setLaunching] = useState(false);
 
   async function onClearAll() {
-    const yes = await confirm(t.homeClearMsg, { title: t.homeClearTitle, kind: "warning" });
+    const yes = await requestConfirmDialog(t.homeClearMsg, {
+      title: t.homeClearTitle,
+      variant: "destructive",
+    });
     if (yes) clearAll();
   }
 

@@ -211,3 +211,39 @@ jobs:
           # without this, Windows clients would silently start updating
           # through a different installer than the one they installed from.
           updaterJsonPreferNsis: true
+
+      # tauri-action signs only the bundles Tauri calls "updater-enabled"
+      # (app, appimage, msi, nsis), so the .deb/.rpm arrive unsigned. They
+      # still need a signature, because `linux_update.rs` verifies one before
+      # handing the file to dnf/apt as root — see docs/UPDATES.md. This signs
+      # them with the same key and uploads `<asset>.sig` beside the package,
+      # named to match the asset tauri-action just uploaded rather than the
+      # bundler's own filename.
+      - name: Sign and publish the Linux packages
+        if: startsWith(matrix.name, 'linux') && startsWith(github.ref, 'refs/tags/v')
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY_PASSWORD }}
+        run: |
+          set -euo pipefail
+          version="${GITHUB_REF_NAME#v}"
+          arch="${{ matrix.name == 'linux' && 'x86_64' || 'aarch64' }}"
+
+          shopt -s nullglob
+          for ext in rpm deb; do
+            files=(src-tauri/target/release/bundle/$ext/*.$ext)
+            if [ ${#files[@]} -eq 0 ]; then
+              echo "::error::no .$ext was built, but bundle.targets asks for one"
+              exit 1
+            fi
+            pkg="${files[0]}"
+            asset="Git-Gud_${version}_${arch}.${ext}"
+
+            npx tauri signer sign "$pkg"
+            # `tauri signer sign` writes <file>.sig next to the input.
+            mv "$pkg.sig" "$asset.sig"
+            gh release upload "$GITHUB_REF_NAME" "$asset.sig" --clobber --repo "$GITHUB_REPOSITORY"
+            echo "signed and uploaded $asset.sig"
+          done

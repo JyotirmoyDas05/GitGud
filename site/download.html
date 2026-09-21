@@ -107,28 +107,59 @@
               <span class="you-badge">This device</span>
             </div>
             <div class="download-cards">
+              <!-- Native packages come first on purpose: they link against
+                   the distribution's own WebKitGTK, while the AppImage
+                   carries its own and cannot start on a current Fedora.
+                   See docs/UPDATES.md. -->
+              <a class="download-card" data-asset="_x86_64.rpm" href="https://github.com/JyotirmoyDas05/GitGud/releases">
+                <img src="assets/mark.png" alt="" width="28" height="28" loading="lazy" />
+                <span class="card-text">
+                  <span class="card-arch">RPM · x86_64</span>
+                  <span class="card-format">Fedora, RHEL, openSUSE</span>
+                </span>
+              </a>
+              <a class="download-card" data-asset="_x86_64.deb,_amd64.deb" href="https://github.com/JyotirmoyDas05/GitGud/releases">
+                <img src="assets/mark.png" alt="" width="28" height="28" loading="lazy" />
+                <span class="card-text">
+                  <span class="card-arch">DEB · x86_64</span>
+                  <span class="card-format">Debian, Ubuntu, Mint</span>
+                </span>
+              </a>
+              <a class="download-card" data-asset="_aarch64.rpm" href="https://github.com/JyotirmoyDas05/GitGud/releases">
+                <img src="assets/mark.png" alt="" width="28" height="28" loading="lazy" />
+                <span class="card-text">
+                  <span class="card-arch">RPM · ARM64</span>
+                  <span class="card-format">Fedora, RHEL, openSUSE</span>
+                </span>
+              </a>
+              <a class="download-card" data-asset="_aarch64.deb,_arm64.deb" href="https://github.com/JyotirmoyDas05/GitGud/releases">
+                <img src="assets/mark.png" alt="" width="28" height="28" loading="lazy" />
+                <span class="card-text">
+                  <span class="card-arch">DEB · ARM64</span>
+                  <span class="card-format">Debian, Ubuntu, Mint</span>
+                </span>
+              </a>
               <a class="download-card" data-asset="_x86_64.AppImage,_amd64.AppImage" href="https://github.com/JyotirmoyDas05/GitGud/releases">
                 <img src="assets/mark.png" alt="" width="28" height="28" loading="lazy" />
                 <span class="card-text">
-                  <span class="card-arch">x86_64</span>
-                  <span class="card-format">AppImage</span>
+                  <span class="card-arch">AppImage · x86_64</span>
+                  <span class="card-format">Portable, no install</span>
                 </span>
               </a>
-              <!-- No .deb card: v0.1.0 shipped one, v0.2.0 does not, and
-                   `bundle.targets` is pinned to AppImage on Linux on purpose
-                   (see docs/UPDATES.md). The card outlived the package and
-                   matched no asset, so app.js quietly fell it back to the
-                   releases page — a Debian/Ubuntu download button that
-                   advertised a file nobody builds. -->
               <a class="download-card" data-asset="_aarch64.AppImage,_arm64.AppImage" href="https://github.com/JyotirmoyDas05/GitGud/releases">
                 <img src="assets/mark.png" alt="" width="28" height="28" loading="lazy" />
                 <span class="card-text">
-                  <span class="card-arch">ARM64</span>
-                  <span class="card-format">AppImage</span>
+                  <span class="card-arch">AppImage · ARM64</span>
+                  <span class="card-format">Portable, no install</span>
                 </span>
               </a>
             </div>
-            <p class="platform-note">One file, no install, no root. <code>chmod +x</code> and run.</p>
+            <p class="platform-note">
+              Take the package your distribution uses: it installs through <code>dnf</code> or
+              <code>apt</code> and runs on the WebKitGTK you already have. The AppImage needs no
+              install at all, but it carries its own copy of WebKitGTK, which does not start on some
+              current distributions — Fedora among them.
+            </p>
           </section>
         </div>
 
@@ -176,8 +207,9 @@
             </button>
           </div>
           <p class="cli-note">
-            On Linux this installs the AppImage — the same single file on every distribution, so there is no
-            apt, dnf, pacman or zypper branch to get wrong. Read the scripts first if you would rather:
+            On Linux this picks the right package for your distribution — <code>.rpm</code> on Fedora and
+            friends, <code>.deb</code> on Debian and Ubuntu — and falls back to the AppImage only where
+            neither fits. Read the scripts first if you would rather:
             <a href="install.sh">install.sh</a>, <a href="install.ps1">install.ps1</a>.
           </p>
         </section>

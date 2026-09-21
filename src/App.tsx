@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { listen } from "@tauri-apps/api/event";
 import { TriangleAlert } from "lucide-react";
 
+import { ConfirmDialogHost } from "~/components/ConfirmDialogHost";
 import { Shell } from "~/components/Shell";
 import { FALLBACK_LOCALE, resolveLocale } from "~/lib/content";
 import { gitVersion } from "~/lib/git";
@@ -112,6 +113,8 @@ export default function App() {
       {route.name === "challenge" && <ChallengeView id={route.id} locale={locale} />}
       {route.name === "page" && <PageView page={route.page} locale={locale} />}
       {route.name === "finale" && <Finale locale={locale} />}
+
+      <ConfirmDialogHost />
     </Shell>
   );
 }

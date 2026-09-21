@@ -25,6 +25,11 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 tauri-plugin-updater = "2.12.0"
 tauri-plugin-process = "2.3.1"
+# Both already compile as part of tauri-plugin-updater; declaring them lets
+# `linux_update.rs` verify a .deb/.rpm with the same key and the same code
+# path the updater uses for every other bundle, without adding a build.
+minisign-verify = "0.2"
+base64 = "0.22"
 
 
 # Read the optimization guideline for more details: https://tauri.app/concept/size/#cargo-configuration

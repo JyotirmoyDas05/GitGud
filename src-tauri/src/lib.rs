@@ -1,4 +1,5 @@
 mod git;
+mod linux_update;
 mod menu;
 mod shell;
 mod store;
@@ -121,6 +122,10 @@ pub fn run() {
         .invoke_handler(tauri::generate_handler![
             run_git,
             git_version,
+            linux_update::install_kind,
+            linux_update::update_arch,
+            linux_update::download_package,
+            linux_update::install_package,
             list_dir,
             home_dir,
             shell_history,
