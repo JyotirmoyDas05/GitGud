@@ -67,6 +67,23 @@ generator.
   that needed one, including the terminal challenges, which want a home
   directory and a practice folder
 
+## [0.2.2] - 2026-09-22
+
+### Added
+
+- `curl ... | sh` prefers the native package for the distribution it finds (`dnf` → `.rpm`, `apt` → `.deb`) and installs it through the package manager so dependencies resolve, falling back to the AppImage where there is no usable sudo. `GITGUD_FORMAT` overrides the choice
+- In-app updates work on `.deb`/`.rpm` installs, with the same button, ring, confirmation dialog and restart as every other platform (`src-tauri/src/linux_update.rs`). Tauri's updater can only rewrite an AppImage, so the download, signature check and `pkexec dnf/apt install` are done here instead — the learner sees no difference. The package is verified against the same minisign key as every other bundle before it is handed to a package manager running as root, and the release workflow now signs the `.rpm`/`.deb` and publishes `<asset>.sig` beside them
+- `install_kind` asks `rpm -qf`/`dpkg -S` whether a package really owns the running binary rather than guessing from its path, so a hand-copied copy is told honestly that it cannot be updated in place
+- A themed confirmation dialog replaces `@tauri-apps/plugin-dialog`'s native OS message box, which rendered as a light-grey system alert in the middle of a dark app. Used by both "restart to update" and "clear all progress"
+- Release notes in the update popover render as Markdown rather than raw `###` and backticks
+
+### Fixed
+
+- The AppImage white-screens on current distributions, and v0.2.1's fix could not have worked. It bundles its own `libwebkit2gtk-4.1.so.0` (90 MB), `libgtk-3.so.0` and `libepoxy.so.0` built on Ubuntu 22.04, and those shadow whatever the host ships. Extracting the published AppImage shows the abort string `Could not create default EGL display: %s. Aborting...` *inside the bundled WebKit* — so on Fedora 44 the host's own healthy WebKitGTK 2.52.5 and Mesa 26 are never loaded. That is also why no environment variable helped: `WEBKIT_DISABLE_DMABUF_RENDERER` only switches off a renderer after WebKit starts, and this fails during start-up. v0.2.1 set that same variable from inside `run()`, which was the same thing, only earlier
+- Linux now ships `.rpm` and `.deb`, which link against the WebKitGTK the distribution installed and tested, removing the entire class of failure. Verified by building the packages in an ubuntu:22.04 container and installing them in a fedora:44 one: dependencies resolve to webkit2gtk4.1-2.52.5 and gtk3-3.24.52, nothing is bundled, and the installed binary resolves libwebkit2gtk, libgtk-3 and libepoxy from /lib64 with no unresolved libraries
+- The site's hero "Download for Linux" button deep-linked the AppImage — the busiest path on the page, handing Fedora visitors the one build that cannot start. A browser cannot tell which distribution it is looking at, so the button now leads to the download page instead of guessing
+- The terminal-install note claimed Linux "installs the AppImage — the same single file on every distribution, so there is no apt, dnf, pacman or zypper branch to get wrong", which is now the opposite of what happens
+
 ## [0.2.1] - 2026-09-21
 
 ### Added
