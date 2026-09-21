@@ -67,6 +67,26 @@ generator.
   that needed one, including the terminal challenges, which want a home
   directory and a practice folder
 
+## [0.2.3] - 2026-09-22
+
+### Added
+
+- Every matched word in a result is highlighted now, not just the first
+- Challenge titles are searchable, so "forks and clones" or "githubbin" finds their challenge; titles were scored but never actually reachable before
+- Plurals match both ways ("repositories" finds "repository"), guarded to terms of four or more characters so short commands like `ls` are untouched
+- A query with one unknown word falls back to the words it does know instead of returning nothing, and a query that is entirely a typo falls back to a one-edit match — each pass only runs if the one before it found nothing
+- Stopwords drop out of a query that also has a real word, so "what is a branch" ranks on "branch" instead of on whichever section has the most "a"s
+- Accent folding, so the eight translated locales can be searched in their own spelling; length-preserving, so highlight offsets stay valid
+- Terms sitting next to each other in the text now outrank the same terms scattered across a page, and one challenge can contribute at most three rows so it cannot fill the whole result list
+
+### Fixed
+
+- `bulletsIn` now tracks whether it is still inside a bullet's wrapped continuation, and a blank line clears that instead of being ignored
+- `bulletsIn` is exported and `main()` only runs when the file is executed directly, so this logic can be unit tested without shelling out to git
+- The result snippet opened on the first query word rather than on the phrase, and was trimmed after its highlight offset was computed, which could slide the highlight off the word entirely
+- A satisfied optional check now gets a tick, in a quieter success colour so it still reads as encouragement rather than a gate
+- The suffix is just "optional" now, in every locale, instead of the self-contradicting "optional, not checked"
+
 ## [0.2.2] - 2026-09-22
 
 ### Added
