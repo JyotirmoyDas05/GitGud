@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Everything shipped in Git Gud, release by release." />
+  <link rel="canonical" href="https://jyotirmoydas05.github.io/GitGud/changelog.html" />
+  <meta property="og:title" content="Changelog — Git Gud" />
+  <meta property="og:description" content="Everything shipped in Git Gud, release by release." />
+  <meta property="og:image" content="assets/app-home.jpg" />
+  <link rel="preload" href="fonts/dm-sans-latin.woff2" as="font" type="font/woff2" crossorigin="anonymous" />
+  <link rel="icon" href="assets/mark.png" />
+  <link rel="stylesheet" href="styles.css" />
+  <title>Changelog — Git Gud</title>
+</head>
+<body>
+  <div class="page">
+    <nav class="nav">
+      <div class="nav-inner">
+        <a href="index.html" class="nav-brand" aria-label="Git Gud home">
+          <img src="assets/mark.png" alt="" width="22" height="22" />
+          <span class="nav-brand-name">Git Gud</span>
+        </a>
+        <div class="nav-right">
+          <a class="nav-link" href="changelog.html">Changelog</a>
+          <a class="nav-link" href="download.html">Download</a>
+          <a
+            class="nav-stars"
+            href="https://github.com/JyotirmoyDas05/GitGud"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Star Git Gud on GitHub"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M12 2.3l2.9 5.88 6.49.94-4.7 4.58 1.11 6.47L12 17.12l-5.8 3.05 1.11-6.47-4.7-4.58 6.49-.94L12 2.3z"/>
+            </svg>
+            <span id="stars-label"><strong>Star</strong>&nbsp;on GitHub</span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <main class="main">
+      <div class="cl-page">
+        <header class="cl-head">
+          <span class="eyebrow" data-rise>Changelog</span>
+          <h1 data-rise style="--d:90ms">Everything shipped, in order.</h1>
+          <p data-rise style="--d:160ms">
+            Every entry below comes straight from the commit that made it — see
+            <a href="https://github.com/JyotirmoyDas05/GitGud/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener noreferrer">CONTRIBUTING.md</a>
+            for why. The full text, unabridged, is in
+            <a href="https://github.com/JyotirmoyDas05/GitGud/blob/main/CHANGELOG.md" target="_blank" rel="noopener noreferrer">CHANGELOG.md<span aria-hidden="true"> ↗</span></a>
+            and on <a href="https://github.com/JyotirmoyDas05/GitGud/releases" target="_blank" rel="noopener noreferrer">GitHub Releases<span aria-hidden="true"> ↗</span></a>.
+          </p>
+        </header>
+
+        <ol class="cl-timeline">
+          <li class="cl-entry" data-rise style="--d:200ms">
+            <div class="cl-dot"></div>
+            <div class="cl-body tile">
+              <div class="cl-meta">
+                <span class="cl-version">v0.2.3</span>
+                <span class="cl-date">Sept 22, 2026</span>
+              </div>
+              <h2>Search that finds what you meant.</h2>
+              <ul class="cl-changes">
+                <li><span class="cl-tag cl-tag--added">Added</span>Every matched word is highlighted, not just the first, and challenge titles are finally searchable — "githubbin" now finds its challenge.</li>
+                <li><span class="cl-tag cl-tag--added">Added</span>Plural matching, typo tolerance, stopword handling, and accent folding for all nine locales.</li>
+                <li><span class="cl-tag cl-tag--fixed">Fixed</span>A satisfied optional check now gets a tick, and result snippets highlight the right word.</li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="cl-entry" data-rise style="--d:240ms">
+            <div class="cl-dot"></div>
+            <div class="cl-body tile">
+              <div class="cl-meta">
+                <span class="cl-version">v0.2.2</span>
+                <span class="cl-date">Sept 22, 2026</span>
+              </div>
+              <h2>Linux gets a real installer.</h2>
+              <ul class="cl-changes">
+                <li><span class="cl-tag cl-tag--added">Added</span><code>curl | sh</code> now installs the native <code>.deb</code>/<code>.rpm</code> for your distribution through its package manager, falling back to an AppImage only when it has to.</li>
+                <li><span class="cl-tag cl-tag--added">Added</span>In-app updates work on <code>.deb</code>/<code>.rpm</code> installs, signed and verified the same way as every other platform.</li>
+                <li><span class="cl-tag cl-tag--added">Added</span>A themed confirmation dialog replaces the native OS alert for restart-to-update and clear-progress.</li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="cl-entry" data-rise style="--d:280ms">
+            <div class="cl-dot"></div>
+            <div class="cl-body tile">
+              <div class="cl-meta">
+                <span class="cl-version">v0.2.1</span>
+                <span class="cl-date">Sept 21, 2026</span>
+              </div>
+              <h2>One-line install, and a white-screen fix.</h2>
+              <ul class="cl-changes">
+                <li><span class="cl-tag cl-tag--added">Added</span><code>curl … | sh</code> and <code>irm … | iex</code> one-line installs for macOS, Linux and Windows, resolved straight from the updater manifest.</li>
+                <li><span class="cl-tag cl-tag--added">Added</span>The hero now shows the real home screen, with a parallax starfield and floating Git/GitHub marks.</li>
+                <li><span class="cl-tag cl-tag--fixed">Fixed</span>A WebKitGTK renderer crash that white-screened the app on a good number of Linux machines, hardest inside the AppImage.</li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="cl-entry" data-rise style="--d:320ms">
+            <div class="cl-dot"></div>
+            <div class="cl-body tile">
+              <div class="cl-meta">
+                <span class="cl-version">v0.2.0</span>
+                <span class="cl-date">Sept 20, 2026</span>
+              </div>
+              <h2>Two new modules, before Git even starts.</h2>
+              <ul class="cl-changes">
+                <li><span class="cl-tag cl-tag--added">Added</span><strong>The Terminal</strong> and <strong>Files &amp; Folders</strong> — five challenges verified against your real shell history and filesystem, not a checkbox.</li>
+                <li><span class="cl-tag cl-tag--added">Added</span>This install website, a redesigned sidebar, in-app self-updates, and a changelog generated straight from commit messages.</li>
+                <li><span class="cl-tag cl-tag--fixed">Fixed</span>macOS builds that silently never offered an update, failing Linux ARM builds, and a stale pass/fail list after navigating challenges.</li>
+              </ul>
+            </div>
+          </li>
+
+          <li class="cl-entry" data-rise style="--d:360ms">
+            <div class="cl-dot"></div>
+            <div class="cl-body tile">
+              <div class="cl-meta">
+                <span class="cl-version">v0.1.0</span>
+                <span class="cl-date">Sept 19, 2026</span>
+              </div>
+              <h2>Initial release.</h2>
+              <ul class="cl-changes">
+                <li><span class="cl-tag cl-tag--added">Added</span>11 interactive Git &amp; GitHub challenges, checked against real Git and GitHub state, with a live end-to-end verification engine.</li>
+                <li><span class="cl-tag cl-tag--added">Added</span>9 locales, a mascot picker, command palette, and installers for Windows, macOS and Linux.</li>
+              </ul>
+            </div>
+          </li>
+        </ol>
+
+        <p class="releases-link" data-rise style="--d:400ms">
+          Older history and every raw commit are on the
+          <a href="https://github.com/JyotirmoyDas05/GitGud/releases" target="_blank" rel="noopener noreferrer">
+            GitHub releases page<span aria-hidden="true"> ↗</span>
+          </a>
+        </p>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="assets/mark.png" alt="" width="20" height="20" loading="lazy" />
+          <span>© 2026 <a href="https://thefreecodesyndicate.github.io/fcs-site/" target="_blank" rel="noopener noreferrer" style="text-decoration:underline"> Free Code Syndicate</a> · A Refreshed port of <a href="https://github.com/jlord/git-it-electron" target="_blank" rel="noopener noreferrer" style="text-decoration:underline">Git-it</a></span>
+        </div>
+        <div class="footer-links">
+          <a href="https://github.com/JyotirmoyDas05/GitGud" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="download.html">Download</a>
+          <a href="https://github.com/JyotirmoyDas05/GitGud/releases" target="_blank" rel="noopener noreferrer">Releases</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

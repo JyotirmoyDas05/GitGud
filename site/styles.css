@@ -610,6 +610,55 @@ html:not([data-platform]) .dl-icon--windows { display: block; }
 .releases-link a { color: var(--fg-muted); text-decoration: underline; text-decoration-color: rgba(161, 161, 170, 0.4); text-underline-offset: 3px; }
 .releases-link a:hover { color: var(--fg); }
 
+/* ── Changelog page ──────────────────────────────────────────
+ * A vertical timeline: one dot + connecting line per release, each
+ * release a tile carrying its own version/date header and a tagged
+ * bullet list (Added/Fixed/Changed), same tag vocabulary CHANGELOG.md
+ * already uses. Bullets here are a curated retelling, not a straight
+ * copy of the (much longer) commit-derived CHANGELOG.md — that file
+ * stays the full record; this page is the scannable one. */
+.cl-page { flex: 1; width: 100%; max-width: 760px; margin: 0 auto; padding: 0 24px 96px; }
+.cl-head { padding: 9vh 0 56px; text-align: center; }
+.cl-head h1 { font-weight: 500; letter-spacing: -0.035em; line-height: 1.1; font-size: clamp(2rem, 4.5vw, 3rem); margin-top: 14px; }
+.cl-head p { color: var(--fg-muted); margin-top: 16px; font-size: 15px; max-width: 52ch; margin-left: auto; margin-right: auto; }
+.cl-head p a { color: var(--fg-muted); text-decoration: underline; text-decoration-color: rgba(161, 161, 170, 0.4); text-underline-offset: 3px; }
+.cl-head p a:hover { color: var(--fg); }
+
+.cl-timeline { list-style: none; position: relative; }
+.cl-timeline::before {
+  content: ""; position: absolute; top: 8px; bottom: 8px; left: 5px;
+  width: 1px; background: var(--border);
+}
+.cl-entry { position: relative; display: flex; gap: 24px; padding-bottom: 28px; }
+.cl-entry:last-child { padding-bottom: 0; }
+.cl-dot {
+  flex-shrink: 0; width: 11px; height: 11px; margin-top: 7px;
+  border-radius: 999px; background: var(--bg); border: 2px solid var(--accent);
+  position: relative; z-index: 1;
+}
+.cl-body { flex: 1; min-width: 0; padding: 22px 26px; }
+.cl-meta { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.cl-version { font-family: var(--font-mono); font-size: 13px; font-weight: 600; color: var(--accent); }
+.cl-date { font-family: var(--font-mono); font-size: 12px; color: var(--fg-faint); }
+.cl-body h2 { font-size: 18px; font-weight: 600; letter-spacing: -0.015em; margin-top: 8px; }
+.cl-changes { list-style: none; margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
+.cl-changes li { font-size: 14px; color: var(--fg-muted); line-height: 1.55; }
+.cl-changes code { font-family: var(--font-mono); font-size: 12.5px; color: var(--fg); background: rgba(255, 255, 255, 0.06); padding: 1px 6px; border-radius: 5px; }
+.cl-changes strong { color: var(--fg); font-weight: 600; }
+.cl-tag {
+  display: inline-block; font-family: var(--font-mono); font-size: 10.5px; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase; border-radius: 5px;
+  padding: 2px 7px; margin-right: 9px; vertical-align: 1px;
+}
+.cl-tag--added { color: var(--accent); background: var(--accent-dim); }
+.cl-tag--fixed { color: var(--ok); background: color-mix(in srgb, var(--ok) 15%, transparent); }
+.cl-tag--changed { color: var(--warn); background: color-mix(in srgb, var(--warn) 15%, transparent); }
+
+@media (max-width: 640px) {
+  .cl-entry { gap: 16px; }
+  .cl-body { padding: 18px 18px; }
+}
+
 /* ── Responsive ── */
 @media (max-width: 900px) {
   .modules { grid-template-columns: 1fr; }
