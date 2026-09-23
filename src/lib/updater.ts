@@ -375,14 +375,12 @@ async function downloadPackage(): Promise<void> {
     const arch = (await invoke<string>("update_arch").catch(() => "x86_64")) || "x86_64";
     const url = packageUrl(version, cache.installKind, arch);
 
-    // The signature sits beside the package in the same release, exactly as
-    // it does for every other bundle. Rust verifies it before installing;
-    // fetching it here keeps the HTTP in one place.
-    const response = await fetch(`${url}.sig`);
-    if (!response.ok) throw new Error(`no signature published for ${url.split("/").pop()}`);
-    const signature = (await response.text()).trim();
-
-    packagePath = await invoke<string>("download_package", { url, signature });
+    // Rust fetches the package *and* its `.sig`. The signature used to be a
+    // `fetch()` from here, and GitHub serves release assets with no CORS
+    // header, so WebKitGTK refused it with "Load failed" and every .rpm/.deb
+    // update failed before it started. Nothing on this path may go through the
+    // web view's network stack.
+    packagePath = await invoke<string>("download_package", { url });
     set({ status: "downloaded", downloadPercent: 100 });
   } catch (e) {
     packagePath = null;

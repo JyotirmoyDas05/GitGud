@@ -102,16 +102,22 @@ fn owns_file(program: &str, args: &[&str], path: &Path) -> bool {
         .unwrap_or(false)
 }
 
-/// Downloads the package to a temporary file and verifies its signature.
+/// Downloads the package and its signature, and verifies one against the other.
 ///
 /// Returns the path it landed on, which is then handed straight back to
 /// [`install_package`]. Splitting the two keeps the app's existing shape: one
 /// press downloads, a second press installs and restarts.
+///
+/// The signature is fetched here, not by the frontend. It used to be a
+/// `fetch()` from the web view, and GitHub serves release assets without an
+/// `Access-Control-Allow-Origin` header, so WebKitGTK refused the response
+/// ("Load failed") and no `.rpm`/`.deb` install could ever update itself.
+/// A native request is not subject to CORS, and it now travels the same way
+/// as the package it vouches for.
 #[tauri::command]
 pub async fn download_package<R: Runtime>(
     app: AppHandle<R>,
     url: String,
-    signature: String,
 ) -> Result<String, String> {
     // The public key is read from this app's own compiled-in config rather
     // than accepted as an argument. A key the caller supplies is no check at
@@ -128,9 +134,7 @@ pub async fn download_package<R: Runtime>(
         .ok_or("no update public key is configured, so nothing can be verified")?
         .to_string();
 
-    tauri::async_runtime::spawn_blocking(move || {
-        download_and_verify(&app, &url, &signature, &public_key)
-    })
+    tauri::async_runtime::spawn_blocking(move || download_and_verify(&app, &url, &public_key))
     .await
     .map_err(|e| format!("download task failed: {e}"))?
 }
@@ -138,13 +142,17 @@ pub async fn download_package<R: Runtime>(
 fn download_and_verify<R: Runtime>(
     app: &AppHandle<R>,
     url: &str,
-    signature: &str,
     public_key: &str,
 ) -> Result<String, String> {
     let name = url.rsplit('/').next().unwrap_or("git-gud-update");
     if !(name.ends_with(".rpm") || name.ends_with(".deb")) {
         return Err(format!("refusing to download {name}: not a .rpm or .deb"));
     }
+
+    // Fetched first: it is a few hundred bytes, and if it is missing there is
+    // no point spending a minute on a package that could never be installed.
+    let signature = fetch_text(&format!("{url}.sig"))
+        .map_err(|e| format!("could not download the signature for {name}: {e}"))?;
 
     let dir = std::env::temp_dir().join("git-gud-update");
     std::fs::create_dir_all(&dir).map_err(|e| format!("could not create {}: {e}", dir.display()))?;
@@ -178,7 +186,7 @@ fn download_and_verify<R: Runtime>(
     let received = std::fs::metadata(&target).map(|m| m.len()).unwrap_or(0);
     let _ = app.emit(PROGRESS_EVENT, Progress { received, total: received });
 
-    verify(&target, signature, public_key).inspect_err(|_| {
+    verify(&target, &signature, public_key).inspect_err(|_| {
         // A package that fails verification is never left on disk where a
         // later step — or a curious learner — could install it anyway.
         let _ = std::fs::remove_file(&target);
@@ -200,6 +208,27 @@ fn downloader(url: &str, target: &Path) -> Result<std::process::Child, String> {
     spawn("curl", vec!["-fsSL", "-o", &target, url])
         .or_else(|_| spawn("wget", vec!["-q", "-O", &target, url]))
         .map_err(|_| "needs curl or wget to download the update, and found neither".to_string())
+}
+
+/// A small text file, into memory, with the same curl-then-wget fallback as
+/// [`downloader`] so the signature and the package can never disagree about
+/// which tool is available.
+fn fetch_text(url: &str) -> Result<String, String> {
+    let run = |program: &str, args: &[&str]| Command::new(program).args(args).output();
+
+    let out = run("curl", &["-fsSL", url])
+        .or_else(|_| run("wget", &["-q", "-O", "-", url]))
+        .map_err(|_| "needs curl or wget, and found neither".to_string())?;
+
+    if !out.status.success() {
+        return Err(format!("the server refused it ({})", out.status));
+    }
+    let text = String::from_utf8(out.stdout).map_err(|_| "it was not text".to_string())?;
+    let text = text.trim();
+    if text.is_empty() {
+        return Err("it was empty".to_string());
+    }
+    Ok(text.to_string())
 }
 
 /// `Content-Length` of the final URL, for the progress ring. Best-effort: a
