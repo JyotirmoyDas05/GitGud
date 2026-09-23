@@ -55,18 +55,27 @@
         </header>
 
         <ol class="cl-timeline">
+<!-- releases:start -->
           <li class="cl-entry" data-rise style="--d:200ms">
             <div class="cl-dot"></div>
             <div class="cl-body tile">
               <div class="cl-meta">
                 <span class="cl-version">v0.2.3</span>
-                <span class="cl-date">Sept 22, 2026</span>
+                <span class="cl-date">Sep 22, 2026</span>
               </div>
-              <h2>Search that finds what you meant.</h2>
               <ul class="cl-changes">
-                <li><span class="cl-tag cl-tag--added">Added</span>Every matched word is highlighted, not just the first, and challenge titles are finally searchable — "githubbin" now finds its challenge.</li>
-                <li><span class="cl-tag cl-tag--added">Added</span>Plural matching, typo tolerance, stopword handling, and accent folding for all nine locales.</li>
-                <li><span class="cl-tag cl-tag--fixed">Fixed</span>A satisfied optional check now gets a tick, and result snippets highlight the right word.</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Every matched word in a result is highlighted now, not just the first</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Challenge titles are searchable, so "forks and clones" or "githubbin" finds their challenge; titles were scored but never actually reachable before</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Plurals match both ways ("repositories" finds "repository"), guarded to terms of four or more characters so short commands like <code>ls</code> are untouched</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>A query with one unknown word falls back to the words it does know instead of returning nothing, and a query that is entirely a typo falls back to a one-edit match — each pass only runs if the one before it found nothing</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Stopwords drop out of a query that also has a real word, so "what is a branch" ranks on "branch" instead of on whichever section has the most "a"s</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Accent folding, so the eight translated locales can be searched in their own spelling; length-preserving, so highlight offsets stay valid</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Terms sitting next to each other in the text now outrank the same terms scattered across a page, and one challenge can contribute at most three rows so it cannot fill the whole result list</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span><code>bulletsIn</code> now tracks whether it is still inside a bullet's wrapped continuation, and a blank line clears that instead of being ignored</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span><code>bulletsIn</code> is exported and <code>main()</code> only runs when the file is executed directly, so this logic can be unit tested without shelling out to git</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>The result snippet opened on the first query word rather than on the phrase, and was trimmed after its highlight offset was computed, which could slide the highlight off the word entirely</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>A satisfied optional check now gets a tick, in a quieter success colour so it still reads as encouragement rather than a gate</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>The suffix is just "optional" now, in every locale, instead of the self-contradicting "optional, not checked"</li>
               </ul>
             </div>
           </li>
@@ -76,13 +85,18 @@
             <div class="cl-body tile">
               <div class="cl-meta">
                 <span class="cl-version">v0.2.2</span>
-                <span class="cl-date">Sept 22, 2026</span>
+                <span class="cl-date">Sep 22, 2026</span>
               </div>
-              <h2>Linux gets a real installer.</h2>
               <ul class="cl-changes">
-                <li><span class="cl-tag cl-tag--added">Added</span><code>curl | sh</code> now installs the native <code>.deb</code>/<code>.rpm</code> for your distribution through its package manager, falling back to an AppImage only when it has to.</li>
-                <li><span class="cl-tag cl-tag--added">Added</span>In-app updates work on <code>.deb</code>/<code>.rpm</code> installs, signed and verified the same way as every other platform.</li>
-                <li><span class="cl-tag cl-tag--added">Added</span>A themed confirmation dialog replaces the native OS alert for restart-to-update and clear-progress.</li>
+              <li><span class="cl-tag cl-tag--added">Added</span><code>curl ... | sh</code> prefers the native package for the distribution it finds (<code>dnf</code> → <code>.rpm</code>, <code>apt</code> → <code>.deb</code>) and installs it through the package manager so dependencies resolve, falling back to the AppImage where there is no usable sudo. <code>GITGUD_FORMAT</code> overrides the choice</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>In-app updates work on <code>.deb</code>/<code>.rpm</code> installs, with the same button, ring, confirmation dialog and restart as every other platform (<code>src-tauri/src/linux_update.rs</code>). Tauri's updater can only rewrite an AppImage, so the download, signature check and <code>pkexec dnf/apt install</code> are done here instead — the learner sees no difference. The package is verified against the same minisign key as every other bundle before it is handed to a package manager running as root, and the release workflow now signs the <code>.rpm</code>/<code>.deb</code> and publishes <code>&lt;asset&gt;.sig</code> beside them</li>
+              <li><span class="cl-tag cl-tag--added">Added</span><code>install_kind</code> asks <code>rpm -qf</code>/<code>dpkg -S</code> whether a package really owns the running binary rather than guessing from its path, so a hand-copied copy is told honestly that it cannot be updated in place</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>A themed confirmation dialog replaces <code>@tauri-apps/plugin-dialog</code>'s native OS message box, which rendered as a light-grey system alert in the middle of a dark app. Used by both "restart to update" and "clear all progress"</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Release notes in the update popover render as Markdown rather than raw <code>###</code> and backticks</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>The AppImage white-screens on current distributions, and v0.2.1's fix could not have worked. It bundles its own <code>libwebkit2gtk-4.1.so.0</code> (90 MB), <code>libgtk-3.so.0</code> and <code>libepoxy.so.0</code> built on Ubuntu 22.04, and those shadow whatever the host ships. Extracting the published AppImage shows the abort string <code>Could not create default EGL display: %s. Aborting...</code> *inside the bundled WebKit* — so on Fedora 44 the host's own healthy WebKitGTK 2.52.5 and Mesa 26 are never loaded. That is also why no environment variable helped: <code>WEBKIT_DISABLE_DMABUF_RENDERER</code> only switches off a renderer after WebKit starts, and this fails during start-up. v0.2.1 set that same variable from inside <code>run()</code>, which was the same thing, only earlier</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>Linux now ships <code>.rpm</code> and <code>.deb</code>, which link against the WebKitGTK the distribution installed and tested, removing the entire class of failure. Verified by building the packages in an ubuntu:22.04 container and installing them in a fedora:44 one: dependencies resolve to webkit2gtk4.1-2.52.5 and gtk3-3.24.52, nothing is bundled, and the installed binary resolves libwebkit2gtk, libgtk-3 and libepoxy from /lib64 with no unresolved libraries</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>The site's hero "Download for Linux" button deep-linked the AppImage — the busiest path on the page, handing Fedora visitors the one build that cannot start. A browser cannot tell which distribution it is looking at, so the button now leads to the download page instead of guessing</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>The terminal-install note claimed Linux "installs the AppImage — the same single file on every distribution, so there is no apt, dnf, pacman or zypper branch to get wrong", which is now the opposite of what happens</li>
               </ul>
             </div>
           </li>
@@ -92,13 +106,19 @@
             <div class="cl-body tile">
               <div class="cl-meta">
                 <span class="cl-version">v0.2.1</span>
-                <span class="cl-date">Sept 21, 2026</span>
+                <span class="cl-date">Sep 21, 2026</span>
               </div>
-              <h2>One-line install, and a white-screen fix.</h2>
               <ul class="cl-changes">
-                <li><span class="cl-tag cl-tag--added">Added</span><code>curl … | sh</code> and <code>irm … | iex</code> one-line installs for macOS, Linux and Windows, resolved straight from the updater manifest.</li>
-                <li><span class="cl-tag cl-tag--added">Added</span>The hero now shows the real home screen, with a parallax starfield and floating Git/GitHub marks.</li>
-                <li><span class="cl-tag cl-tag--fixed">Fixed</span>A WebKitGTK renderer crash that white-screened the app on a good number of Linux machines, hardest inside the AppImage.</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Install from a terminal: <code>curl -fsSL .../install.sh | sh</code> (macOS + Linux, one AppImage/<code>.app.tar.gz</code> path for every distro, no per-distro branch) and <code>irm .../install.ps1 | iex</code> (Windows, silent NSIS install). Both resolve the current release from the updater's own <code>latest.json</code> manifest rather than the GitHub API, so there is no unauthenticated rate limit to hit</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Hero background: a ported, dimmed version of animate-ui's stars background (three parallax star layers, no visible loop seam), with a glow repositioned behind the screenshot instead of the empty page floor, and a hover tilt on the screenshot itself</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>A blurred crossfade (not a flat opacity swap) between a terminal-install row's command and its "Copied" confirmation</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Hero shows the current home screen (16 challenges, welcome, quilt art) instead of the old challenge screenshot.</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Floating Git, GitHub, terminal and FCS marks with the t3.codes entrance/drift/pointer-parallax motion, reduced-motion aware.</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Download CTAs carry Windows/macOS/Linux icons and follow the visitor's OS (icon, label, direct asset link); Linux header uses the real Tux artwork. All icon SVG paths byte-identical to the t3code marketing source.</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>WebKitGTK's DMA-BUF renderer aborts with <code>Could not create default EGL display: EGL_BAD_PARAMETER</code> on a good number of Linux machines, and there is no fallback after that line — the window opens, paints nothing, and the only trace is on a terminal the learner was never told to launch from. It hits hardest inside the AppImage (whose bundled GTK stack shadows the host's real Mesa drivers), but the same abort is reported from ordinary installs on Wayland, VMs and hybrid graphics too, so the fix sets <code>WEBKIT_DISABLE_DMABUF_RENDERER=1</code> before the window is created on every Linux launch rather than in an AppImage-only wrapper</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>The download page carried a "Debian / Ubuntu — .deb package" card from v0.1.0. <code>bundle.targets</code> has shipped no <code>.deb</code> since v0.2.0, so the card matched no release asset and silently fell back to the releases page — a download button advertising a file nobody builds</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>The OS icon tooltips on the terminal-install rows never appeared, regardless of hover duration. Two independent causes: <code>.cli-rows</code> had <code>overflow: hidden</code> to round its outer corners, clipping the tooltip entirely since it renders above its row; and <code>.cli-feedback</code> (the copied-confirmation overlay) covers the full row at all times, hidden only by opacity, with no <code>pointer-events: none</code> — it silently owned every hover across the row before it ever reached the icons underneath</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span><code>.btn-ghost</code> used an invented <code>rgba(255,255,255,.06)</code> + blur wash instead of T3 Code's actual app-UI glass (the chat composer surface): more opaque, colour-mixed from the real surface tone rather than a white tint, and reliant on an inset top highlight and a drop shadow for most of its "glass" read rather than blur alone</li>
               </ul>
             </div>
           </li>
@@ -108,13 +128,23 @@
             <div class="cl-body tile">
               <div class="cl-meta">
                 <span class="cl-version">v0.2.0</span>
-                <span class="cl-date">Sept 20, 2026</span>
+                <span class="cl-date">Sep 20, 2026</span>
               </div>
-              <h2>Two new modules, before Git even starts.</h2>
               <ul class="cl-changes">
-                <li><span class="cl-tag cl-tag--added">Added</span><strong>The Terminal</strong> and <strong>Files &amp; Folders</strong> — five challenges verified against your real shell history and filesystem, not a checkbox.</li>
-                <li><span class="cl-tag cl-tag--added">Added</span>This install website, a redesigned sidebar, in-app self-updates, and a changelog generated straight from commit messages.</li>
-                <li><span class="cl-tag cl-tag--fixed">Fixed</span>macOS builds that silently never offered an update, failing Linux ARM builds, and a stale pass/fail list after navigating challenges.</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>t3-style install website with live release download page (<a href="https://github.com/JyotirmoyDas05/GitGud/commit/529195776f8bd2e4da171a4198992d9e50eefff1" target="_blank" rel="noopener noreferrer"><code>5291957</code></a>)</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Two new modules ahead of Git: The Terminal (what a terminal is, the prompt, command/argument/option shape, <code>--help</code>) and Files &amp; Folders (<code>pwd</code>, <code>ls</code>, <code>cd</code>, absolute/relative paths, <code>mkdir</code>/<code>touch</code>), five challenges total, verified against the learner's real shell history and real filesystem rather than a checkbox</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Shell-history verification (<code>src-tauri/src/shell.rs</code>, <code>src/lib/shell.ts</code>, <code>src/lib/verify/shell.ts</code>): reads Bash, Zsh, Fish and PowerShell history to confirm a command was actually run, since <code>pwd</code>/<code>ls</code>/<code>cd</code> change nothing on disk to check afterwards</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Sidebar redesigned: modules render as a rail-based track with a completion count per group instead of a flat list of sixteen rows; the scrollbar is gone in favour of a bottom fade</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>In-app self-update from GitHub Releases (<code>src/lib/updater.ts</code>, <code>src/components/UpdateButton.tsx</code>): check/download/install as one derived control, signed bundles, release notes shown before installing</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Fully automatic changelog and release notes (<code>scripts/generate-changelog.mjs</code>, <code>CONTRIBUTING.md</code>): derived from <code>git log</code> at tag-push time from every contributor's commits, grouped by Conventional Commits type or a commit's own <code>### Added</code>/<code>### Fixed</code> body — nothing to hand-write</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Release packaging fixed: AppImage was named with Debian's <code>amd64</code> instead of the universal <code>x86_64</code>, <code>productName</code>'s space corrupted every asset name, the <code>.msi</code> could silently become the updater's preferred Windows installer over the NSIS build actually shipped, and native arm64 builds (Linux, Windows) were added</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>bundle.targets had dmg but not app. Tauri only treats app, appimage, msi and nsis as updater-enabled targets, so createUpdaterArtifacts silently produced no darwin-* entry in latest.json even though the .app.tar.gz + signature it needs were built on disk right next to the dmg. A learner on macOS would install a perfectly good DMG and then never be offered a single update, with no error anywhere. The build's own log names the fix: 'the bundler was configured to create updater artifacts but no updater-enabled targets were built.'</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>ubuntu-22.04-arm has no xdg-open, unlike the x86_64 runner image, and Tauri's AppImage bundler refuses to run without it - the whole linux-arm64 job failed at the bundling step, after a full 4-minute compile, with 'xdg-open binary not found'. Installs xdg-utils alongside the other Linux packaging dependencies.</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>bulletsIn() only matched lines starting with - or *, so a bullet written as hard-wrapped prose (this repo's own commit style) lost every line after its first the moment it wrapped past one line. Continuation lines are now appended to the previous bullet; a blank line ends one without starting another. Verified against the real v0.2.0 commit that exposed it and against the existing structured-body regression case.</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>Verifying a challenge and moving to the next one showed the previous challenge's stale pass/fail list until Verify was pressed again — <code>VerifyBlock</code> had no key, so React reused its local state across navigation instead of resetting it</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>Inline tips rendered as broken half-boxes: they are <code>&lt;span&gt;</code> elements and an inline box cannot carry a border, so a tip that wrapped onto a second line drew as two ragged fragments</li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>Multi-line sample output (an <code>ls -l</code> listing, a directory tree) collapsed onto one line for want of <code>white-space: pre-wrap</code></li>
+              <li><span class="cl-tag cl-tag--fixed">Fixed</span>The directory picker asked for "the repository folder" on every challenge that needed one, including the two terminal challenges that want a home directory and a practice folder</li>
               </ul>
             </div>
           </li>
@@ -124,15 +154,18 @@
             <div class="cl-body tile">
               <div class="cl-meta">
                 <span class="cl-version">v0.1.0</span>
-                <span class="cl-date">Sept 19, 2026</span>
+                <span class="cl-date">Sep 19, 2026</span>
               </div>
-              <h2>Initial release.</h2>
               <ul class="cl-changes">
-                <li><span class="cl-tag cl-tag--added">Added</span>11 interactive Git &amp; GitHub challenges, checked against real Git and GitHub state, with a live end-to-end verification engine.</li>
-                <li><span class="cl-tag cl-tag--added">Added</span>9 locales, a mascot picker, command palette, and installers for Windows, macOS and Linux.</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>11 interactive challenges: get Git, make a repository, commit to it, GitHubbin, remote control, forks and clones, branches, small world, pull never out of date, requesting you pull please, merge finale</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Real verification engine that checks your work against actual Git and GitHub state, plus a live end-to-end harness</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>9 locales: en-US, es-CO, es-ES, fr-FR, ja-JP, ko-KR, pt-BR, uk-UA, zh-TW</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Mascot picker, command palette, tutorial pages (about, dictionary, resources) and offline-friendly bundled content</li>
+              <li><span class="cl-tag cl-tag--added">Added</span>Installers for Linux (.deb, .AppImage), macOS universal (.dmg) and Windows (NSIS .exe, .msi)</li>
               </ul>
             </div>
           </li>
+<!-- releases:end -->
         </ol>
 
         <p class="releases-link" data-rise style="--d:400ms">

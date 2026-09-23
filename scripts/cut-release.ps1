@@ -20,6 +20,11 @@
 # and unread — it is a free scratch space above the generated section for a
 # note with no corresponding commit (a known issue, a heads-up), not an input
 # this script depends on.
+#
+# site/changelog.html: also nothing to hand-edit. scripts/generate-changelog-html.mjs
+# re-renders its release list from CHANGELOG.md every time this script runs,
+# so the public site page tracks whatever CHANGELOG.md says without a second
+# manual step.
 
 param(
   [Parameter(Mandatory = $true)]
@@ -109,6 +114,13 @@ function Add-GeneratedChangelogEntry([string]$path, [string]$version) {
 
 Add-GeneratedChangelogEntry "CHANGELOG.md" $Version
 
+# The site's changelog page (site/changelog.html) is rendered straight from
+# CHANGELOG.md, same principle as CHANGELOG.md itself: nothing to hand-edit
+# per release. Regenerated unconditionally, not just when a new entry was
+# just written above, so a hand-edited CHANGELOG.md still gets reflected.
+node scripts/generate-changelog-html.mjs
+if ($LASTEXITCODE -ne 0) { throw "scripts/generate-changelog-html.mjs failed" }
+
 function Set-JsonVersion([string]$path, [string]$version) {
   $text = Read-Utf8Text $path
   $updated = $text -replace '"version"\s*:\s*"[^"]+"', "`"version`": `"$version`""
@@ -127,7 +139,7 @@ Set-JsonVersion "package.json" $Version
 Set-JsonVersion "src-tauri/tauri.conf.json" $Version
 Set-CargoVersion "src-tauri/Cargo.toml" $Version
 
-git add -- package.json src-tauri/tauri.conf.json src-tauri/Cargo.toml CHANGELOG.md
+git add -- package.json src-tauri/tauri.conf.json src-tauri/Cargo.toml CHANGELOG.md site/changelog.html
 git commit -m "chore(release): v$Version"
 git tag "v$Version"
 
